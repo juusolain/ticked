@@ -1,14 +1,12 @@
 /**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
+ * Ticked
+ * https://github.com/jusola/ticked
  * @format
  * @flow
  */
 
 import React, {Component} from 'react';
 import {
-  SafeAreaView,
   StyleSheet,
   ScrollView,
   View,
@@ -16,28 +14,34 @@ import {
   StatusBar,
 } from 'react-native';
 
-export default class TickedApp extends Component  {
+import Colors from './components/colors';
+
+export default class App extends Component  {
   render() {
     return(
-      <SafeAreaView>
-        <StatusBar barStyle="dark-content" />
-        <ScrollView
-          contentInsetAdjustmentBehavior="automatic"
-          style={styles.scrollView}>
-          <View style={styles.body}>
-            <View>
-  
-            </View>
+      <View
+        contentInsetAdjustmentBehavior="automatic"
+        style={styles.body}>
+          <View style={styles.menu}>
+            <Text>
+              This is menu
+            </Text>
           </View>
-        </ScrollView>
-      </SafeAreaView>
+          <View style={styles.main}>
+            <Text>
+              This is main
+            </Text>
+          </View>
+        
+      </View>
     );
   }
 };
 
 const styles = StyleSheet.create({
-  scrollView: {
-    backgroundColor: "azure",
+  body: {
+    backgroundColor: '#00FFFF',
+    flex: 1,
   },
   engine: {
     position: 'absolute',
@@ -45,19 +49,14 @@ const styles = StyleSheet.create({
   },
   menu: {
     flex: 1,
-    backgroundColor: "azure",
+    flexDirection: 'column',
+    backgroundColor: '#FFFF00',
+    //backgroundColor: Colors.lightblue,
   },
-  list: {
+  main: {
     flex: 5,
-    backgroundColor
-  }
-
-  footer: {
-    color: "black",
-    fontSize: 12,
-    fontWeight: '600',
-    padding: 4,
-    paddingRight: 12,
-    textAlign: 'right',
+    flexDirection: 'column',
+    backgroundColor: '#FF00FF',
+    //backgroundColor: Colors.white,
   },
 });
