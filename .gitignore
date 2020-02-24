@@ -58,8 +58,6 @@ buck-out/
 # CocoaPods
 /ios/Pods/
 
-#JShint
-.jshintrc
-
 #VS code
-.vscode/
+/.vscode/
+!/.vscode/launch.json
