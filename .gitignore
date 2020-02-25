@@ -61,6 +61,7 @@ buck-out/
 #VS code
 /.vscode/
 !/.vscode/launch.json
+.ticked.code-workspace
 
 #MSbuild
 msbuild.binlog
