@@ -14,13 +14,22 @@ import {
   StatusBar,
 } from 'react-native';
 
-import styles from './components/styles';
-import Task from './components/task';
+import styles from './components/Styles';
+import Task from './components/Task';
+import Auth from './components/Auth';
 
 export default class App extends Component  {
+  constructor(){
+    if(await Auth.login('testuser', '1234')){
+      console.log("Auth succeed")
+    }else{
+      console.log("Auth failed");
+    }
+  }
   getTasks() {
     let testLocal = true; //Development before server
   }
+
   render() {
     return(
       <View

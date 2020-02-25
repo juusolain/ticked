@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import { Text, View } from "react-native";
-import styles from './styles';
+import styles from './Styles';
 
 export default class Task extends Component {
     render(){

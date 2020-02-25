@@ -1,4 +1,3 @@
-import React, {Component} from 'react';
 import jwtDecode from 'jwt-decode';
 
 export default class Auth{
@@ -6,10 +5,10 @@ export default class Auth{
         this.server = server;
     }
 
-    async login(username, password){
+    login = async(username, password)=>{
         const res = await fetch(`${this.server}/login`, {
             method: 'POST',
-            body: JSON.stringify({username: username, password: password});
+            body: JSON.stringify({username: username, password: password}),
         })
         if(res.ok){
             this.setToken(res.token);
@@ -25,6 +24,15 @@ export default class Auth{
 
     getToken(){
         return localStorage.getItem('token');
+    }
+
+    isLoggedIn(){
+        const token = getToken();
+        if(token && !isExpired(token)){
+            return true;
+        }else{
+            return false
+        }
     }
 
     isExpired(token){
