@@ -8,6 +8,7 @@
     "lint": "eslint ."
   },
   "dependencies": {
+    "jwt-decode": "^2.2.0",
     "react": "16.8.6",
     "react-native": "^0.60.0-0",
     "react-native-windows": "0.60.0-vnext.141",
