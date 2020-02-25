@@ -21,7 +21,7 @@ import AuthService from './components/AuthService';
 export default class App extends Component  {
   constructor(props){
     super(props)
-    this.Auth = new AuthService('http://localhost:5000');//Debug
+    this.Auth = new AuthService('http://ticked-server.herokuapp.com');//Debug
     this.Auth.register('testuser', '1234');
   }
 
