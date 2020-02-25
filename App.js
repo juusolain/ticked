@@ -16,16 +16,18 @@ import {
 
 import styles from './components/Styles';
 import Task from './components/Task';
-import Auth from './components/Auth';
+import AuthService from './components/AuthService';
 
 export default class App extends Component  {
   constructor(){
+    this.Auth = new AuthService();
     if(await Auth.login('testuser', '1234')){
       console.log("Auth succeed")
     }else{
       console.log("Auth failed");
     }
   }
+
   getTasks() {
     let testLocal = true; //Development before server
   }
