@@ -1,16 +1,44 @@
 import jwtDecode from 'jwt-decode';
+import {AsyncStorage} from 'react-native';
 
 export default class AuthService{
     constructor(server){
         this.server = server;
+        this.login = this.login.bind(this);
+        this.register = this.register.bind(this);
+        this.isLoggedIn = this.isLoggedIn.bind(this);
+        this.getToken = this.getToken.bind(this);
+        this.setToken = this.setToken.bind(this);
+        this.getUserID = this.getUserID.bind(this);
     }
 
-    login = async(username, password)=>{
-        const res = await fetch(`${this.server}/login`, {
+    async login(username, password){
+        try {
+            const res = await this.authFetch(`${this.server}/login`, {
+                method: 'POST',
+                body: JSON.stringify({username: username, password: password}),
+            });
+            if(res.ok){
+                if (process.env.NODE_ENV == 'development') console.log("Logged in, got token: ", res.token);
+                this.setToken(res.token);
+                return true;
+            }else{
+                return false;
+            }
+        } catch (err) {
+            console.error(err);
+            return false;
+        }
+    }
+
+    async register(username, password){
+        if (process.env.NODE_ENV == 'development') console.log("Registering", JSON.stringify({username: username, password: password}));
+        const res = await this.authFetch(`${this.server}/register`, {
             method: 'POST',
             body: JSON.stringify({username: username, password: password}),
         })
         if(res.ok){
+            if (process.env.NODE_ENV == 'development') console.log("Registered, got token: ", res.token);
             this.setToken(res.token);
             return true;
         }else{
@@ -18,30 +46,18 @@ export default class AuthService{
         }
     }
 
-    register = async(username, password)=>{
-        const res = await fetch(`${this.server}/register`, {
-            method: 'POST',
-            body: JSON.stringify({username: username, password: password}),
-        })
-        if(res.ok){
-            this.setToken(res.token);
-            return true;
-        }else{
-            return false;
-        }
+    async setToken(newToken){
+        await AsyncStorage.setItem('token', newToken);
+        return true;
     }
 
-    setToken(newToken){
-        localStorage.setItem('token', newToken);
+    async getToken(){
+        return await AsyncStorage.getItem('token');
     }
 
-    getToken(){
-        return localStorage.getItem('token');
-    }
-
-    isLoggedIn(){
-        const token = getToken();
-        if(token && !isExpired(token)){
+    async isLoggedIn(){
+        const token = await this.getToken();
+        if(token && !this.isExpired(token)){
             return true;
         }else{
             return false
@@ -57,23 +73,22 @@ export default class AuthService{
         }
     }
 
-    getUserID(){
-        if(isLoggedIn()){
-            const decodedJWT = jwtDecode(getToken());
+    async getUserID(){
+        if(await this.isLoggedIn()){
+            const decodedJWT = jwtDecode(await getToken());
             return decodedJWT.userid;
         }else{
             return false;
         }
     }
 
-    authFetch = (url, options)=> {
+    async authFetch(url, options){
         const headers = {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
         }
-
-        if(isLoggedIn()){
-            headers['Authorization'] = 'Bearer ' + getToken();
+        if(this.isLoggedIn()){
+            headers['Authorization'] = 'Bearer ' + await this.getToken();
         }
         return fetch(url, {headers, ...options});
     }

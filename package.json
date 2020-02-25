@@ -8,6 +8,8 @@
     "lint": "eslint ."
   },
   "dependencies": {
+    "@react-native-community/async-storage": "^2.0.0-rc.2",
+    "@react-native-community/async-storage-backend-legacy": "^2.0.0-rc.2",
     "jwt-decode": "^2.2.0",
     "react": "16.8.6",
     "react-native": "^0.60.0-0",
