@@ -63,79 +63,92 @@ async function newTask(){
 }
 
 async function loadData(loopCounter=0){
-    if(loopCounter > 3){
-        show(modal);
+    if(loopCounter >= 3){
+        hide(modal);
         show(errorDiv);
         const old = errorText.html();
-        errorText.html('Failed after 3 times with error: ', old);
-        throw new Error('Failed after 3 times with error: ', old);
+        errorText.html('Failed after 3 times with error: ' + old);
+        throw new Error('Failed after 3 times with error: ' + old);
     }
     hide(errorDiv);
     show(modal);
     show(spinner);
-    const res = await auth.post('/getTask/all');
-    const resData = res.data;
-    const taskTemplate = await $('#task-template').html();
-    taskScreen.empty();
-    if(resData.success){
-        for (const task of resData.tasks) {
-            var newTask = await $(taskTemplate).clone();
-            const inputName = newTask.find('input.name')
-            const inputDesc = newTask.find('input.description')
-            inputName.val(task.name);
-            if(task.description){
-                inputDesc.val(task.description);
+    try {
+        const res = await auth.post('/getTask/all');
+        const resData = res.data;
+        const taskTemplate = await $('#task-template').html();
+        taskScreen.empty();
+        if(resData.success){
+            for (const task of resData.tasks) {
+                var newTask = await $(taskTemplate).clone();
+                const inputName = newTask.find('input.name')
+                const inputDesc = newTask.find('input.description')
+                inputName.val(task.name);
+                if(task.description){
+                    inputDesc.val(task.description);
+                }
+                
+                inputName.focusin(()=>{
+                    inputName.curVal = inputName.val();
+                });
+    
+                inputDesc.focusin(()=>{
+                    inputDesc.curVal = inputDesc.val();
+                });
+    
+                inputName.focusout(()=>{
+                    if(inputName.val() !== inputName.curVal){
+                        updateTask(task.taskid, {name: inputName.val(), description: -1});
+                    }
+                });
+    
+                inputDesc.focusout(()=>{
+                    if(inputDesc.val() !== inputDesc.curVal){
+                        updateTask(task.taskid, {description: inputDesc.val(), name: -1});
+                    }
+                });
+    
+                inputDesc.keypress((event)=>{
+                    if(event.key === 'Enter'){
+                        inputDesc.blur();
+                    }
+                });
+    
+                inputName.keypress((event)=>{
+                    if(event.key === 'Enter'){
+                        inputName.blur();
+                    }
+                });
+    
+    
+    
+                taskScreen.append(newTask);
             }
-            
-            inputName.focusin(()=>{
-                inputName.curVal = inputName.val();
-            });
-
-            inputDesc.focusin(()=>{
-                inputDesc.curVal = inputDesc.val();
-            });
-
-            inputName.focusout(()=>{
-                if(inputName.val() !== inputName.curVal){
-                    updateTask(task.taskid, {name: inputName.val(), description: -1});
-                }
-            });
-
-            inputDesc.focusout(()=>{
-                if(inputDesc.val() !== inputDesc.curVal){
-                    updateTask(task.taskid, {description: inputDesc.val(), name: -1});
-                }
-            });
-
-            inputDesc.keypress((event)=>{
-                if(event.key === 'Enter'){
-                    inputDesc.blur();
-                }
-            });
-
-            inputName.keypress((event)=>{
-                if(event.key === 'Enter'){
-                    inputName.blur();
-                }
-            });
-
-
-
-            taskScreen.append(newTask);
+            show(mainScreen);
+            hide(modal);
+            hide(spinner);
+        }else{
+            show(errorDiv);
+            errorText.html(resData.error);
+            loopCounter++;
+            return loadData(loopCounter);
         }
-        show(mainScreen);
-        hide(modal);
-        hide(spinner);
-    }else{
+    } catch (error) {
         show(errorDiv);
-        console.log(loopCounter);
-        errorText.html(resData.error);
+        errorText.html(error);
         loopCounter++;
         return loadData(loopCounter);
     }
+
 }
 
-async function updateTask(taskID, newTask){
+async function updateTask(taskID, newTask, counter=0){
+    if(counter > 3){
+        hide(modal);
+        hide(spinner);
+        show(errorDiv)
+        errorText.html(res.error, ", exhauted ", counter, "retries");
+    }
     if(!taskID){
         show(errorDiv);
         hide(modal);
@@ -164,17 +177,18 @@ async function updateTask(taskID, newTask){
             hide(spinner);
             return true;
         }else{
+            counter++;
             show(errorDiv);
-            errorText.html(res.error);
+            errorText.html(res.error + ", " + counter + " retries");
             console.error(res.error);
-            return false;
+            return updateTask(taskID, newTask, counter);
         }
-
     } catch (error) {
+        counter++;
         show(errorDiv);
-        errorText.html(error);
+        errorText.html(error + ", " + counter + " retries");
         console.error(error);
-        return false;
+        return updateTask(taskID, newTask, counter);
     }
 }
 
