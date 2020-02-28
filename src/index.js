@@ -8,6 +8,7 @@ if (require('electron-squirrel-startup')) { // eslint-disable-line global-requir
 }
 
 require('electron-reload')(__dirname);
+require('update-electron-app')();
 
 const createWindow = () => {
   const mainWindow = new BrowserWindow({
