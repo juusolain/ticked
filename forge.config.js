@@ -9,5 +9,17 @@ module.exports = {
         {
             name: '@electron-forge/maker-zip',
         }
+    ],
+    publishers:[
+        {
+            name: '@electron-forge/publisher-github',
+            config: {
+              repository: {
+                owner: 'jusola',
+                name: 'ticked'
+              },
+              prerelease: true
+            }
+          }
     ]
 }
