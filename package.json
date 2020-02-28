@@ -1,7 +1,7 @@
 {
   "name": "ticked",
   "productName": "ticked",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "My Electron application description",
   "repository": "https://github.com/jusola/ticked",
   "main": "src/index.js",

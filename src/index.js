@@ -23,12 +23,9 @@ const createWindow = () => {
     webPreferences: {
       preload: __dirname + '/preload.js',
     },
-    show: false,
+    backgroundColor: '#ABCDEF'
   });
   mainWindow.loadFile(path.join(__dirname, 'index.html'));
-  mainWindow.webContents.on('did-finish-load', function() {
-    mainWindow.show();
-  });
 };
 
 app.on('ready', createWindow);
