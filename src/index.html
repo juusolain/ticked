@@ -3,11 +3,26 @@
   <head>
     <meta charset="UTF-8">
     <title>Hello World!</title>
+    <link rel="stylesheet" href="roboto.css">
     <link rel="stylesheet" href="index.css">
     <script src="window.js"></script>
   </head>
   <body>
-    <h1>💖 Hello World!</h1>
-    <p>Welcome to your Electron application.</p>
+    <div class="loginModal">
+      <div class="login">
+        <input type="text" id="username" placeholder="Username">
+        <input type="password" id="password" placeholder="Password">
+        <button class="loginButton" onclick="login()">Login</button>
+      </div>
+    </div>
+    <div class="main">
+      <div class="sidebar">
+        <p>Menu</p>
+      </div>
+      <div class="tasks">
+        <p>Tasks</p>
+      </div>
+    </div>
+
   </body>
 </html>

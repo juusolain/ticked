@@ -12,21 +12,37 @@ class auth{
 
     login = async(username, password)=>{
         if(username && password){
-            const res = await this.post('/login', {
-                data: {
-                    username: username,
-                    password: password,
-                },
-            });
-            if(res.data.success){
-                store.set('token', res.data.token);
-                return true;
-            }else{
-                store.set('token', null);
-                return new Error('invalid username or password');
+            try{
+                const res = await this.post('/login', {
+                    data: {
+                        username: username,
+                        password: password,
+                    },
+                });
+                if(res.data.success){
+                    store.set('token', res.data.token);
+                    return {
+                        success: true,
+                    }
+                }else{
+                    store.set('token', null);
+                    return {
+                        success: false,
+                        error: 'Invalid username or password',
+                    }
+                }
+            }catch(err){
+                return {
+                    success: false,
+                    error: err,
+                } 
             }
+
         }else{
-            return new Error('Please supply both username and password');
+            return {
+                success: false,
+                error: 'Please supply both username and password',
+            }
         }
     }
 
