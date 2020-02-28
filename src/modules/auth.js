@@ -63,6 +63,12 @@ class auth{
         }
     }
 
+    logout = ()=>{
+        this.setToken(null);
+        return true;
+    }
+
+
     isExpired = (token)=>{
         const decodedJWT = jwtDecode(token);
         if(decodedJWT.exp < Date.now()/1000){
@@ -72,7 +78,7 @@ class auth{
         }
     }
 
-    post = (apiAddress, options)=>{
+    post = async(apiAddress, options)=>{
         const axios = require('axios');
         const headers = {
             'Accept': 'application/json',
@@ -81,17 +87,21 @@ class auth{
         if(this.isLoggedIn()){
             headers['Authorization'] = 'Bearer ' + this.getToken();
         }
-        const res = axios({
-            baseURL: this.server,
-            method: 'post',
-            url: apiAddress,
-            headers: headers,
-            ...options,
-        })
-        return res;
+        try {
+            const res = await axios({
+                baseURL: this.server,
+                method: 'post',
+                url: apiAddress,
+                headers: headers,
+                ...options,
+            });
+            return res;
+        } catch (error) {
+            return Promise.reject(error);
+        }
     }
 
-    get = (apiAddress, options)=>{
+    get = async(apiAddress, options)=>{
         const axios = require('axios');
         const headers = {
             'Accept': 'application/json',
@@ -100,14 +110,20 @@ class auth{
         if(this.isLoggedIn()){
             headers['Authorization'] = 'Bearer ' + this.getToken();
         }
-        const res = axios({
-            baseURL: this.server,
-            method: 'get',
-            url: apiAddress,
-            headers: headers,
-            ...options,
-        })
-        return res;
+        try {
+            const res = await axios({
+                baseURL: this.server,
+                method: 'get',
+                url: apiAddress,
+                headers: headers,
+                ...options,
+            });
+            return res;
+        } catch (error) {
+            return Promise.reject(error);
+        }
+
+        
     }
 }
 

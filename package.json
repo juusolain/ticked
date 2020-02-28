@@ -3,6 +3,7 @@
   "productName": "ticked",
   "version": "1.0.0",
   "description": "My Electron application description",
+  "repository": "https://github.com/jusola/ticked",
   "main": "src/index.js",
   "scripts": {
     "start": "electron-forge start",
@@ -44,6 +45,7 @@
   },
   "dependencies": {
     "axios": "^0.19.2",
+    "electron-is-dev": "^1.1.0",
     "electron-reload": "^1.5.0",
     "electron-squirrel-startup": "^1.0.0",
     "electron-store": "^5.1.1",

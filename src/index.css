@@ -2,21 +2,27 @@
   --white: #F3F3F3;
   --light: #DDDDDD;
   --lightblue: #ABCDEF;
+  --gray: #484d52;
   --dark: #20262C;
   --black: #0C0E10;
+  --error: rgba(255, 0, 0, 0.5);
 }
 
 html{
-  background-color: var(--light);
+  height: 100%;
+  background-color: var(--lightblue);
   color: var(--black);
 }
 
 body {
+  height: 100%;
   font-family: 'Roboto', sans-serif;
+  font-size: 12px;
   margin: auto;
+  display: flex;
 }
 
-div.loginModal{
+div.modal{
   flex: 1;
   position: absolute;
   top: 0;
@@ -44,21 +50,100 @@ div.login{
 }
 
 div.main{
+  flex: 1;
   display: flex;
+  background-color: var(--white);
 }
 
 div.tasks{
-  flex: 3;
+  margin: 4px;
+  background-color: var(--white);
+  flex: 4;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  display: flex;
+  flex-direction: column;
 }
 
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background-color: rgba(0,0,0,0);
+  padding: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background-color: var(--gray);
+  border-radius: 4px;
+  border: 2px solid var(--gray);
+  box-sizing: border-box;
+  transition: background-color 2s;
+}
+
+
+
+div.task{
+  background-color: var(--light);
+  margin: 8px;
+  padding: 4px;
+  border-radius: 2px;
+  border-width: 2px;
+  border-color: var(--light);
+}
+
+div.task > p{
+  margin: 8px;
+}
+
+div.task > p.name{
+  color: var(--black);
+  font-size: 18px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+}
+
+div.task > p.description{
+  color: var(--gray);
+  font-size: 12px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+
 div.sidebar{
+  background-color: var(--lightblue);
   flex: 1;
+}
+
+.hide{
+  display: none !important;
+}
+
+
+div.error{
+  background-color: var(--error);
+  position: absolute;
+  top: 5%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 95%;
+  box-sizing: border-box;
+  border-radius: 2px;
+  border-width: 2px;
+  border-color: var(--error);
+  text-align: center;
 }
 
 .login > input{
   font-size: 18px;
   flex: 1;
-  margin: 2px;
+  margin: 1%;
   border-radius: 2px;
   border-width: 2px;
   background-color: rgba(0, 0, 0, 0.25);
@@ -69,11 +154,34 @@ div.sidebar{
 
 .login > button{
   flex: 1;
-  margin: 2px;
+  margin: 1%;
   border-radius: 2px;
   border-width: 2px;
   color: var(--white);
   background-color: rgba(0, 0, 0, 0.25);
   border-color: rgba(0, 0, 0, 0.25);
   box-sizing: border-box;
+}
+
+div.spinner{
+  display: inline-block;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border: 8px solid rgba(0, 0, 0, 0.25);
+  border-radius: 50%;
+  border-top: 8px solid #FFF;
+  width: 80px;
+  height: 80px;
+  animation: spinner 1s linear infinite;
+}
+
+@keyframes spinner {
+  0% {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  100% {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
 }

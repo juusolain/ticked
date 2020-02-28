@@ -3,24 +3,34 @@
   <head>
     <meta charset="UTF-8">
     <title>Hello World!</title>
-    <link rel="stylesheet" href="roboto.css">
+    <link rel="stylesheet" href="external/roboto.css">
     <link rel="stylesheet" href="index.css">
     <script src="window.js"></script>
   </head>
   <body>
-    <div class="loginModal">
-      <div class="login">
+    <script id="task-template" type="text/x-custom-template">
+      <div class="task">
+        <p class="name">Name</p>
+        <p class="description">Description</p>
+      </div>
+    </script>
+    <div class="modal">
+      <div class="login hide">
         <input type="text" id="username" placeholder="Username">
         <input type="password" id="password" placeholder="Password">
         <button class="loginButton" onclick="login()">Login</button>
       </div>
+      <div class="error hide">
+        <p class="errorText"></p>
+      </div>
+      <div class="spinner"></div>
     </div>
-    <div class="main">
+    <div class="main hide">
       <div class="sidebar">
         <p>Menu</p>
+        <button onclick="logout()">Logout</button>
       </div>
       <div class="tasks">
-        <p>Tasks</p>
       </div>
     </div>
 
