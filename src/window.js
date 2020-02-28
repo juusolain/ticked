@@ -1,5 +1,5 @@
 const auth = new Auth(server);
-var modal, loginScreen, mainScreen, spinner, taskScreen;
+var modal, loginScreen, mainScreen, spinner, taskScreen, errorDiv, errorText;
 
 
 window.onload = async()=>{
@@ -8,13 +8,25 @@ window.onload = async()=>{
     mainScreen = await $('div.main');
     spinner = await $('div.modal > div.spinner');
     taskScreen = await $('div.tasks');
-    
+    errorDiv = await $('div.error');
+    errorText = await $('div.error > p.errorText');
+    const newTaskInput = await $('div.newtask > input.newtask');
+    newTaskInput.keypress((event)=>{
+        if(event.key === 'Enter'){
+            newTask();
+        }
+    });
     if(auth.isLoggedIn()){
-        await loadData();
-        hide(spinner);
-        hide(modal);
-        show(mainScreen);
-        mainScreen.show(250);
+        try {
+            await loadData();
+            hide(spinner);
+            hide(modal);
+            show(mainScreen);
+        } catch (error) {
+            show(modal);
+            show(errorDiv);
+            errorText.html(error);
+        }
     }else{
         hide(spinner);
         show(loginScreen);
@@ -22,24 +34,148 @@ window.onload = async()=>{
     }
 };
 
-async function loadData(){
-    taskScreen.empty();
-    hide(mainScreen);
+async function newTask(){
+    const newTaskInput = await $('div.newtask > input.newtask');
+    const name = newTaskInput.val();
+    console.log(name);
     show(modal);
     show(spinner);
-    const res = await auth.get('/getTask/all');
-    const taskTemplate = await $('#task-template').html();
-    for (const task of res.data) {
-        var newTask = await $(taskTemplate).clone();
-
-        newTask.find('p.name').html(task.name);
-        newTask.find('p.description').html(task.description);
-
-        taskScreen.append(newTask);
+    hide(loginScreen);
+    hide(errorDiv);
+    try {
+        const res = await auth.post('/newTask', {
+            data: {
+                name: name
+            }
+        });
+        if(res.data.success){
+            newTaskInput.val('');
+            await loadData();
+        }else{
+            show(errorDiv);
+            errorText.html(res.data.error);
+        }
+        
+    } catch (error) {
+        show(errorDiv);
+        errorText.html(error);
     }
-    show(mainScreen);
-    hide(modal);
-    hide(spinner);
+}
+
+async function loadData(loopCounter=0){
+    if(loopCounter > 3){
+        show(modal);
+        show(errorDiv);
+        const old = errorText.html();
+        errorText.html('Failed after 3 times with error: ', old);
+        throw new Error('Failed after 3 times with error: ', old);
+    }
+    hide(errorDiv);
+    show(modal);
+    show(spinner);
+    const res = await auth.post('/getTask/all');
+    const resData = res.data;
+    const taskTemplate = await $('#task-template').html();
+    taskScreen.empty();
+    if(resData.success){
+        for (const task of resData.tasks) {
+            var newTask = await $(taskTemplate).clone();
+            const inputName = newTask.find('input.name')
+            const inputDesc = newTask.find('input.description')
+            inputName.val(task.name);
+            if(task.description){
+                inputDesc.val(task.description);
+            }
+            
+            inputName.focusin(()=>{
+                inputName.curVal = inputName.val();
+            });
+
+            inputDesc.focusin(()=>{
+                inputDesc.curVal = inputDesc.val();
+            });
+
+            inputName.focusout(()=>{
+                if(inputName.val() !== inputName.curVal){
+                    updateTask(task.taskid, {name: inputName.val(), description: -1});
+                }
+            });
+
+            inputDesc.focusout(()=>{
+                if(inputDesc.val() !== inputDesc.curVal){
+                    updateTask(task.taskid, {description: inputDesc.val(), name: -1});
+                }
+            });
+
+            inputDesc.keypress((event)=>{
+                if(event.key === 'Enter'){
+                    inputDesc.blur();
+                }
+            });
+
+            inputName.keypress((event)=>{
+                if(event.key === 'Enter'){
+                    inputName.blur();
+                }
+            });
+
+
+
+            taskScreen.append(newTask);
+        }
+        show(mainScreen);
+        hide(modal);
+        hide(spinner);
+    }else{
+        show(errorDiv);
+        console.log(loopCounter);
+        errorText.html(resData.error);
+        loopCounter++;
+        return loadData(loopCounter);
+    }
+}
+
+async function updateTask(taskID, newTask){
+    if(!taskID){
+        show(errorDiv);
+        hide(modal);
+        hide(spinner);
+        errorText.html('Empty taskid');
+        return false;
+    }
+    if(newTask.name === -1 && newTask.description === -1){
+        return true;
+    }
+    try {
+        hide(loginScreen);
+        show(modal);
+        show(spinner);
+        if(!newTask.name) newTask.name = null;
+        if(!newTask.name) newTask.description = null;
+        const res = await auth.post('/updateTask', {
+            data: {
+                description: newTask.description,
+                taskid: taskID,
+                name: newTask.name,
+            }
+        });
+        if(res.data.success){
+            hide(modal);
+            hide(spinner);
+            return true;
+        }else{
+            show(errorDiv);
+            errorText.html(res.error);
+            console.error(res.error);
+            return false;
+        }
+
+    } catch (error) {
+        show(errorDiv);
+        errorText.html(error);
+        console.error(error);
+        return false;
+    }
 }
 
 async function logout(){
@@ -54,8 +190,7 @@ async function logout(){
 async function login(){
     const usernameInput = await $('#username');
     const passwordInput = await $('#password');
-    const errorDiv = await $('div.modal > div.error');
-    const errorText = await $('div.modal > div.error > p.errorText');
+
 
     const password = passwordInput.val();
     const username = usernameInput.val();
@@ -77,6 +212,7 @@ async function login(){
     show(spinner);
     const authRes = await auth.login(username, password);
     if(authRes.success){
+        await loadData();
         hide(errorDiv);
         hide(modal);
         show(mainScreen);

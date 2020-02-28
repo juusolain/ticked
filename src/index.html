@@ -10,18 +10,18 @@
   <body>
     <script id="task-template" type="text/x-custom-template">
       <div class="task">
-        <p class="name">Name</p>
-        <p class="description">Description</p>
+        <input type="text" class="name" placeholder="Click to change name"></p>
+        <input type="text" class="description" placeholder="Click to write a description"></p>
       </div>
     </script>
+    <div class="error hide">
+      <p class="errorText"></p>
+    </div>
     <div class="modal">
       <div class="login hide">
         <input type="text" id="username" placeholder="Username">
         <input type="password" id="password" placeholder="Password">
         <button class="loginButton" onclick="login()">Login</button>
-      </div>
-      <div class="error hide">
-        <p class="errorText"></p>
       </div>
       <div class="spinner"></div>
     </div>
@@ -30,7 +30,13 @@
         <p>Menu</p>
         <button onclick="logout()">Logout</button>
       </div>
-      <div class="tasks">
+      <div class="mainarea">
+        <div class="tasks">
+        </div>
+        <div class="newtask">
+          <input type="text" class="newtask" placeholder="Write something">
+          <button class="submitTask" onclick="newTask()">Create</button>
+        </div>
       </div>
     </div>
 
