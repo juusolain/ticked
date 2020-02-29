@@ -97,14 +97,14 @@ async function loadData(loopCounter=0){
                 });
     
                 inputName.focusout(()=>{
-                    if(inputName.val() !== inputName.curVal){
-                        updateTask(task.taskid, {name: inputName.val(), description: -1});
+                    if(inputDesc.val() !== inputDesc.curVal && inputName.val() !== inputName.curVal()){
+                        updateTask(task.taskid, {name: inputName.val(), description: inputDesc.val()});
                     }
                 });
     
                 inputDesc.focusout(()=>{
-                    if(inputDesc.val() !== inputDesc.curVal){
-                        updateTask(task.taskid, {description: inputDesc.val(), name: -1});
+                    if(inputDesc.val() !== inputDesc.curVal && inputName.val() !== inputName.curVal()){
+                        updateTask(task.taskid, {description: inputDesc.val(), name: inputName.val()});
                     }
                 });
     
