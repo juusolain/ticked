@@ -90,9 +90,18 @@ async function insertTask(taskData){
     if(taskData.description){
         inputDesc.val(taskData.description);
     }
-    
-    if(taskData.alarm){
-        buttonAlarm.addClass('blue');
+
+    function updateThis(){
+        var newTaskData = {};
+        if(inputDesc.val() !== inputDesc.curVal){
+            newTaskData['description'] = inputDesc.val();
+        }
+        if(inputName.val() !== inputName.curVal){
+            newTaskData['name'] = inputName.val();
+        }
+        if(Object.entries(newTaskData).length !== 0){
+            updateTask(task.taskID, newTaskData);
+        }
     }
     
     inputName.focusin(()=>{
@@ -104,15 +113,11 @@ async function insertTask(taskData){
     });
 
     inputName.focusout(()=>{
-        if(inputDesc.val() !== inputDesc.curVal && inputName.val() !== inputName.curVal){
-            updateTask(task.taskid, {name: inputName.val(), description: inputDesc.val(), alarm: taskData.alarm});
-        }
+        updateThis();
     });
 
     inputDesc.focusout(()=>{
-        if(inputDesc.val() !== inputDesc.curVal && inputName.val() !== inputName.curVal){
-            updateTask(task.taskid, {description: inputDesc.val(), name: inputName.val(), alarm: taskData.alarm});
-        }
+        updateThis();
     });
 
     inputDesc.keypress((event)=>{
@@ -140,6 +145,7 @@ async function insertTask(taskData){
         altFormat: "H:i", //d.m.Y\nH:i
         dateFormat: "H:i",
     });
+
     buttonDelete.click(()=>{
         deleteTask(taskData.taskid);
         newTask.remove();
