@@ -37,7 +37,7 @@
               "owner": "jusola",
               "name": "ticked"
             },
-            "prerelease": true
+            "prerelease": false
           }
         }
       ]
@@ -49,6 +49,7 @@
     "electron-reload": "^1.5.0",
     "electron-squirrel-startup": "^1.0.0",
     "electron-store": "^5.1.1",
+    "flatpickr": "^4.6.3",
     "jquery": "^3.4.1",
     "jwt-decode": "^2.2.0",
     "update-electron-app": "^1.5.0"

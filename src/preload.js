@@ -1,5 +1,4 @@
 window.Auth = require('./modules/auth');
-
 if(require('electron-is-dev')){
   window.server = 'http://localhost:5000';
 }else{
@@ -9,5 +8,6 @@ if(require('electron-is-dev')){
 document.onreadystatechange = function () {
     if (document.readyState == "complete") {
       window.$ = require('jquery');
+      console.log(flatpickr);
     }
 }

@@ -4,14 +4,23 @@
     <meta charset="UTF-8">
     <title>Hello World!</title>
     <link rel="stylesheet" href="external/roboto.css">
+    <link rel="stylesheet" href="external/flatpickr.css">
     <link rel="stylesheet" href="index.css">
+    <script src="external/flatpickr.js"></script>
     <script src="window.js"></script>
   </head>
   <body>
     <script id="task-template" type="text/x-custom-template">
       <div class="task">
-        <input type="text" class="name" placeholder="Click to change name"></p>
-        <input type="text" class="description" placeholder="Click to write a description"></p>
+        <div class="taskLeft">
+          <input type="text" class="name" placeholder="Click to change name"></input>
+          <input type="text" class="description" placeholder="Click to write a description"></input>
+        </div>
+        <div class="taskRight">
+          <button class="delete"></button>
+          <input type="text" class="alarm date" data-input></input>
+          <input type="text" class="alarm time" data-input></input>
+        </div>
       </div>
     </script>
     <div class="error hide">
@@ -22,6 +31,9 @@
         <input type="text" id="username" placeholder="Username">
         <input type="password" id="password" placeholder="Password">
         <button class="loginButton" onclick="login()">Login</button>
+      </div>
+      <div class="reload hide">
+        <button onclick="reloadPage()">Reload</button>
       </div>
       <div class="spinner"></div>
     </div>
