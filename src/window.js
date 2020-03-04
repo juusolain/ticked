@@ -1,5 +1,5 @@
 const auth = new Auth(server);
-var modal, loginScreen, mainScreen, spinner, taskScreen, errorDiv, errorText, taskTemplate, reload;
+var modal, loginScreen, mainScreen, spinner, taskScreen, errorDiv, errorText, taskTemplate, reload, timeouts = [];
 
 
 window.onload = async()=>{
@@ -92,7 +92,7 @@ async function insertTask(taskData){
         taskAlarm = taskData.alarm;
     }
 
-    function updateThis(){
+    async function updateThis(){
         var newTaskData = {};
         if(inputDesc.val() !== inputDesc.curVal){
             inputDesc.curVal = inputDesc.val();
@@ -108,7 +108,8 @@ async function insertTask(taskData){
         }
         if(Object.entries(newTaskData).length !== 0){
             newTaskData['taskid']=taskData.taskid;
-            updateTask(newTaskData);
+            await updateTask(newTaskData);
+            await loadData();
         }
     }
 
@@ -159,10 +160,38 @@ async function insertTask(taskData){
         newTask.remove();
         console.log("Removed newtask");
     });
+    if(taskData.alarm){
+        addAlarm(taskData);
+    }
     taskScreen.append(newTask);
     return true;
 }
 
+async function addAlarm(taskData){
+    const curDate = new Date();
+    const taskDate = new Date(taskData.alarm);
+    var dateDiff = taskDate.getTime() - curDate.getTime();
+    if(dateDiff > 0){
+        if(Notification.permission === 'denied') await Notification.requestPermission();
+        if(Notification.permission === 'granted'){
+            timeouts.push(setTimeout(()=>{
+                if(Notification.permission === 'granted'){
+                    new Notification(taskData.name, {
+                        body: taskData.description,
+                    });
+                }
+            }, dateDiff));
+        }
+    }
+
+
+}
+
+async function clearAlarms(){
+    for (const elem of timeouts) {
+        clearTimeout(elem);
+    }
+}
 
 async function loadData(loopCounter=0){
     if(loopCounter >= 1){
@@ -179,6 +208,7 @@ async function loadData(loopCounter=0){
         const res = await auth.post('/getTask/all');
         const resData = res.data;
         taskScreen.empty();
+        clearAlarms();
         await $('div.flatpickr-calendar').remove();
         if(resData.success){
             for (const task of resData.tasks) {
@@ -231,7 +261,6 @@ async function deleteTask(taskID, counter=0){
 }
 
 async function updateTask(newTask, counter=0){
-    console.log(newTask);
     if(counter >= 1){
         show(modal);
         show(spinner);

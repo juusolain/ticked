@@ -1,6 +1,6 @@
 window.Auth = require('./modules/auth');
 
-const useLocalhost = true;
+const useLocalhost = false;
 
 if(require('electron-is-dev') && useLocalhost){
   window.server = 'http://localhost:5000';
