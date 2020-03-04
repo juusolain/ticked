@@ -60,7 +60,6 @@ async function newTask(){
     const newTaskData = {
         name: name
     };
-    insertTask(newTaskData);
     hideError();
     try {
         const res = await auth.post('/newTask', {
@@ -82,35 +81,36 @@ async function insertTask(taskData){
     var newTask = await $(taskTemplate).clone();
     const inputName = newTask.find('input.name')
     const inputDesc = newTask.find('input.description')
-    const inputAlarmDate = newTask.find('input.alarm.date')
-    const inputAlarmTime = newTask.find('input.alarm.time')
+    const inputAlarm = newTask.find('input.alarm')
     const buttonDelete = newTask.find('button.delete')
-    
+    var taskAlarm = null;
     inputName.val(taskData.name);
     if(taskData.description){
         inputDesc.val(taskData.description);
+    }
+    if(taskData.alarm){
+        taskAlarm = taskData.alarm;
     }
 
     function updateThis(){
         var newTaskData = {};
         if(inputDesc.val() !== inputDesc.curVal){
+            inputDesc.curVal = inputDesc.val();
             newTaskData['description'] = inputDesc.val();
         }
         if(inputName.val() !== inputName.curVal){
+            inputName.curVal = inputName.val();
             newTaskData['name'] = inputName.val();
         }
+        if(fpInst.selectedDates[0] !== inputAlarm.curVal){
+            inputAlarm.curVal = fpInst.selectedDates[0];
+            newTaskData['alarm'] = fpInst.selectedDates[0];
+        }
         if(Object.entries(newTaskData).length !== 0){
-            updateTask(task.taskID, newTaskData);
+            newTaskData['taskid']=taskData.taskid;
+            updateTask(newTaskData);
         }
     }
-    
-    inputName.focusin(()=>{
-        inputName.curVal = inputName.val();
-    });
-
-    inputDesc.focusin(()=>{
-        inputDesc.curVal = inputDesc.val();
-    });
 
     inputName.focusout(()=>{
         updateThis();
@@ -131,24 +131,33 @@ async function insertTask(taskData){
             inputName.blur();
         }
     });
-    flatpickr(inputAlarmDate, {
-        enableTime: false,
-        altInput: true,
-        altFormat: "M d", //d.m.Y\nH:i
-        dateFormat: "d.m.y",
-    });
-    flatpickr(inputAlarmTime, {
+
+    const fpInst = flatpickr(inputAlarm, {
         enableTime: true,
-        noCalendar: true,
-        time_24hr: true,
         altInput: true,
-        altFormat: "H:i", //d.m.Y\nH:i
-        dateFormat: "H:i",
+        defaultDate: taskData.alarm,
+        time_24hr: true,
+        defaultDate: taskAlarm,
+        altFormat: "M d Y H:i", //d.m.Y\nH:i
+        dateFormat: "Z",
+        onClose: (dateArr, dateStr, instance)=>{
+            updateThis();
+        }
     });
 
     buttonDelete.click(()=>{
         deleteTask(taskData.taskid);
         newTask.remove();
+    });
+    newTask.bind('destroyed', ()=>{
+        fpInst.destroy();
+        inputName.remove();
+        inputDesc.remove();
+        inputAlarm.remove();
+        buttonDelete.remove();
+        newTask.empty();
+        newTask.remove();
+        console.log("Removed newtask");
     });
     taskScreen.append(newTask);
     return true;
@@ -170,6 +179,7 @@ async function loadData(loopCounter=0){
         const res = await auth.post('/getTask/all');
         const resData = res.data;
         taskScreen.empty();
+        await $('div.flatpickr-calendar').remove();
         if(resData.success){
             for (const task of resData.tasks) {
                 insertTask(task);
@@ -220,7 +230,8 @@ async function deleteTask(taskID, counter=0){
     }
 }
 
-async function updateTask(taskID, newTask, counter=0){
+async function updateTask(newTask, counter=0){
+    console.log(newTask);
     if(counter >= 1){
         show(modal);
         show(spinner);
@@ -231,7 +242,7 @@ async function updateTask(taskID, newTask, counter=0){
         show(reload);
         throw new Error(errorText.html());
     }
-    if(!taskID){
+    if(!newTask.taskid){
         show(errorDiv);
         hide(modal);
         hide(spinner);
@@ -244,13 +255,9 @@ async function updateTask(taskID, newTask, counter=0){
     try {
         hide(loginScreen);
         if(!newTask.name) newTask.name = null;
-        if(!newTask.name) newTask.description = null;
+        if(!newTask.description) newTask.description = null;
         const res = await auth.post('/updateTask', {
-            data: {
-                description: newTask.description,
-                taskid: taskID,
-                name: newTask.name,
-            }
+            data: newTask
         });
         if(res.data.success){
             hide(modal);
@@ -259,13 +266,13 @@ async function updateTask(taskID, newTask, counter=0){
             return true;
         }else{
             counter++;
-            showError(res.data.error);
-            return updateTask(taskID, newTask, counter);
+            showError(`Server error: ${res.data.error}`);
+            return updateTask(newTask, counter);
         }
     } catch (error) {
         counter++;
         showError(error);
-        return updateTask(taskID, newTask, counter);
+        return updateTask(newTask, counter);
     }
 }
 
