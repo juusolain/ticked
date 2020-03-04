@@ -1,4 +1,4 @@
-const { app, BrowserWindow } = require('electron');
+const { app, BrowserWindow, screen } = require('electron');
 const path = require('path');
 
 
@@ -7,24 +7,31 @@ if (require('electron-squirrel-startup')) { // eslint-disable-line global-requir
   app.quit();
 }
 
+if(require('electron-is-dev')){
+  require('electron-reload')(__dirname);
+}else{
+  require('update-electron-app')();
+}
+
+app.allowRendererProcessReuse = true; //Get rid of warnings - doesnt affect this project due to always quitting after closing renderer
+
 const createWindow = () => {
+  const { width, height } = screen.getPrimaryDisplay().workAreaSize;
   const mainWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
+    width: 0.75*width,
+    height: 0.75*height,
     webPreferences: {
       preload: __dirname + '/preload.js',
     },
+    backgroundColor: '#ABCDEF'
   });
   mainWindow.loadFile(path.join(__dirname, 'index.html'));
-  mainWindow.webContents.openDevTools();
 };
 
 app.on('ready', createWindow);
 
 app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') {
-    app.quit();
-  }
+  app.quit();
 });
 
 app.on('activate', () => {

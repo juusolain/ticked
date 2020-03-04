@@ -1,6 +1,334 @@
+:root{
+  --white: #F3F3F3;
+  --whitehover: #E9E9E9;
+  --light: #DDDDDD;
+  --lightblue: #ABCDEF;
+  --gray: #484d52;
+  --dark: #20262C;
+  --black: #0C0E10;
+  --error: rgba(255, 0, 0, 0.5);
+}
+
+html{
+  height: 100%;
+  background-color: var(--lightblue);
+  color: var(--black);
+}
+
 body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  height: 100%;
+  font-family: 'Roboto', sans-serif;
+  font-size: 12px;
   margin: auto;
-  max-width: 38rem;
-  padding: 2rem;
+  display: flex;
+}
+
+div.modal{
+  flex: 1;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  align-content: center;
+  justify-content: center;
+}
+
+div.login{
+  position: absolute;
+  border-radius: 2px;
+  border-width: 2px;
+  width: 50%;
+  height: 25%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 8px;
+  background-color: var(--dark);
+  flex-direction: column;
+  display: flex;
+}
+
+div.main{
+  flex: 1;
+  display: flex;
+  background-color: var(--white);
+}
+
+div.mainarea{
+  margin: 4px;
+  background-color: var(--white);
+  flex: 4;
+  flex-direction: column;
+  display: flex;
+}
+
+div.newtask{
+  flex: 1;
+  display: flex;
+}
+
+div.tasks{
+  overflow-x: hidden;
+  overflow-y: scroll;
+  flex: 12;
+}
+
+div.newtask{
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+}
+
+div.newtask > input{
+  font-size: 18px;
+  margin: 1%;
+  flex: 10;
+  border-radius: 4px;
+  border-width: 4px;
+  background-color: var(--light);
+  padding: 4px;
+  color: var(--black);
+  border: 4px solid var(--light);
+  box-sizing: border-box;
+  line-height: 4px;
+}
+
+div.newtask > button{
+  font-size: 18px;
+  margin: 1%;
+  flex: 1;
+  border-radius: 4px;
+  border-width: 4px;
+  padding: 4px;
+  color: var(--black);
+  background-color: var(--light);
+  border: 4px solid transparent;
+  box-sizing: border-box;
+  line-height: 4px;
+  transition: background-color linear 0.1s;
+}
+
+
+
+div.newtask > button:hover{
+  background-color: var(--whitehover);
+}
+
+div.reload{
+  position: absolute;
+  border-radius: 2px;
+  border-width: 2px;
+  width: 10%;
+  height: 10%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 8px;
+  flex-direction: column;
+  display: flex;
+}
+
+div.reload > button{
+  font-size: 18px;
+  margin: 1%;
+  flex: 1;
+  border-radius: 4px;
+  border-width: 4px;
+  background-color: var(--light);
+  padding: 4px;
+  color: var(--black);
+  border: 4px solid var(--light);
+  box-sizing: border-box;
+  line-height: 4px;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background-color: rgba(0,0,0,0);
+  padding: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background-color: var(--gray);
+  border-radius: 4px;
+  border: 2px solid var(--gray);
+  box-sizing: border-box;
+  transition: background-color 2s;
+}
+
+div.task{
+  background-color: var(--light);
+  margin: 8px;
+  padding: 4px;
+  border-radius: 2px;
+  border-width: 2px;
+  border-color: var(--light);
+  display: flex;
+  flex-direction: row;
+}
+
+div.task > div.taskLeft{
+  flex: 8;
+  display: flex;
+  flex-direction: column;
+}
+
+div.task > div.taskRight{
+  display: grid;
+  grid-template-columns: auto auto;
+  grid-template-rows: 1fr 1fr;
+  flex-direction: column;
+  flex: 1;
+}
+
+div.task > div.taskRight > button{
+  flex: 1;
+  grid-row: 1;
+  background-color: var(--white);
+  background-position: center;
+  background-repeat: no-repeat;
+  border-radius: 2px;
+  border: 2px solid transparent;
+  margin: 4px;
+  transition: background-color linear 0.1s;
+  background-size: contain;
+}
+
+div.task > div.taskRight > button:hover{
+  background-color: var(--whitehover);
+}
+
+div.task > div.taskRight > button.delete{
+  grid-column: 1;
+  min-width: 64px;
+  background-image: url('external/delete.svg');
+}
+
+div.task > div.taskRight > button.unused{
+  grid-column: 2;
+  min-width: 64px;
+  background-image: url('external/delete.svg');
+}
+
+div.task > div.taskRight input.alarm{
+  min-width: 63px;
+  flex: 1;
+  grid-row: 2;
+  grid-column: 1/3;
+  margin: 4px;
+  overflow: hidden;
+  background-color: var(--white);
+  border-radius: 2px;
+  border: 2px solid transparent;
+  transition: background-color linear 0.1s;
+}
+
+div.task > div.taskRight > input.alarm:hover{
+  background-color: var(--whitehover);
+}
+
+div.task > div.taskRight > button.alarm{
+  background-image: url('external/alarm.svg');
+}
+
+div.task > div.taskRight > button.alarm.blue{
+  background-image: url('external/alarmblue.svg') !important;
+}
+
+div.task > div.taskLeft > input{
+  margin: 8px;
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  background-color: var(--light);
+  border: none;
+}
+
+div.task > div.taskLeft > input.name{
+  color: var(--black);
+  font-size: 18px;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+}
+
+div.task > div.taskLeft > input.description{
+  color: var(--gray);
+  font-size: 12px;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+
+div.sidebar{
+  background-color: var(--lightblue);
+  flex: 1;
+}
+
+.hide{
+  display: none !important;
+}
+
+
+div.error{
+  z-index: 1;
+  background-color: var(--error);
+  position: absolute;
+  top: 5%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 95%;
+  box-sizing: border-box;
+  border-radius: 2px;
+  border-width: 2px;
+  border-color: var(--error);
+  text-align: center;
+}
+
+.login > input{
+  font-size: 18px;
+  flex: 1;
+  margin: 1%;
+  border-radius: 2px;
+  border-width: 2px;
+  background-color: rgba(0, 0, 0, 0.25);
+  color: var(--white);
+  border-color: rgba(0, 0, 0, 0);
+  box-sizing: border-box;
+}
+
+.login > button{
+  flex: 1;
+  margin: 1%;
+  border-radius: 2px;
+  border-width: 2px;
+  color: var(--white);
+  background-color: rgba(0, 0, 0, 0.25);
+  border-color: rgba(0, 0, 0, 0);
+  box-sizing: border-box;
+}
+
+div.spinner{
+  display: inline-block;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border: 8px solid rgba(0, 0, 0, 0.25);
+  border-radius: 50%;
+  border-top: 8px solid #FFF;
+  width: 80px;
+  height: 80px;
+  animation: spinner 1s linear infinite;
+}
+
+@keyframes spinner {
+  0% {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  100% {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
 }

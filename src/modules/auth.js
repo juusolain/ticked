@@ -12,21 +12,37 @@ class auth{
 
     login = async(username, password)=>{
         if(username && password){
-            const res = await this.post('/login', {
-                data: {
-                    username: username,
-                    password: password,
-                },
-            });
-            if(res.data.success){
-                store.set('token', res.data.token);
-                return true;
-            }else{
-                store.set('token', null);
-                return new Error('invalid username or password');
+            try{
+                const res = await this.post('/login', {
+                    data: {
+                        username: username,
+                        password: password,
+                    },
+                });
+                if(res.data.success){
+                    store.set('token', res.data.token);
+                    return {
+                        success: true,
+                    }
+                }else{
+                    store.set('token', null);
+                    return {
+                        success: false,
+                        error: 'Invalid username or password',
+                    }
+                }
+            }catch(err){
+                return {
+                    success: false,
+                    error: err,
+                } 
             }
+
         }else{
-            return new Error('Please supply both username and password');
+            return {
+                success: false,
+                error: 'Please supply both username and password',
+            }
         }
     }
 
@@ -47,6 +63,12 @@ class auth{
         }
     }
 
+    logout = ()=>{
+        this.setToken(null);
+        return true;
+    }
+
+
     isExpired = (token)=>{
         const decodedJWT = jwtDecode(token);
         if(decodedJWT.exp < Date.now()/1000){
@@ -56,7 +78,7 @@ class auth{
         }
     }
 
-    post = (apiAddress, options)=>{
+    post = async(apiAddress, options)=>{
         const axios = require('axios');
         const headers = {
             'Accept': 'application/json',
@@ -65,17 +87,21 @@ class auth{
         if(this.isLoggedIn()){
             headers['Authorization'] = 'Bearer ' + this.getToken();
         }
-        const res = axios({
-            baseURL: this.server,
-            method: 'post',
-            url: apiAddress,
-            headers: headers,
-            ...options,
-        })
-        return res;
+        try {
+            const res = await axios({
+                baseURL: this.server,
+                method: 'post',
+                url: apiAddress,
+                headers: headers,
+                ...options,
+            });
+            return res;
+        } catch (error) {
+            return Promise.reject(error);
+        }
     }
 
-    get = (apiAddress, options)=>{
+    get = async(apiAddress, options)=>{
         const axios = require('axios');
         const headers = {
             'Accept': 'application/json',
@@ -84,14 +110,20 @@ class auth{
         if(this.isLoggedIn()){
             headers['Authorization'] = 'Bearer ' + this.getToken();
         }
-        const res = axios({
-            baseURL: this.server,
-            method: 'get',
-            url: apiAddress,
-            headers: headers,
-            ...options,
-        })
-        return res;
+        try {
+            const res = await axios({
+                baseURL: this.server,
+                method: 'get',
+                url: apiAddress,
+                headers: headers,
+                ...options,
+            });
+            return res;
+        } catch (error) {
+            return Promise.reject(error);
+        }
+
+        
     }
 }
 
