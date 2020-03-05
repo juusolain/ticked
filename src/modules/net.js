@@ -1,10 +1,7 @@
-const Store = require('electron-store');
-const jwtDecode = require('jwt-decode');
-
 const store = new Store();
 
 
-class auth{
+class Net{
     constructor(server){
         this.server = server;
         console.log('New auth created');
@@ -79,7 +76,6 @@ class auth{
     }
 
     post = async(apiAddress, options)=>{
-        const axios = require('axios');
         const headers = {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
@@ -102,7 +98,6 @@ class auth{
     }
 
     get = async(apiAddress, options)=>{
-        const axios = require('axios');
         const headers = {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
@@ -121,10 +116,18 @@ class auth{
             return res;
         } catch (error) {
             return Promise.reject(error);
-        }
+        }   
+    }
 
-        
+    updateTask = async(newTask)=>{
+
+    }
+
+    getTasks = async(category)=>{
+
+    }
+
+    getCategories = async()=>{
+
     }
 }
-
-module.exports = auth;

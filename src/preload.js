@@ -1,6 +1,7 @@
-window.Auth = require('./modules/auth');
-
 const useLocalhost = false;
+window.jwtDecode = require('jwt-decode');
+window.Store = require('electron-store')
+window.axios = require('axios')
 
 if(require('electron-is-dev') && useLocalhost){
   window.server = 'http://localhost:5000';

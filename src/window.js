@@ -1,8 +1,10 @@
-const auth = new Auth(server);
+var net;
+var taskManager;
 var modal, loginScreen, mainScreen, spinner, taskScreen, errorDiv, errorText, taskTemplate, reload, timeouts = [];
 
-
 window.onload = async()=>{
+    net = new Net(server);
+    taskManager = new TaskManager();
     modal = await $('div.modal');
     loginScreen = await $('div.login');
     mainScreen = await $('div.main');
@@ -18,7 +20,7 @@ window.onload = async()=>{
             newTask();
         }
     });
-    if(auth.isLoggedIn()){
+    if(net.isLoggedIn()){
         try {
             show(modal);
             show(spinner);
@@ -62,7 +64,7 @@ async function newTask(){
     };
     hideError();
     try {
-        const res = await auth.post('/newTask', {
+        const res = await net.post('/newTask', {
             data: newTaskData
         });
         if(res.data.success){
@@ -137,6 +139,7 @@ async function insertTask(taskData){
         enableTime: true,
         altInput: true,
         defaultDate: taskData.alarm,
+        minDate: new Date(),
         time_24hr: true,
         defaultDate: taskAlarm,
         altFormat: "M d Y H:i", //d.m.Y\nH:i
@@ -205,7 +208,7 @@ async function loadData(loopCounter=0){
         throw new Error(errorText.html());
     }
     try {
-        const res = await auth.post('/getTask/all');
+        const res = await net.post('/getTask/all');
         const resData = res.data;
         taskScreen.empty();
         clearAlarms();
@@ -242,7 +245,7 @@ async function deleteTask(taskID, counter=0){
         throw new Error(errorText.html());
     }
     try {
-        const res = await auth.post('/deleteTask', {
+        const res = await net.post('/deleteTask', {
             data: {
                 taskid: taskID
             }
@@ -285,7 +288,7 @@ async function updateTask(newTask, counter=0){
         hide(loginScreen);
         if(!newTask.name) newTask.name = null;
         if(!newTask.description) newTask.description = null;
-        const res = await auth.post('/updateTask', {
+        const res = await net.post('/updateTask', {
             data: newTask
         });
         if(res.data.success){
@@ -306,7 +309,7 @@ async function updateTask(newTask, counter=0){
 }
 
 async function logout(){
-    auth.logout();
+    net.logout();
     hide(mainScreen);
     show(loginScreen);
     show(modal);
@@ -336,7 +339,7 @@ async function login(){
     hideError();
     hide(loginScreen);
     show(spinner);
-    const authRes = await auth.login(username, password);
+    const authRes = await net.login(username, password);
     if(authRes.success){
         await loadData();
         hide(modal);
