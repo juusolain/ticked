@@ -1,4 +1,4 @@
-const useLocalhost = false;
+const useLocalhost = true;
 window.jwtDecode = require('jwt-decode');
 window.Store = require('electron-store')
 window.axios = require('axios')

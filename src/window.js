@@ -22,22 +22,16 @@ window.onload = async()=>{
     });
     if(net.isLoggedIn()){
         try {
-            show(modal);
-            show(spinner);
+            setViewState('spinner');
             await loadData();
-            hide(spinner);
+            setViewState('main');
             hideError();
-            hide(modal);
-            show(mainScreen);
         } catch (error) {
             showError(error);
-            hide(spinner);
-            show(reload);
+            setViewState('reload');
         }
     }else{
-        hide(spinner);
-        show(loginScreen);
-        console.log(loginScreen);
+        setViewState('login');
     }
 };
 
@@ -68,7 +62,6 @@ async function newTask(){
             data: newTaskData
         });
         if(res.data.success){
-            
             await loadData();
         }else{
             showError(res.data.error);
@@ -79,115 +72,9 @@ async function newTask(){
     }
 }
 
-async function insertTask(taskData){
-    var newTask = await $(taskTemplate).clone();
-    const inputName = newTask.find('input.name')
-    const inputDesc = newTask.find('input.description')
-    const inputAlarm = newTask.find('input.alarm')
-    const buttonDelete = newTask.find('button.delete')
-    var taskAlarm = null;
-    inputName.val(taskData.name);
-    if(taskData.description){
-        inputDesc.val(taskData.description);
-    }
-    if(taskData.alarm){
-        taskAlarm = taskData.alarm;
-    }
-
-    async function updateThis(){
-        var newTaskData = {};
-        if(inputDesc.val() !== inputDesc.curVal){
-            inputDesc.curVal = inputDesc.val();
-            newTaskData['description'] = inputDesc.val();
-        }
-        if(inputName.val() !== inputName.curVal){
-            inputName.curVal = inputName.val();
-            newTaskData['name'] = inputName.val();
-        }
-        if(fpInst.selectedDates[0] !== inputAlarm.curVal){
-            inputAlarm.curVal = fpInst.selectedDates[0];
-            newTaskData['alarm'] = fpInst.selectedDates[0];
-        }
-        if(Object.entries(newTaskData).length !== 0){
-            newTaskData['taskid']=taskData.taskid;
-            await updateTask(newTaskData);
-            await loadData();
-        }
-    }
-
-    inputName.focusout(()=>{
-        updateThis();
-    });
-
-    inputDesc.focusout(()=>{
-        updateThis();
-    });
-
-    inputDesc.keypress((event)=>{
-        if(event.key === 'Enter'){
-            inputDesc.blur();
-        }
-    });
-
-    inputName.keypress((event)=>{
-        if(event.key === 'Enter'){
-            inputName.blur();
-        }
-    });
-
-    const fpInst = flatpickr(inputAlarm, {
-        enableTime: true,
-        altInput: true,
-        defaultDate: taskData.alarm,
-        minDate: new Date(),
-        time_24hr: true,
-        defaultDate: taskAlarm,
-        altFormat: "M d Y H:i", //d.m.Y\nH:i
-        dateFormat: "Z",
-        onClose: (dateArr, dateStr, instance)=>{
-            updateThis();
-        }
-    });
-
-    buttonDelete.click(()=>{
-        deleteTask(taskData.taskid);
-        newTask.remove();
-    });
-    newTask.bind('destroyed', ()=>{
-        fpInst.destroy();
-        inputName.remove();
-        inputDesc.remove();
-        inputAlarm.remove();
-        buttonDelete.remove();
-        newTask.empty();
-        newTask.remove();
-        console.log("Removed newtask");
-    });
-    if(taskData.alarm){
-        addAlarm(taskData);
-    }
-    taskScreen.append(newTask);
+async function addAlarm(taskData){//Wrapper for taskManager.addAlarm
+    await taskManager.addAlarm(taskData);
     return true;
-}
-
-async function addAlarm(taskData){
-    const curDate = new Date();
-    const taskDate = new Date(taskData.alarm);
-    var dateDiff = taskDate.getTime() - curDate.getTime();
-    if(dateDiff > 0){
-        if(Notification.permission === 'denied') await Notification.requestPermission();
-        if(Notification.permission === 'granted'){
-            timeouts.push(setTimeout(()=>{
-                if(Notification.permission === 'granted'){
-                    new Notification(taskData.name, {
-                        body: taskData.description,
-                    });
-                }
-            }, dateDiff));
-        }
-    }
-
-
 }
 
 async function clearAlarms(){
@@ -198,50 +85,31 @@ async function clearAlarms(){
 
 async function loadData(loopCounter=0){
     if(loopCounter >= 1){
-        show(spinner);
-        show(modal);
+        setViewState('spinner');
     }
     if(loopCounter >= 3){
         showError('loadData failed after 3 times with error: '+errorText.html());
-        hide(spinner);
-        show(reload);
+        setViewState('reload');
         throw new Error(errorText.html());
     }
     try {
-        const res = await net.post('/getTask/all');
-        const resData = res.data;
-        taskScreen.empty();
-        clearAlarms();
-        await $('div.flatpickr-calendar').remove();
-        if(resData.success){
-            for (const task of resData.tasks) {
-                insertTask(task);
-            }
-            show(mainScreen);
-            hide(modal);
-            hide(spinner);
-        }else{
-            showError(resData.error);
-            loopCounter++;
-            return loadData(loopCounter);
-        }
+        await taskManager.loadData();
+        setViewState('main');
+        return true;
     } catch (error) {
         showError(error);
         loopCounter++;
         return loadData(loopCounter);
     }
-
 }
 
 async function deleteTask(taskID, counter=0){
     if(counter >= 1){
-        show(modal);
-        show(spinner);
+        setViewState('spinner')
     }
     if(counter >= 3){
         showError('deleteTask failed after 3 times with error: '+errorText.html());
-        hide(spinner);
-        show(reload);
+        setViewState('reload');
         throw new Error(errorText.html());
     }
     try {
@@ -263,64 +131,34 @@ async function deleteTask(taskID, counter=0){
     }
 }
 
-async function updateTask(newTask, counter=0){
-    if(counter >= 1){
-        show(modal);
-        show(spinner);
+async function updateTask(newTask, loopCounter=0){
+    if(loopCounter >= 1){
+        setViewState('spinner');
     }
-    if(counter >= 3){
+    if(loopCounter >= 3){
         showError('updateTask failed after 3 times with error: '+errorText.html());
-        hide(spinner);
-        show(reload);
-        throw new Error(errorText.html());
-    }
-    if(!newTask.taskid){
-        show(errorDiv);
-        hide(modal);
-        hide(spinner);
-        errorText.html('Empty taskid');
+        setViewState('reload');
         return false;
     }
-    if(newTask.name === -1 && newTask.description === -1){
-        return true;
-    }
     try {
-        hide(loginScreen);
-        if(!newTask.name) newTask.name = null;
-        if(!newTask.description) newTask.description = null;
-        const res = await net.post('/updateTask', {
-            data: newTask
-        });
-        if(res.data.success){
-            hide(modal);
-            hide(spinner);
-            hideError();
-            return true;
-        }else{
-            counter++;
-            showError(`Server error: ${res.data.error}`);
-            return updateTask(newTask, counter);
-        }
+        await taskManager.updateTask(newTask);
+        return true;
     } catch (error) {
-        counter++;
+        loopCounter++;
         showError(error);
-        return updateTask(newTask, counter);
+        updateTask(newTask, loopCounter);
     }
 }
 
 async function logout(){
     net.logout();
-    hide(mainScreen);
-    show(loginScreen);
-    show(modal);
-    hide(spinner);
+    setViewState('login')
     return true;
 }
 
 async function login(){
     const usernameInput = await $('#username');
     const passwordInput = await $('#password');
-
 
     const password = passwordInput.val();
     const username = usernameInput.val();
@@ -337,19 +175,50 @@ async function login(){
 
     
     hideError();
-    hide(loginScreen);
-    show(spinner);
+    setViewState('spinner');
     const authRes = await net.login(username, password);
     if(authRes.success){
         await loadData();
-        hide(modal);
-        show(mainScreen);
+        setViewState('main');
     }else{
         showError(authRes.error);
-        show(loginScreen);
-        hide(spinner);
+        setViewState('login');
     }
     return;
+}
+
+function setViewState(newViewState){
+    switch (newViewState) {
+        case 'login':
+            show(modal);
+            show(loginScreen);
+            hide(reload);
+            hide(mainScreen);
+            hide(spinner);
+            break;
+        case 'main':
+            hide(modal);
+            hide(spinner);
+            hide(loginScreen);
+            hide(reload);
+            show(mainScreen);
+            break;
+        case 'reload':
+            show(modal);
+            show(reload);
+            hide(spinner);
+            hide(loginScreen);
+            hide(mainScreen);
+            break;
+        case 'spinner':
+            show(modal);
+            hide(reload);
+            hide(loginScreen);
+            show(spinner);
+            break;
+        default:
+            break;
+    }
 }
 
 function hide(object){
