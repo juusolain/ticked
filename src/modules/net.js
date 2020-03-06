@@ -76,7 +76,6 @@ class Net{
     }
 
     post = async(apiAddress, options)=>{
-        console.log('posting')
         const headers = {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
