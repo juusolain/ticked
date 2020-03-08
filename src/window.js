@@ -50,23 +50,10 @@ function reloadPage(){
 }
 
 async function newTask(){
-    const newTaskInput = await $('div.newtask > input.newtask');
-    const name = newTaskInput.val();
-    newTaskInput.val('');
-    const newTaskData = {
-        name: name
-    };
     hideError();
     try {
-        const res = await net.post('/newTask', {
-            data: newTaskData
-        });
-        if(res.data.success){
-            await loadData();
-        }else{
-            showError(res.data.error);
-        }
-        
+        await taskManager.newTask();
+        return true;
     } catch (error) {
         showError(error);
     }

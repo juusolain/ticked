@@ -4,6 +4,23 @@ class TaskManager{
         console.log(taskManager);
     }
     
+    newTask = async()=>{
+        const newTaskInput = await $('div.newtask > input.newtask');
+        const name = newTaskInput.val();
+        newTaskInput.val('');
+        const newTaskData = {
+            name: name
+        };
+        const res = await net.post('/newTask', {
+            data: newTaskData
+        });
+        if(res.data.success){
+            return true;
+        }else{
+            throw new Error(res.data.error);
+        }
+    }
+
     insertTask = async(newTask)=>{
         const newTaskInstance = new Task(newTask, this);
         const newTaskDOM = await newTaskInstance.init();
