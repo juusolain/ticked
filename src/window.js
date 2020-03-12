@@ -90,7 +90,7 @@ async function loadData(loopCounter=0){
     }
 }
 
-async function deleteTask(taskID, counter=0){
+async function deleteTask(taskid, counter=0){
     if(counter >= 1){
         setViewState('spinner')
     }
@@ -100,21 +100,11 @@ async function deleteTask(taskID, counter=0){
         throw new Error(errorText.html());
     }
     try {
-        const res = await net.post('/deleteTask', {
-            data: {
-                taskid: taskID
-            }
-        });
-        if(res.data.success){
-            return true;
-        }else{
-            throw new Error(res.data.error);
-        }
-        
+        taskManager.deleteTask(taskid);
     } catch (error) {
         counter++;
         showError(error);
-        deleteTask(taskID, counter);
+        deleteTask(taskid, counter);
     }
 }
 

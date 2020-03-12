@@ -111,4 +111,8 @@ class Task{
         }
     }
 
+    updateData = async (newData)=>{
+        
+    }
+
 }

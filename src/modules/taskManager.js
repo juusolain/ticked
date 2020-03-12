@@ -21,6 +21,19 @@ class TaskManager{
         }
     }
 
+    deleteTask = async(taskid)=>{
+        const res = await net.post('/deleteTask', {
+            data: {
+                taskid: taskid
+            }
+        });
+        if(res.data.success){
+            return true;
+        }else{
+            throw new Error(res.data.error);
+        }
+    }
+
     insertTask = async(newTask)=>{
         const newTaskInstance = new Task(newTask, this);
         const newTaskDOM = await newTaskInstance.init();
