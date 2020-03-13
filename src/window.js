@@ -108,6 +108,7 @@ async function deleteTask(taskid, counter=0){
     }
 }
 
+
 async function updateTask(newTask, loopCounter=0){
     if(loopCounter >= 1){
         setViewState('spinner');
