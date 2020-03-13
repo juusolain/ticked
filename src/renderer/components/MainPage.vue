@@ -10,8 +10,8 @@
 </template>
 
 <script>
-import Menu from './MainPage/Menu'
-import TaskList from './MainPage/TaskList'
+import Menu from '@/components/MainPage/Menu'
+import TaskList from '@/components/MainPage/TaskList'
 
 export default {
   name: 'MainPage',

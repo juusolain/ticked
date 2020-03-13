@@ -5,8 +5,7 @@
 </template>
 
 <script>
-import Task from './Task'
-import axios from 'axios'
+import Task from '@/components/MainPage/Task'
 
 export default {
   name: 'tasklist',
@@ -14,29 +13,17 @@ export default {
   props: ['tasks'],
   methods: {
     async fetchData () {
-      this.error = this.post = null
+      this.error = this.tasks = null
       this.loading = true
-        const headers = {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-        }
-        /*if(this.isLoggedIn()){
-            headers['Authorization'] = 'Bearer ' + this.getToken()
-        }*/
-        const res = await axios({
-          baseURL: this.server,
-          method: 'post',
-          url: this.$apiAddress,
-          headers: headers,
-          ...options,
-        })
-        console.log(res)
-  },
-  watch: {
-    '$route': 'fetchData'
-  },
-  created () {
-    this.fetchData()
+      const res = this.net.post('/getTasks/all')
+      console.log(res)
+    },
+    watch: {
+      '$route': 'fetchData'
+    },
+    created () {
+      this.fetchData()
+    }
   }
 }
 </script>
