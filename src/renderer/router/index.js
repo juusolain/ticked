@@ -6,13 +6,22 @@ Vue.use(Router)
 export default new Router({
   routes: [
     {
-      path: '/',
-      name: 'landing-page',
-      component: require('@/components/LandingPage').default
+      path: '/login',
+      name: 'login',
+      component: require('@/components/Login').default,
+      props: true
     },
     {
-      path: '*',
-      redirect: '/'
+      path: '/',
+      redirect: '/main',
+      props: true
+    },
+    {
+      path: '/main',
+      name: 'Main',
+      component: require('@/components/MainPage').default,
+      props: true
     }
+
   ]
 })
