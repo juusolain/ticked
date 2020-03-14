@@ -1,6 +1,6 @@
 <template>
-  <div class="columns">
-    <div class="column is-one-quarter">
+  <div class="columns is-fullheight">
+    <div class="column is-one-quarter has-background-black-ter has-text-light">
       <Menu></Menu>
     </div>
     <div class="column is-three-quarters">

@@ -1,13 +1,16 @@
-import Store from 'electron-store'
+import ElectronStore from 'electron-store'
 import jwtDecode from 'jwt-decode'
 import axios from 'axios'
 
-const store = new Store()
+const store = new ElectronStore()
 
 class Net {
-  constructor (server) {
+  constructor () {
+    const server = process.env.NODE_ENV === 'development'
+      ? 'http://localhost:5000/'
+      : 'https://ticked-server.herokuapp.com/'
     this.server = server
-    console.log('New auth created')
+    console.log(`New auth created with server ${this.server}`)
   }
 
     login = async (username, password) => {
@@ -133,4 +136,4 @@ class Net {
     }
 }
 
-export default Net
+export default new Net()

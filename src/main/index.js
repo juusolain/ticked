@@ -14,6 +14,7 @@ let mainWindow
 const winURL = process.env.NODE_ENV === 'development'
   ? `http://localhost:9080`
   : `file://${__dirname}/index.html`
+const useWebSecurity = process.env.NODE_ENV !== 'development'
 
 function createWindow () {
   /**
@@ -25,7 +26,8 @@ function createWindow () {
     width: 1000,
     webPreferences: {
       nodeIntegration: true,
-      nodeIntegrationInWorker: true
+      nodeIntegrationInWorker: true,
+      webSecurity: useWebSecurity
     }
   })
 

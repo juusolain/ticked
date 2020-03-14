@@ -1,4 +1,24 @@
 @import "~bulma/sass/utilities/_all";
 
+.is-viewport-height {
+  height: 100vh;
+}
+  
+.has-direction-column {
+  flex-direction: column;
+}
+.columns {
+  &.is-fullheight {
+    flex: 1;
+    .column {
+      overflow-y: auto;
+    }
+  }
+}
+
+.is-sidebar-menu {
+  padding: 1rem;
+}
+
 @import "~bulma";
 @import "~buefy/src/scss/buefy";
