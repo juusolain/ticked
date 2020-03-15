@@ -1,5 +1,7 @@
 <script>
 import net from '@/modules/net'
+import state from '@/modules/state'
+
 export default {
   data () {
     return { loading: false, lists: null, error: null, isActive: true }
@@ -20,6 +22,10 @@ export default {
         this.loading = false
         this.error = res.data.error
       }
+    },
+    setList (newList) {
+      state.setList(newList)
+      this.fetchData()
     }
   }
 }
@@ -32,6 +38,7 @@ export default {
         v-for="list in lists"
         :key="list.listid"
         :label="list.listname"
+        @click="setList(list.listid)"
       />
     </b-menu-list>
     <b-menu-list label="Actions">

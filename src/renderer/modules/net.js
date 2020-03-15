@@ -4,10 +4,9 @@ import axios from 'axios'
 
 const store = new ElectronStore()
 
-const server =
-  process.env.NODE_ENV === 'development'
-    ? 'http://localhost:5000/'
-    : 'https://ticked-server.herokuapp.com/'
+const server = process.env.NODE_ENV === 'development'
+  ? 'http://localhost:5000/'
+  : 'https://ticked-server.herokuapp.com/'
 
 class Net {
   constructor () {

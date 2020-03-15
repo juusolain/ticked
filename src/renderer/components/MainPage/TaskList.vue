@@ -1,6 +1,7 @@
 <script>
 import Task from '@/components/MainPage/Task'
 import net from '@/modules/net'
+import state from '@/modules/state'
 export default {
   name: 'Tasklist',
   components: { Task },
@@ -19,7 +20,11 @@ export default {
     async fetchData () {
       this.error = this.tasks = null
       this.loading = true
-      const res = await net.post('/getTask/all')
+      const res = await net.post('/getTask/all', {
+        body: JSON.stringify({
+          listid: state.currentList
+        })
+      })
       if (res.data.success) {
         this.tasks = res.data.tasks
         this.loading = false

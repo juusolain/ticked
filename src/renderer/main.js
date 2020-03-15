@@ -9,7 +9,6 @@ import App from './App'
 import router from './router'
 
 import net from './modules/net'
-console.log(net)
 window.net = net
 
 if (!process.env.IS_WEB) Vue.use(require('vue-electron'))
