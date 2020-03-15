@@ -1,141 +1,141 @@
-import ElectronStore from "electron-store";
-import jwtDecode from "jwt-decode";
-import axios from "axios";
+import ElectronStore from 'electron-store'
+import jwtDecode from 'jwt-decode'
+import axios from 'axios'
 
-const store = new ElectronStore();
+const store = new ElectronStore()
 
 const server =
-  process.env.NODE_ENV === "development"
-    ? "http://localhost:5000/"
-    : "https://ticked-server.herokuapp.com/";
+  process.env.NODE_ENV === 'development'
+    ? 'http://localhost:5000/'
+    : 'https://ticked-server.herokuapp.com/'
 
 class Net {
-  constructor() {
-    this.server = server;
-    console.log(`New auth created with server ${this.server}`);
+  constructor () {
+    this.server = server
+    console.log(`New auth created with server ${this.server}`)
   }
 
   login = async (username, password) => {
     if (username && password) {
       try {
-        const res = await this.post("/login", {
+        const res = await this.post('/login', {
           data: {
             username: username,
             password: password
           }
-        });
+        })
         if (res.data.success) {
-          store.set("token", res.data.token);
+          store.set('token', res.data.token)
           return {
             success: true
-          };
+          }
         } else {
-          store.set("token", null);
+          store.set('token', null)
           return {
             success: false,
-            error: "Invalid username or password"
-          };
+            error: 'Invalid username or password'
+          }
         }
       } catch (err) {
         return {
           success: false,
           error: err
-        };
+        }
       }
     } else {
       return {
         success: false,
-        error: "Please supply both username and password"
-      };
+        error: 'Please supply both username and password'
+      }
     }
   };
 
   getToken = () => {
-    return store.get("token");
+    return store.get('token')
   };
 
   setToken = newToken => {
-    return store.set("token", newToken);
+    return store.set('token', newToken)
   };
 
   isLoggedIn = () => {
-    const token = this.getToken();
+    const token = this.getToken()
     if (token && !this.isExpired(token)) {
-      return true;
+      return true
     } else {
-      return false;
+      return false
     }
   };
 
   logout = () => {
-    this.setToken(null);
-    return true;
+    this.setToken(null)
+    return true
   };
 
   isExpired = token => {
-    const decodedJWT = jwtDecode(token);
+    const decodedJWT = jwtDecode(token)
     if (decodedJWT.exp < Date.now() / 1000) {
-      return true;
+      return true
     } else {
-      return false;
+      return false
     }
   };
 
   post = async (apiAddress, options) => {
     const headers = {
-      Accept: "application/json",
-      "Content-Type": "application/json"
-    };
+      Accept: 'application/json',
+      'Content-Type': 'application/json'
+    }
     if (this.isLoggedIn()) {
-      headers["Authorization"] = "Bearer " + this.getToken();
+      headers['Authorization'] = 'Bearer ' + this.getToken()
     }
     try {
       const res = await axios({
         baseURL: this.server,
-        method: "post",
+        method: 'post',
         url: apiAddress,
         headers: headers,
         ...options
-      });
-      return res;
+      })
+      return res
     } catch (error) {
-      return Promise.reject(error);
+      return Promise.reject(error)
     }
   };
 
   get = async (apiAddress, options) => {
     const headers = {
-      Accept: "application/json",
-      "Content-Type": "application/json"
-    };
+      Accept: 'application/json',
+      'Content-Type': 'application/json'
+    }
     if (this.isLoggedIn()) {
-      headers["Authorization"] = "Bearer " + this.getToken();
+      headers['Authorization'] = 'Bearer ' + this.getToken()
     }
     try {
       const res = await axios({
         baseURL: this.server,
-        method: "get",
+        method: 'get',
         url: apiAddress,
         headers: headers,
         ...options
-      });
-      return res;
+      })
+      return res
     } catch (error) {
-      return Promise.reject(error);
+      return Promise.reject(error)
     }
   };
 
   updateTask = async newTask => {
-    console.log(newTask);
+    console.log(newTask)
   };
 
   getTasks = async list => {
-    console.log(list);
+    console.log(list)
   };
 
   getLists = async () => {
-    console.log("Getlists");
+    console.log('Getlists')
   };
 }
 
-export default new Net();
+export default new Net()

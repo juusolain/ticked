@@ -1,26 +1,25 @@
 module.exports = {
   root: true,
-  parser: 'babel-eslint',
-  parserOptions: {
-    sourceType: 'module'
-  },
   env: {
-    browser: true,
-    node: true
+    // this section will be used to determine which APIs are available to us
+    // (i.e are we running in a browser environment or a node.js env)
+    node: true,
+    browser: true
   },
-  extends: 'standard',
-  globals: {
-    __static: true
+  parserOptions: {
+    parser: "babel-eslint",
+    // specifying a module sourcetype prevent eslint from marking import statements as errors
+    sourceType: "module"
   },
-  plugins: [
-    'html'
+  extends: [
+    // use the recommended rule set for both plain javascript and vue
+    "eslint:recommended",
+    "standard",
+    "plugin:vue/vue3-recommended"
   ],
-  'rules': {
-    // allow paren-less arrow functions
-    'arrow-parens': 0,
-    // allow async-await
-    'generator-star-spacing': 0,
-    // allow debugger during development
-    'no-debugger': process.env.NODE_ENV === 'production' ? 2 : 0
+  rules: {
+    // we should always disable console logs and debugging in production
+    "no-console": process.env.NODE_ENV === "production" ? "error" : "off",
+    "no-debugger": process.env.NODE_ENV === "production" ? "error" : "off"
   }
-}
+};
