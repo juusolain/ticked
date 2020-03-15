@@ -1,18 +1,3 @@
-<template>
-  <b-menu class="is-sidebar-menu">
-    <b-menu-list label="Lists">
-      <b-menu-item
-        v-for="list in lists"
-        :key="list.listid"
-        :label="list.listname"
-      />
-    </b-menu-list>
-    <b-menu-list label="Actions">
-      <b-menu-item label="Logout" />
-    </b-menu-list>
-  </b-menu>
-</template>
-
 <script>
 import net from '@/modules/net'
 export default {
@@ -39,5 +24,20 @@ export default {
   }
 }
 </script>
+
+<template>
+  <b-menu class="is-sidebar-menu">
+    <b-menu-list label="Lists">
+      <b-menu-item
+        v-for="list in lists"
+        :key="list.listid"
+        :label="list.listname"
+      />
+    </b-menu-list>
+    <b-menu-list label="Actions">
+      <b-menu-item label="Logout" />
+    </b-menu-list>
+  </b-menu>
+</template>
 
 <style></style>

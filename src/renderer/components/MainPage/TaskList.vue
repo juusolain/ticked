@@ -1,26 +1,3 @@
-<template>
-  <div class="tasklist">
-    <div v-if="tasks">
-      <Task
-        v-for="task in tasks"
-        :key="task.taskid"
-        :task="task"
-      />
-    </div>
-    <b-loading
-      :active="loading"
-      :is-full-page="false"
-      :can-cancel="false"
-    />
-    <div
-      v-if="error"
-      class="error"
-    >
-      {{ error }}
-    </div>
-  </div>
-</template>
-
 <script>
 import Task from '@/components/MainPage/Task'
 import net from '@/modules/net'
@@ -54,5 +31,28 @@ export default {
   }
 }
 </script>
+
+<template>
+  <div class="tasklist">
+    <div v-if="tasks">
+      <Task
+        v-for="task in tasks"
+        :key="task.taskid"
+        :task="task"
+      />
+    </div>
+    <b-loading
+      :active="loading"
+      :is-full-page="false"
+      :can-cancel="false"
+    />
+    <div
+      v-if="error"
+      class="error"
+    >
+      {{ error }}
+    </div>
+  </div>
+</template>
 
 <style></style>

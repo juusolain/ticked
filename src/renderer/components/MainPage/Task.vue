@@ -1,3 +1,17 @@
+<script>
+export default {
+  name: 'Task',
+  props: {
+    task: {
+      type: Object,
+      default: function () {
+        return {}
+      }
+    }
+  }
+}
+</script>
+
 <template>
   <article class="media">
     <div class="media-content">
@@ -7,9 +21,5 @@
     </div>
   </article>
 </template>
-
-<script>
-export default { name: 'Task', props: ['task'] }
-</script>
 
 <style></style>
