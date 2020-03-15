@@ -2,19 +2,14 @@
   <article class="media">
     <div class="media-content">
       <strong>{{ task.name }}</strong>
-      <br>
+      <br />
       {{ task.description }}
     </div>
   </article>
 </template>
 
 <script>
-export default {
-  name: 'Task',
-  props: ['task']
-}
+export default { name: "Task", props: ["task"] };
 </script>
 
-<style>
-
-</style>
+<style></style>

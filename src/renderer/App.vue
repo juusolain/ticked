@@ -5,11 +5,7 @@
 </template>
 
 <script>
-  export default {
-    name: 'ticked'
-  }
+export default { name: "Ticked" };
 </script>
 
-<style>
-
-</style>
+<style></style>

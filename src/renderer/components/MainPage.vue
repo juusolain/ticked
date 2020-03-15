@@ -10,20 +10,17 @@
 </template>
 
 <script>
-import Menu from '@/components/MainPage/Menu'
-import TaskList from '@/components/MainPage/TaskList'
-
+import Menu from "@/components/MainPage/Menu";
+import TaskList from "@/components/MainPage/TaskList";
 export default {
-  name: 'MainPage',
+  name: "MainPage",
   components: { Menu, TaskList },
   methods: {
-    open (link) {
-      this.$electron.shell.openExternal(link)
+    open(link) {
+      this.$electron.shell.openExternal(link);
     }
   }
-}
+};
 </script>
 
-<style>
-
-</style>
+<style></style>
