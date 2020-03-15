@@ -7,7 +7,6 @@ import './custom.scss'
 
 import App from './App'
 import router from './router'
-import store from './store'
 
 import net from './modules/net'
 console.log(net)
@@ -31,7 +30,6 @@ Vue.use(VueGlobalVar, {
 new Vue({
   components: { App },
   router,
-  store,
   template: '<App/>',
   el: '#app'
 }).$mount('#app')
