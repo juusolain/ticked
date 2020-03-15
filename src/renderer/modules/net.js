@@ -2,6 +2,8 @@ import ElectronStore from 'electron-store'
 import jwtDecode from 'jwt-decode'
 import axios from 'axios'
 
+import state from '@/modules/state'
+
 const store = new ElectronStore()
 
 const server = process.env.NODE_ENV === 'development'
@@ -128,12 +130,32 @@ class Net {
     console.log(newTask)
   };
 
-  getTasks = async list => {
-    console.log(list)
+  getLists = async () => {
+    state.addLoading(1)
+    const res = await this.post('/getLists')
+    state.addLoading(-1)
+    if (res.data.success) {
+      state.setLists(res.data.lists)
+      return true
+    } else {
+      throw res.data.error
+    }
   };
 
-  getLists = async () => {
-    console.log('Getlists')
+  getTasks = async () => {
+    state.addLoading(1)
+    const res = await this.post('/getTask/all', {
+      data: {
+        listid: state.state.list
+      }
+    })
+    state.addLoading(-1)
+    if (res.data.success) {
+      state.setTasks(res.data.tasks)
+      return true
+    } else {
+      throw res.data.error
+    }
   };
 }
 

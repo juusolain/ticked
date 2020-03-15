@@ -7,9 +7,8 @@ export default {
   components: { Task },
   data () {
     return {
-      loading: false,
-      tasks: null,
-      error: null
+      error: null,
+      state: state.state
     }
   },
   watch: { $route: 'fetchData' },
@@ -18,19 +17,11 @@ export default {
   },
   methods: {
     async fetchData () {
-      this.error = this.tasks = null
-      this.loading = true
-      const res = await net.post('/getTask/all', {
-        body: JSON.stringify({
-          listid: state.currentList
-        })
-      })
-      if (res.data.success) {
-        this.tasks = res.data.tasks
-        this.loading = false
-      } else {
-        this.loading = false
-        this.error = res.data.error
+      this.error = null
+      try {
+        await net.getTasks()
+      } catch (error) {
+        this.error = error
       }
     }
   }
@@ -39,18 +30,13 @@ export default {
 
 <template>
   <div class="tasklist">
-    <div v-if="tasks">
+    <div v-if="state.tasks">
       <Task
-        v-for="task in tasks"
+        v-for="task in state.tasks"
         :key="task.taskid"
         :task="task"
       />
     </div>
-    <b-loading
-      :active="loading"
-      :is-full-page="false"
-      :can-cancel="false"
-    />
     <div
       v-if="error"
       class="error"

@@ -4,7 +4,12 @@ import state from '@/modules/state'
 
 export default {
   data () {
-    return { loading: false, lists: null, error: null, isActive: true }
+    return {
+      loading: false,
+      state: state.state,
+      error: null,
+      isActive: true
+    }
   },
   watch: { $route: 'fetchData' },
   created () {
@@ -12,20 +17,18 @@ export default {
   },
   methods: {
     async fetchData () {
-      this.error = this.lists = null
+      this.error = null
       this.loading = true
-      const res = await net.post('/getLists')
-      if (res.data.success) {
-        this.lists = res.data.lists
-        this.loading = false
-      } else {
-        this.loading = false
-        this.error = res.data.error
+      try {
+        await net.getLists()
+      } catch (error) {
+        this.error = error
       }
+      this.loading = false
     },
     setList (newList) {
       state.setList(newList)
-      this.fetchData()
+      net.getTasks()
     }
   }
 }
@@ -35,7 +38,7 @@ export default {
   <b-menu class="is-sidebar-menu">
     <b-menu-list label="Lists">
       <b-menu-item
-        v-for="list in lists"
+        v-for="list in state.lists"
         :key="list.listid"
         :label="list.listname"
         @click="setList(list.listid)"
