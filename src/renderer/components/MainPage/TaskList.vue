@@ -23,6 +23,17 @@ export default {
       } catch (error) {
         this.error = error
       }
+    },
+    createTask (event) {
+      console.log('Creating new task, ', event.target)
+      event.target.blur()
+      const name = event.target.text
+      console.log(name)
+      event.target.text = ''
+      console.log(event.target.text)
+      net.createTask({
+        name: name
+      })
     }
   }
 }
@@ -30,6 +41,15 @@ export default {
 
 <template>
   <div class="tasklist">
+    <div class="newtask">
+      <b-field>
+        <b-input
+          placeholder="New task"
+          size="is-medium"
+          @keyup.native.enter="createTask"
+        />
+      </b-field>
+    </div>
     <div v-if="state.tasks">
       <Task
         v-for="task in state.tasks"
