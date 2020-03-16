@@ -1,3 +1,5 @@
+import '@mdi/font/css/materialdesignicons.css'
+
 import Vue from 'vue'
 import VueGlobalVar from 'vue-global-var'
 import axios from 'axios'

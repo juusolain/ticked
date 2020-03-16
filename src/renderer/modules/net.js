@@ -19,6 +19,7 @@ class Net {
   login = async (username, password) => {
     if (username && password) {
       try {
+        state.addLoading(1)
         const res = await this.post('/login', {
           data: {
             username: username,
@@ -26,24 +27,28 @@ class Net {
           }
         })
         if (res.data.success) {
-          store.set('token', res.data.token)
+          this.setToken(res.data.token)
+          state.addLoading(-1)
           return {
             success: true
           }
         } else {
-          store.set('token', null)
+          this.setToken(null)
+          state.addLoading(-1)
           return {
             success: false,
             error: 'Invalid username or password'
           }
         }
       } catch (err) {
+        state.addLoading(-1)
         return {
           success: false,
           error: err
         }
       }
     } else {
+      state.addLoading(-1)
       return {
         success: false,
         error: 'Please supply both username and password'

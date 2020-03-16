@@ -29,6 +29,10 @@ export default {
     setList (newList) {
       state.setList(newList)
       net.getTasks()
+    },
+    logout () {
+      net.logout()
+      this.$router.push('/')
     }
   }
 }
@@ -45,7 +49,10 @@ export default {
       />
     </b-menu-list>
     <b-menu-list label="Actions">
-      <b-menu-item label="Logout" />
+      <b-menu-item
+        label="Logout"
+        @click="logout"
+      />
     </b-menu-list>
   </b-menu>
 </template>
