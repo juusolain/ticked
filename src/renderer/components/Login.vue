@@ -4,7 +4,18 @@ export default {}
 
 <template>
   <div>
-    This is login page
+    <b-field>
+      <b-input
+        type="text"
+        placeholder="Username"
+      />
+    </b-field>
+    <b-field>
+      <b-input
+        type="password"
+        placeholder="Password"
+      />
+    </b-field>
   </div>
 </template>
 
