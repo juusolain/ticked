@@ -51,6 +51,7 @@ export default {
     <b-menu-list label="Actions">
       <b-menu-item
         label="Logout"
+        icon="logout"
         @click="logout"
       />
     </b-menu-list>
