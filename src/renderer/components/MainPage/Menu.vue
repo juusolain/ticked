@@ -33,19 +33,32 @@ export default {
     logout () {
       net.logout()
       this.$router.push('/')
+    },
+    newList () {
+
     }
   }
 }
 </script>
 
 <template>
-  <b-menu class="is-sidebar-menu">
+  <b-menu
+    class="is-sidebar-menu"
+    activable="false"
+  >
     <b-menu-list label="Lists">
       <b-menu-item
         v-for="list in state.lists"
         :key="list.listid"
         :label="list.listname"
         @click="setList(list.listid)"
+      />
+      <b-menu-item
+        tag="a"
+        icon="plus"
+        label="New list"
+        active="false"
+        @click="newList"
       />
     </b-menu-list>
     <b-menu-list label="Actions">

@@ -24,6 +24,19 @@ var state = {
   setLoading (newLoading) {
     if (process.env.NODE_ENV === 'development') console.log('Changing loading: ', newLoading)
     this.state.loading = newLoading
+  },
+  addTask (newTask) {
+    if (newTask.listid === this.state.list) {
+      if (process.env.NODE_ENV === 'development') console.log('Adding task: ', newTask)
+      this.state.tasks.push(newTask)
+    }
+  },
+  removeTask (taskToRemove) {
+    if (process.env.NODE_ENV === 'development') console.log('Removing task: ', taskToRemove)
+    this.state.tasks = this.state.tasks.filter(function (task) {
+      return task.taskid !== taskToRemove.taskid
+    })
   }
 }
+
 export default state

@@ -8,7 +8,8 @@ export default {
   data () {
     return {
       error: null,
-      state: state.state
+      state: state.state,
+      newTaskValue: ''
     }
   },
   watch: { $route: 'fetchData' },
@@ -24,16 +25,11 @@ export default {
         this.error = error
       }
     },
-    createTask (event) {
+    newTask (event) {
       console.log('Creating new task, ', event.target)
       event.target.blur()
-      const name = event.target.text
-      console.log(name)
-      event.target.text = ''
-      console.log(event.target.text)
-      net.createTask({
-        name: name
-      })
+      net.newTask(this.newTaskValue)
+      this.newTaskValue = ''
     }
   }
 }
@@ -44,9 +40,10 @@ export default {
     <div class="newtask">
       <b-field>
         <b-input
+          v-model="newTaskValue"
           placeholder="New task"
           size="is-medium"
-          @keyup.native.enter="createTask"
+          @keyup.native.enter="newTask"
         />
       </b-field>
     </div>

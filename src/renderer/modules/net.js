@@ -1,6 +1,7 @@
 import ElectronStore from 'electron-store'
 import jwtDecode from 'jwt-decode'
 import axios from 'axios'
+import { v4 as uuidv4 } from 'uuid'
 
 import state from '@/modules/state'
 
@@ -133,6 +134,20 @@ class Net {
 
   updateTask = async newTask => {
     console.log(newTask)
+  };
+
+  newTask = async (name) => {
+    const taskid = uuidv4()
+    const listid = state.state.list
+    const newTask = {
+      name: name,
+      listid: listid,
+      taskid: taskid
+    }
+    state.addTask(newTask)
+    await this.post('/newTask', {
+      data: newTask
+    })
   };
 
   getLists = async () => {

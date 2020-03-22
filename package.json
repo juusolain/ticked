@@ -58,6 +58,7 @@
     "buefy": "^0.8.13",
     "electron-store": "^5.1.1",
     "jwt-decode": "^2.2.0",
+    "uuid": "^7.0.2",
     "vue": "^2.5.16",
     "vue-electron": "^1.0.6",
     "vue-global-var": "^1.0.0",
