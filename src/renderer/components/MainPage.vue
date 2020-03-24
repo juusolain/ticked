@@ -1,17 +1,21 @@
 <script>
 import Menu from '@/components/MainPage/Menu'
 import TaskList from '@/components/MainPage/TaskList'
-import state from '@/modules/state'
+import store from '@/modules/store'
+import backend from '@/modules/backend'
 export default {
   name: 'MainPage',
   components: { Menu, TaskList },
   data () {
     return {
       loading: false,
-      state: state.state,
+      store: store.state,
       error: null,
       isActive: true
     }
+  },
+  mounted () {
+    backend.initialLoad()
   },
   lists: {listid: '1234', listname: 'Example'},
   methods: {
@@ -25,7 +29,7 @@ export default {
 <template>
   <div class="columns is-fullheight">
     <b-loading
-      :active="state.loading !== 0"
+      :active="store.loading !== 0"
       :is-full-page="true"
       :can-cancel="false"
     />

@@ -1,13 +1,14 @@
 <script>
 import net from '@/modules/net'
-import state from '@/modules/state'
+import store from '@/modules/store'
+import backend from '@/modules/backend'
 
 export default {
   data () {
     return {
       username: '',
       password: '',
-      state: state.state,
+      store: store.state,
       error: ''
     }
   },
@@ -18,7 +19,6 @@ export default {
         this.username = ''
         this.password = ''
         this.error = ''
-        console.log(net.isLoggedIn())
         this.$router.push('/main')
       } else {
         this.username = ''
@@ -37,7 +37,7 @@ export default {
       @keyup.enter="submit"
     >
       <b-loading
-        :active="state.loading !== 0"
+        :active="store.loading !== 0"
         :is-full-page="true"
         :can-cancel="false"
       />

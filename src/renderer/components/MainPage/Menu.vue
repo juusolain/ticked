@@ -1,41 +1,27 @@
 <script>
 import net from '@/modules/net'
-import state from '@/modules/state'
+import store from '@/modules/store'
+import backend from '@/modules/backend'
 
 export default {
   data () {
     return {
       loading: false,
-      state: state.state,
+      store: store.state,
       error: null,
       isActive: true
     }
   },
-  watch: { $route: 'fetchData' },
-  created () {
-    this.fetchData()
-  },
   methods: {
-    async fetchData () {
-      this.error = null
-      this.loading = true
-      try {
-        await net.getLists()
-      } catch (error) {
-        this.error = error
-      }
-      this.loading = false
-    },
     setList (newList) {
-      state.setList(newList)
-      net.getTasks()
+      backend.setList(newList)
     },
     logout () {
-      net.logout()
+      backend.logout()
       this.$router.push('/')
     },
     newList () {
-
+      backend.newList()
     }
   }
 }
@@ -44,11 +30,10 @@ export default {
 <template>
   <b-menu
     class="is-sidebar-menu"
-    activable="false"
   >
     <b-menu-list label="Lists">
       <b-menu-item
-        v-for="list in state.lists"
+        v-for="list in store.lists"
         :key="list.listid"
         :label="list.listname"
         @click="setList(list.listid)"
@@ -57,7 +42,6 @@ export default {
         tag="a"
         icon="plus"
         label="New list"
-        active="false"
         @click="newList"
       />
     </b-menu-list>

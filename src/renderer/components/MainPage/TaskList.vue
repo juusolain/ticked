@@ -1,34 +1,24 @@
 <script>
 import Task from '@/components/MainPage/Task'
 import net from '@/modules/net'
-import state from '@/modules/state'
+import store from '@/modules/store'
+import backend from '@/modules/backend'
+
 export default {
   name: 'Tasklist',
   components: { Task },
   data () {
     return {
       error: null,
-      state: state.state,
+      store: store.state,
       newTaskValue: ''
     }
   },
-  watch: { $route: 'fetchData' },
-  created () {
-    this.fetchData()
-  },
   methods: {
-    async fetchData () {
-      this.error = null
-      try {
-        await net.getTasks()
-      } catch (error) {
-        this.error = error
-      }
-    },
     newTask (event) {
       console.log('Creating new task, ', event.target)
       event.target.blur()
-      net.newTask(this.newTaskValue)
+      backend.newTask(this.newTaskValue)
       this.newTaskValue = ''
     }
   }
@@ -47,9 +37,9 @@ export default {
         />
       </b-field>
     </div>
-    <div v-if="state.tasks">
+    <div v-if="store.tasks">
       <Task
-        v-for="task in state.tasks"
+        v-for="task in store.tasks"
         :key="task.taskid"
         :task="task"
       />

@@ -3,9 +3,9 @@ import jwtDecode from 'jwt-decode'
 import axios from 'axios'
 import { v4 as uuidv4 } from 'uuid'
 
-import state from '@/modules/state'
+import store from '@/modules/store'
 
-const store = new ElectronStore()
+const electronstore = new ElectronStore()
 
 const server = process.env.NODE_ENV === 'development'
   ? 'http://localhost:5000/'
@@ -20,7 +20,6 @@ class Net {
   login = async (username, password) => {
     if (username && password) {
       try {
-        state.addLoading(1)
         const res = await this.post('/login', {
           data: {
             username: username,
@@ -29,27 +28,23 @@ class Net {
         })
         if (res.data.success) {
           this.setToken(res.data.token)
-          state.addLoading(-1)
           return {
             success: true
           }
         } else {
           this.setToken(null)
-          state.addLoading(-1)
           return {
             success: false,
             error: 'Invalid username or password'
           }
         }
       } catch (err) {
-        state.addLoading(-1)
         return {
           success: false,
           error: err
         }
       }
     } else {
-      state.addLoading(-1)
       return {
         success: false,
         error: 'Please supply both username and password'
@@ -58,11 +53,11 @@ class Net {
   };
 
   getToken = () => {
-    return store.get('token')
+    return electronstore.get('token')
   };
 
   setToken = newToken => {
-    return store.set('token', newToken)
+    return electronstore.set('token', newToken)
   };
 
   isLoggedIn = () => {
@@ -138,41 +133,30 @@ class Net {
 
   newTask = async (name) => {
     const taskid = uuidv4()
-    const listid = state.state.list
+    const listid = store.state.list
     const newTask = {
       name: name,
       listid: listid,
       taskid: taskid
     }
-    state.addTask(newTask)
     await this.post('/newTask', {
       data: newTask
     })
   };
 
   getLists = async () => {
-    state.addLoading(1)
     const res = await this.post('/getLists')
-    state.addLoading(-1)
     if (res.data.success) {
-      state.setLists(res.data.lists)
-      return true
+      return res.data.lists
     } else {
       throw res.data.error
     }
   };
 
   getTasks = async () => {
-    state.addLoading(1)
-    const res = await this.post('/getTask/all', {
-      data: {
-        listid: state.state.list
-      }
-    })
-    state.addLoading(-1)
+    const res = await this.post('/getTask/all')
     if (res.data.success) {
-      state.setTasks(res.data.tasks)
-      return true
+      return res.data.tasks
     } else {
       throw res.data.error
     }
