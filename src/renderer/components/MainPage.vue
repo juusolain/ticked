@@ -14,9 +14,6 @@ export default {
       isActive: true
     }
   },
-  mounted () {
-    backend.initialLoad()
-  },
   lists: {listid: '1234', listname: 'Example'},
   methods: {
     open (link) {

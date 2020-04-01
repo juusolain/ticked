@@ -51,7 +51,7 @@ class Backend {
         const token = await net.login(username, password)
         store.addLoading(-1)
         if (token !== null) {
-          store.setToken(token)
+          net.setToken(token)
           await this.initialLoad()
           router.push('/')
           return null
@@ -59,7 +59,7 @@ class Backend {
           return 'Supply both username and a password'
         }
       } catch (err) {
-        store.addLoading(-1)
+        console.error(err)
         return 'Internal error: ' + err.toString()
       }
     }
