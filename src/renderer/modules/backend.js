@@ -1,5 +1,6 @@
 import net from '@/modules/net'
 import store from '@/modules/store'
+import router from '@/router'
 
 class Backend {
     loadTasks = async () => {
@@ -44,10 +45,30 @@ class Backend {
       store.setList(newList)
     }
 
+    login = async (username, password) => {
+      try {
+        store.addLoading(1)
+        const token = await net.login(username, password)
+        store.addLoading(-1)
+        if (token !== null) {
+          store.setToken(token)
+          await this.initialLoad()
+          router.push('/')
+          return null
+        } else {
+          return 'Supply both username and a password'
+        }
+      } catch (err) {
+        store.addLoading(-1)
+        return 'Internal error: ' + err.toString()
+      }
+    }
+
     logout = async () => {
       net.logout()
       store.setTasks([])
       store.setLists([])
+      router.push('/')
     }
 }
 

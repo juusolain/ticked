@@ -14,16 +14,11 @@ export default {
   },
   methods: {
     async submit () {
-      const res = await net.login(this.username, this.password)
-      if (res.success) {
-        this.username = ''
-        this.password = ''
-        this.error = ''
-        this.$router.push('/main')
-      } else {
-        this.username = ''
-        this.password = ''
-        this.error = res.error
+      const returnError = await backend.login(this.username, this.password)
+      this.username = ''
+      this.password = ''
+      if (returnError) {
+        this.error = returnError
       }
     }
   }

@@ -18,7 +18,6 @@ export default {
     },
     logout () {
       backend.logout()
-      this.$router.push('/')
     },
     newList () {
       backend.newList()

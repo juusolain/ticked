@@ -27,28 +27,15 @@ class Net {
           }
         })
         if (res.data.success) {
-          this.setToken(res.data.token)
-          return {
-            success: true
-          }
+          return res.data.token
         } else {
-          this.setToken(null)
-          return {
-            success: false,
-            error: 'Invalid username or password'
-          }
+          return null
         }
       } catch (err) {
-        return {
-          success: false,
-          error: err
-        }
+        throw new Error('netError')
       }
     } else {
-      return {
-        success: false,
-        error: 'Please supply both username and password'
-      }
+      throw new Error('invalidQuery')
     }
   };
 
