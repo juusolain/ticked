@@ -4,12 +4,16 @@ var state = {
     lists: [],
     tasks: [],
     allTasks: [],
-    loading: 0
+    loading: 0,
+    userData: {}
   },
   setList (newList) {
     if (process.env.NODE_ENV === 'development') console.log('Changing list: ', newList)
     this.state.list = newList
     this.state.tasks = this.state.allTasks.filter((elem) => {
+      if (elem.listid === this.state.list) {
+        console.log('Adding: ', elem)
+      }
       return elem.listid === this.state.list
     })
   },
@@ -41,6 +45,10 @@ var state = {
     this.state.allTasks = this.state.allTasks.filter(function (task) {
       return task.taskid !== taskToRemove.taskid
     })
+  },
+  setUserData (newUserData) {
+    if (process.env.NODE_ENV === 'development') console.log('Setting user data: ', newUserData)
+    userData = newUserData
   }
 }
 

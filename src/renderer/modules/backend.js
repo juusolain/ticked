@@ -2,6 +2,8 @@ import net from '@/modules/net'
 import store from '@/modules/store'
 import router from '@/router'
 
+import { v4 as uuidv4 } from 'uuid'
+
 class Backend {
     loadTasks = async () => {
       try {
@@ -25,8 +27,10 @@ class Backend {
       await this.loadTasks()
     }
 
-    initialLoad = async () => {
+    initialLoad = async (password) => {
       store.addLoading(1)
+      const userData = await net.getUserData()
+      store.setUserData(userData)
       await this.loadTasks()
       await this.loadLists()
       store.addLoading(-1)
@@ -34,6 +38,13 @@ class Backend {
 
     addTask = async (newTask) => {
       try {
+        const taskid = uuidv4()
+        const listid = store.state.list
+        const newTask = {
+          name: name,
+          listid: listid,
+          taskid: taskid
+        }
         store.addTask(newTask)
         await net.addTask(newTask)
       } catch (err) {
@@ -52,7 +63,7 @@ class Backend {
         store.addLoading(-1)
         if (token !== null) {
           net.setToken(token)
-          await this.initialLoad()
+          await this.initialLoad(password)
           router.push('/')
           return null
         } else {

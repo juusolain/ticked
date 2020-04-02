@@ -18,7 +18,9 @@ export default {
     newTask (event) {
       console.log('Creating new task, ', event.target)
       event.target.blur()
-      backend.newTask(this.newTaskValue)
+      backend.newTask({
+        name: this.newTaskValue
+      })
       this.newTaskValue = ''
     }
   }

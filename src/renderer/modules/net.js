@@ -56,6 +56,15 @@ class Net {
     }
   };
 
+  getDeviceID = () => {
+    var deviceID = electronstore.get('deviceid')
+    if (deviceID === null) {
+      deviceID = uuidv4()
+      electronstore.set('deviceid', deviceID)
+    }
+    return deviceID
+  }
+
   logout = () => {
     this.setToken(null)
     return true
@@ -118,7 +127,7 @@ class Net {
     console.log(newTask)
   };
 
-  newTask = async (name) => {
+  addTask = async (name) => {
     const taskid = uuidv4()
     const listid = store.state.list
     const newTask = {
@@ -130,6 +139,15 @@ class Net {
       data: newTask
     })
   };
+
+  getUserData = async () => {
+    const res = await this.post('/getUserData')
+    if (res.data.success) {
+      return res.data
+    } else {
+      throw res.data.error
+    }
+  }
 
   getLists = async () => {
     const res = await this.post('/getLists')
@@ -148,6 +166,16 @@ class Net {
       throw res.data.error
     }
   };
+
+  sendKey = async (key, prime) => {
+    const res = await this.post('/sendKey', {
+      data: {
+        key: key,
+        prime: prime,
+        deviceid: this.getDeviceID()
+      }
+    })
+  }
 }
 
 export default new Net()
