@@ -1,6 +1,7 @@
 import net from '@/modules/net'
 import store from '@/modules/store'
 import router from '@/router'
+import auth from '@/modules/auth'
 
 import { v4 as uuidv4 } from 'uuid'
 
@@ -62,6 +63,7 @@ class Backend {
         const token = await net.login(username, password)
         store.addLoading(-1)
         if (token !== null) {
+          auth.setPassword(password)
           net.setToken(token)
           await this.initialLoad(password)
           router.push('/')

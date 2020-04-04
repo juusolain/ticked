@@ -167,14 +167,17 @@ class Net {
     }
   };
 
-  sendKey = async (key, prime) => {
+  sendKey = async (key) => {
     const res = await this.post('/sendKey', {
       data: {
-        key: key,
-        prime: prime,
-        deviceid: this.getDeviceID()
+        key: key
       }
     })
+  }
+
+  fetchKey = async () => {
+    const res = await this.post('/getKey')
+    return res.data.key
   }
 }
 

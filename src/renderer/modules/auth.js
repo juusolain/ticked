@@ -1,17 +1,42 @@
 import crypto from 'crypto'
 import net from '@/modules/net'
+import ElectronStore from 'electron-store'
+
+const electronstore = new ElectronStore()
 
 class auth {
   constructor () {
-    this.ourDH = null
-    this.ourKey = null
-    this.prime = null
+    this.password = null
   }
 
-  sendKey () {
-    this.ourDH = crypto.createDiffieHellman(2048)
-    this.ourKey = this.ourDH.generateKeys('base64')
-    this.prime = this.ourDH.getPrime('base64')
-    net.sendKey(this.ourKey, this.prime)
+  setPassword (newPassword) {
+    this.password = newPassword
+  }
+
+  async sendKey () {
+    var key = this.getKey()
+    if (!key) {
+      key = crypto.randomBytes(256).toString('base64')
+      this.setKey(key)
+    }
+    var keyPassword = this.password += crypto.randomBytes(8).toString('base64')
+    const cipher = crypto.createCipheriv('aes256', keyPassword, null)
+    var encryptedKey = cipher.update(key)
+    encryptedKey += cipher.final()
+    console.log(encryptedKey)
+    await net.sendKey(encryptedKey)
+  }
+
+  async fetchKey () {
+    const newKey = await net.fetchKey()
+    this.setKey(newKey)
+  }
+
+  getKey () {
+    return electronstore.get('key')
+  }
+
+  setKey (newKey) {
+    return electronstore.set('key', newKey)
   }
 }
