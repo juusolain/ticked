@@ -375,6 +375,11 @@ acorn@^7.1.1:
   resolved "https://registry.yarnpkg.com/acorn/-/acorn-7.1.1.tgz#e35668de0b402f359de515c5482a1ab9f89a69bf"
   integrity sha512-add7dgA5ppRPxCFJoAGfMDi7PIBXq1RtGo7BhbLaxwrXPOmw8gq48Y9ozT01hUKy9byMjlR20EJhu5zlkErEkg==
 
+aes256@^1.0.4:
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/aes256/-/aes256-1.0.4.tgz#7cd4666535216cae28eecece0d46fdb4c469c557"
+  integrity sha512-yuaKOdoKebChkP+uRsQovWsJYm6qf58cQTvXBu6MM0BMnrXZ9SXEiXREBuU513ZRr+Uo2qX/Ci6EODLUu/qiHA==
+
 ajv-errors@^1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/ajv-errors/-/ajv-errors-1.0.1.tgz#f35986aceb91afadec4102fbd85014950cefa64d"

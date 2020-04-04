@@ -65,6 +65,7 @@ class Backend {
         if (token !== null) {
           auth.setPassword(password)
           net.setToken(token)
+          await auth.sendKey()
           await this.initialLoad(password)
           router.push('/')
           return null

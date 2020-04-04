@@ -48,7 +48,7 @@ var state = {
   },
   setUserData (newUserData) {
     if (process.env.NODE_ENV === 'development') console.log('Setting user data: ', newUserData)
-    userData = newUserData
+    this.state.userData = newUserData
   }
 }
 

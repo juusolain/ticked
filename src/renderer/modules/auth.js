@@ -1,10 +1,11 @@
 import crypto from 'crypto'
 import net from '@/modules/net'
 import ElectronStore from 'electron-store'
+import aes256 from 'aes256'
 
 const electronstore = new ElectronStore()
 
-class auth {
+class Auth {
   constructor () {
     this.password = null
   }
@@ -14,16 +15,14 @@ class auth {
   }
 
   async sendKey () {
-    var key = this.getKey()
+    var key = null // this.getKey()
     if (!key) {
       key = crypto.randomBytes(256).toString('base64')
       this.setKey(key)
     }
     var keyPassword = this.password += crypto.randomBytes(8).toString('base64')
-    const cipher = crypto.createCipheriv('aes256', keyPassword, null)
-    var encryptedKey = cipher.update(key)
-    encryptedKey += cipher.final()
-    console.log(encryptedKey)
+    console.log(keyPassword)
+    const encryptedKey = aes256.encrypt(keyPassword, key)
     await net.sendKey(encryptedKey)
   }
 
@@ -40,3 +39,5 @@ class auth {
     return electronstore.set('key', newKey)
   }
 }
+
+export default new Auth()
