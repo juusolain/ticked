@@ -5,7 +5,8 @@ var state = {
     tasks: [],
     allTasks: [],
     loading: 0,
-    userData: {}
+    userData: {},
+    view: 'tasks' // tasks or shareKey
   },
   setList (newList) {
     if (process.env.NODE_ENV === 'development') console.log('Changing list: ', newList)
@@ -49,6 +50,10 @@ var state = {
   setUserData (newUserData) {
     if (process.env.NODE_ENV === 'development') console.log('Setting user data: ', newUserData)
     this.state.userData = newUserData
+  },
+  setView (newView) {
+    if (process.env.NODE_ENV === 'development') console.log('Setting view: ', newView)
+    this.state.view = newView
   }
 }
 

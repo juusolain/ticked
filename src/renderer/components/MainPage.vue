@@ -1,11 +1,12 @@
 <script>
 import Menu from '@/components/MainPage/Menu'
 import TaskList from '@/components/MainPage/TaskList'
+import ShareKey from '@/components/MainPage/ShareKey'
 import store from '@/modules/store'
 import backend from '@/modules/backend'
 export default {
   name: 'MainPage',
-  components: { Menu, TaskList },
+  components: { Menu, TaskList, ShareKey },
   data () {
     return {
       loading: false,
@@ -15,6 +16,10 @@ export default {
     }
   },
   lists: {listid: '1234', listname: 'Example'},
+  mounted: function () {
+    console.log('Mounted')
+    backend.initialLoad()
+  },
   methods: {
     open (link) {
       this.$electron.shell.openExternal(link)
@@ -34,7 +39,8 @@ export default {
       <Menu />
     </div>
     <div class="column is-three-quarters">
-      <TaskList />
+      <TaskList v-if="store.view === 'tasks'" />
+      <ShareKey v-if="store.view === 'shareKey'" />
     </div>
   </div>
 </template>

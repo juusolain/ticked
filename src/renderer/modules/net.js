@@ -56,13 +56,10 @@ class Net {
     }
   };
 
-  getDeviceID = () => {
-    var deviceID = electronstore.get('deviceid')
-    if (deviceID === null) {
-      deviceID = uuidv4()
-      electronstore.set('deviceid', deviceID)
-    }
-    return deviceID
+  getUserID = () => {
+    const token = this.getToken()
+    const decodedJWT = jwtDecode(token)
+    return decodedJWT.userid
   }
 
   logout = () => {
@@ -141,11 +138,15 @@ class Net {
   };
 
   getUserData = async () => {
-    const res = await this.post('/getUserData')
-    if (res.data.success) {
-      return res.data
-    } else {
-      throw res.data.error
+    try {
+      const res = await this.post('/getUserData')
+      if (res.data.success) {
+        return res.data
+      } else {
+        throw res.data.error
+      }
+    } catch (error) {
+      return 'Hellothere'
     }
   }
 
@@ -173,10 +174,12 @@ class Net {
         key: key
       }
     })
+    return res
   }
 
   fetchKey = async () => {
     const res = await this.post('/getKey')
+    console.log(res)
     return res.data.key
   }
 }

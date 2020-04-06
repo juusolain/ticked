@@ -13,6 +13,9 @@ import router from './router'
 import backend from '@/modules/backend'
 import store from '@/modules/store'
 import net from '@/modules/net'
+import auth from '@/modules/auth'
+
+import ElectronStore from 'electron-store'
 
 if (!process.env.IS_WEB) Vue.use(require('vue-electron'))
 Vue.http = Vue.prototype.$http = axios
@@ -22,6 +25,8 @@ if (process.env.NODE_ENV === 'development') {
   window.router = router
   window.backend = backend
   window.net = net
+  window.auth = auth
+  window.electronstore = new ElectronStore()
 }
 
 Vue.config.productionTip = false

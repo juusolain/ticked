@@ -14,6 +14,7 @@ export default {
   },
   methods: {
     setList (newList) {
+      this.setView('tasks')
       backend.setList(newList)
     },
     logout () {
@@ -21,6 +22,9 @@ export default {
     },
     newList () {
       backend.newList()
+    },
+    setView (newView) {
+      store.setView(newView)
     }
   }
 }
@@ -45,6 +49,11 @@ export default {
       />
     </b-menu-list>
     <b-menu-list label="Actions">
+      <b-menu-item
+        label="Settings"
+        icon="settings"
+        @click="setView('shareKey')"
+      />
       <b-menu-item
         label="Logout"
         icon="logout"

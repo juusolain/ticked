@@ -24,11 +24,24 @@ class Backend {
       }
     }
 
+    sendKey = async () => {
+      console.log('Sending key')
+      const res = await auth.sendKey()
+      return res
+    }
+
+    fetchKey = async (code) => {
+      console.log('Getting key')
+      const res = await auth.fetchKey(code)
+      router.push('/')
+      return res
+    }
+
     syncTasks = async () => {
       await this.loadTasks()
     }
 
-    initialLoad = async (password) => {
+    initialLoad = async () => {
       store.addLoading(1)
       const userData = await net.getUserData()
       store.setUserData(userData)
@@ -63,10 +76,8 @@ class Backend {
         const token = await net.login(username, password)
         store.addLoading(-1)
         if (token !== null) {
-          auth.setPassword(password)
           net.setToken(token)
-          await auth.sendKey()
-          await this.initialLoad(password)
+          auth.setPassword(password)
           router.push('/')
           return null
         } else {
