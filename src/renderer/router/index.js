@@ -21,12 +21,6 @@ const router = new Router({
       props: true
     },
     {
-      path: '/receivekey',
-      name: 'ReceiveKey',
-      component: require('@/components/ReceiveKey').default,
-      props: true
-    },
-    {
       path: '/',
       name: 'redirect',
       redirect: to => {

@@ -1,12 +1,14 @@
 <script>
 import Menu from '@/components/MainPage/Menu'
 import TaskList from '@/components/MainPage/TaskList'
-import ShareKey from '@/components/MainPage/ShareKey'
+
 import store from '@/modules/store'
 import backend from '@/modules/backend'
+import auth from '@/modules/auth'
+
 export default {
   name: 'MainPage',
-  components: { Menu, TaskList, ShareKey },
+  components: { Menu, TaskList },
   data () {
     return {
       loading: false,
@@ -18,7 +20,9 @@ export default {
   lists: {listid: '1234', listname: 'Example'},
   mounted: function () {
     console.log('Mounted')
-    backend.initialLoad()
+    this.$nextTick(() => {
+      backend.initialLoad()
+    })
   },
   methods: {
     open (link) {
@@ -40,7 +44,6 @@ export default {
     </div>
     <div class="column is-three-quarters">
       <TaskList v-if="store.view === 'tasks'" />
-      <ShareKey v-if="store.view === 'shareKey'" />
     </div>
   </div>
 </template>

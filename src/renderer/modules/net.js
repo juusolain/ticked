@@ -124,14 +124,7 @@ class Net {
     console.log(newTask)
   };
 
-  addTask = async (name) => {
-    const taskid = uuidv4()
-    const listid = store.state.list
-    const newTask = {
-      name: name,
-      listid: listid,
-      taskid: taskid
-    }
+  addTask = async (newTask) => {
     await this.post('/newTask', {
       data: newTask
     })
@@ -167,21 +160,6 @@ class Net {
       throw res.data.error
     }
   };
-
-  sendKey = async (key) => {
-    const res = await this.post('/sendKey', {
-      data: {
-        key: key
-      }
-    })
-    return res
-  }
-
-  fetchKey = async () => {
-    const res = await this.post('/getKey')
-    console.log(res)
-    return res.data.key
-  }
 }
 
 export default new Net()

@@ -9,7 +9,8 @@ class Backend {
     loadTasks = async () => {
       try {
         const newTasks = await net.getTasks()
-        store.setTasks(newTasks)
+        const decryptedTasks = await auth.decryptArray(newTasks, auth.decryptObj)
+        store.setTasks(decryptedTasks)
       } catch (err) {
         console.error(err)
       }
@@ -18,7 +19,8 @@ class Backend {
     loadLists = async () => {
       try {
         const newLists = await net.getLists()
-        store.setLists(newLists)
+        const decryptedLists = await auth.decryptArray(newLists, auth.decryptObj)
+        store.setLists(decryptedLists)
       } catch (err) {
         console.error(err)
       }
@@ -50,17 +52,14 @@ class Backend {
       store.addLoading(-1)
     }
 
-    addTask = async (newTask) => {
+    newTask = async (newTask) => {
       try {
-        const taskid = uuidv4()
-        const listid = store.state.list
-        const newTask = {
-          name: name,
-          listid: listid,
-          taskid: taskid
-        }
+        newTask.taskid = uuidv4()
+        newTask.listid = store.state.list
+        newTask.userid = net.getUserID()
         store.addTask(newTask)
-        await net.addTask(newTask)
+        const encryptedTask = await auth.encryptObj(newTask)
+        await net.addTask(encryptedTask)
       } catch (err) {
         console.error(err)
       }

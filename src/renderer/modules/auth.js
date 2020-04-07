@@ -1,4 +1,3 @@
-import crypto from 'crypto'
 import net from '@/modules/net'
 import store from '@/modules/store'
 
@@ -6,36 +5,87 @@ import ElectronStore from 'electron-store'
 import aes256 from 'aes256'
 import keytar from 'keytar'
 
-const electronstore = new ElectronStore()
-
 class Auth {
-  setPassword (newPassword) {
-    keytar.setPassword('ticked', net.getUserID(), newPassword)
+  setPassword = async newPassword => {
+    return keytar.setPassword('ticked', net.getUserID(), newPassword)
   }
 
-  getPassword () {
-    keytar.getPassword('ticked', net.getUserID())
+  getPassword = async () => {
+    return keytar.getPassword('ticked', net.getUserID())
   }
 
-  decrypt (data) {
-    const decrypted = aes256.decrypt(this.getPassword(), JSON.stringify(data))
-    console.log(JSON.parse(decrypted))
-    return JSON.parse(decrypted)
+  // Base decrypt
+  decrypt = async data => {
+    const decrypted = await aes256.decrypt(await this.getPassword(), data)
+    return decrypted
   }
 
-  encrypt (data) {
-    const encrypted = aes256.encrypt(this.getPassword(), JSON.stringify(data))
-    console.log(JSON.parse(encrypted))
-    return JSON.parse(encrypted)
+  // Base encrypt
+  encrypt = async data => {
+    const encrypted = await aes256.encrypt(await this.getPassword(), data)
+    return encrypted
   }
 
-  decryptArray (dataArray) {
+  // Decrypt array with specified decryptor function
+  decryptArray = async (dataArray, decryptor = this.decrypt) => {
     var decryptedArray = []
-    dataArray.forEach(element => {
-      const decrypted = this.decrypt(element)
+    for await (const element of dataArray) {
+      const decrypted = await decryptor(element)
       decryptedArray.push(decrypted)
-    })
+    }
     return decryptedArray
+  }
+
+  // Encrypt array with specified encryptor function
+  encryptArray = async (dataArray, encryptor = this.decrypt) => {
+    var encryptedArray = []
+    for await (const element of dataArray) {
+      const decrypted = await encryptor(element)
+      encryptedArray.push(decrypted)
+    }
+    return encryptedArray
+  }
+
+  decryptObj = async obj => {
+    var newObj = {
+      listid: obj.listid,
+      userid: obj.userid
+    }
+    if (obj.taskid) {
+      newObj.taskid = obj.taskid
+    }
+    for (const [prop, value] of Object.entries(obj)) {
+      if (!['taskid', 'listid', 'userid'].includes(prop)) {
+        if (value) {
+          newObj[prop] = await this.decrypt(value)
+        } else {
+          newObj[prop] = null
+        }
+      }
+    }
+    console.log('Decrypted: ', newObj)
+    return newObj
+  }
+
+  encryptObj = async obj => {
+    var newObj = {
+      listid: obj.listid,
+      userid: obj.userid
+    }
+    if (obj.taskid) {
+      newObj.taskid = obj.taskid
+    }
+    for (const [prop, value] of Object.entries(obj)) {
+      if (!['taskid', 'listid', 'userid'].includes(prop)) {
+        if (value) {
+          newObj[prop] = await this.encrypt(value)
+        } else {
+          newObj[prop] = null
+        }
+      }
+    }
+    console.log('Encrypted: ', newObj)
+    return newObj
   }
 }
 
