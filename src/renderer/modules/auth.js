@@ -18,13 +18,24 @@ class Auth {
   }
 
   decrypt (data) {
-    const decrypted = aes256.decrypt(this.getPassword(), data)
-    return decrypted
+    const decrypted = aes256.decrypt(this.getPassword(), JSON.stringify(data))
+    console.log(JSON.parse(decrypted))
+    return JSON.parse(decrypted)
   }
 
   encrypt (data) {
-    const encrypted = aes256.encrypt(this.getPassword(), data)
-    return encrypted
+    const encrypted = aes256.encrypt(this.getPassword(), JSON.stringify(data))
+    console.log(JSON.parse(encrypted))
+    return JSON.parse(encrypted)
+  }
+
+  decryptArray (dataArray) {
+    var decryptedArray = []
+    dataArray.forEach(element => {
+      const decrypted = this.decrypt(element)
+      decryptedArray.push(decrypted)
+    })
+    return decryptedArray
   }
 }
 
