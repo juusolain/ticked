@@ -9,7 +9,7 @@ const electronstore = new ElectronStore()
 
 const server = process.env.NODE_ENV === 'development'
   ? 'http://localhost:5000/'
-  : 'https://server.ticked.com/'
+  : 'https://server.ticked.cf/'
 
 class Net {
   constructor () {
