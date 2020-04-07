@@ -31,14 +31,8 @@ const router = new Router({
       name: 'redirect',
       redirect: to => {
         if (net.isLoggedIn()) {
-          if (auth.hasKey()) {
-            return {
-              name: 'Main'
-            }
-          } else {
-            return {
-              name: 'ReceiveKey'
-            }
+          return {
+            name: 'Main'
           }
         } else {
           return {

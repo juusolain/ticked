@@ -17,43 +17,14 @@ class Auth {
     keytar.getPassword('ticked', net.getUserID())
   }
 
-  async sendKey () {
-    var key = this.getKey()
-    const code = crypto.randomBytes(6).toString('base64')
-    const keyPassword = this.getPassword() + code
-    const encryptedKey = aes256.encrypt(keyPassword, key)
-    await net.sendKey(encryptedKey)
-    return code
+  decrypt (data) {
+    const decrypted = aes256.decrypt(this.getPassword(), data)
+    return decrypted
   }
 
-  generateKey () {
-    const key = crypto.randomBytes(256).toString('base64')
-    this.setKey(key)
-    console.log(key)
-  }
-
-  async fetchKey (code) {
-    const newKey = await net.fetchKey()
-    const keyPassword = this.getPassword() + code
-    const decryptedKey = aes256.decrypt(keyPassword, newKey).toString('base64')
-    this.setKey(decryptedKey)
-    return decryptedKey
-  }
-
-  getKey () {
-    return electronstore.get('key')
-  }
-
-  hasKey () {
-    return electronstore.has('key')
-  }
-
-  setKey (newKey) {
-    if (newKey) {
-      return electronstore.set('key', newKey)
-    } else {
-      return electronstore.delete('key')
-    }
+  encrypt (data) {
+    const encrypted = aes256.encrypt(this.getPassword(), data)
+    return encrypted
   }
 }
 
