@@ -83,8 +83,8 @@ class Backend {
           return 'Supply both username and a password'
         }
       } catch (err) {
-        console.error(err)
-        return 'Internal error: ' + err.toString()
+        store.addLoading(-1)
+        return err.toString()
       }
     }
 

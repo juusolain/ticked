@@ -29,10 +29,11 @@ class Net {
         if (res.data.success) {
           return res.data.token
         } else {
-          return null
+          throw res.data.err
         }
       } catch (err) {
-        throw new Error('netError')
+        console.error(err)
+        throw err
       }
     } else {
       throw new Error('invalidQuery')
