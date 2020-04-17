@@ -1,8 +1,3 @@
 {
-  "files.exclude": {
-    ".eslintignore": true,
-    ".gitignore": true,
-    ".babelrc": true,
-    ".eslintrc.js": true
-  }
+  "files.exclude": {}
 }

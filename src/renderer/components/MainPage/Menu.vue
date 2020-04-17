@@ -34,7 +34,7 @@ export default {
   <b-menu
     class="is-sidebar-menu"
   >
-    <b-menu-list label="Lists">
+    <b-menu-list :label="$t('menu.label.lists')">
       <b-menu-item
         v-for="list in store.lists"
         :key="list.listid"
@@ -44,18 +44,18 @@ export default {
       <b-menu-item
         tag="a"
         icon="plus"
-        label="New list"
+        :label="$t('menu.label.newlist')"
         @click="newList"
       />
     </b-menu-list>
-    <b-menu-list label="Actions">
+    <b-menu-list :label="$t('menu.label.actions')">
       <b-menu-item
-        label="Settings"
+        :label="$t('menu.label.settings')"
         icon="settings"
         @click="setView('shareKey')"
       />
       <b-menu-item
-        label="Logout"
+        :label="$t('menu.label.logout')"
         icon="logout"
         @click="logout"
       />

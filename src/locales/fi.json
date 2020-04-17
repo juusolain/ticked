@@ -1,0 +1,43 @@
+{
+  "menu": {
+    "label": {
+      "lists": "Listat",
+      "actions": "Timinnot",
+      "logout": "Kirjaudu ulos",
+      "settings": "Asetukset",
+      "newlist": "Uusi lista"
+    }
+  },
+  "login": {
+    "label": {
+      "user": "@:login.placeholder.user",
+      "username": "@:login.placeholder.username",
+      "password": "@:login.placeholder.password",
+      "login": "Kirjaudu sisään"
+    },
+    "placeholder": {
+      "user": "Käyttäjätunnus tai sähköposti",
+      "username": "Käyttäjätunnus",
+      "password": "Salasana"
+    },
+    "link":{
+      "register": "Tee uusi käyttäjätili"
+    }
+  },
+  "register":{
+    "label": {
+      "email": "@:register.placeholder.email",
+      "username": "@:register.placeholder.username",
+      "password": "@:register.placeholder.password",
+      "register": "Rekisteröidy"
+    },
+    "placeholder": {
+      "email": "Sähköposti",
+      "username": "@:login.placeholder.username",
+      "password": "@:login.placeholder.password"
+    },
+    "link":{
+      "login": "Kirjaudu sisään"
+    }
+  }
+}

@@ -14,7 +14,8 @@ export default {
       loading: false,
       store: store.state,
       error: null,
-      isActive: true
+      isActive: true,
+      test: 'test'
     }
   },
   lists: {listid: '1234', listname: 'Example'},

@@ -10,7 +10,6 @@ export default {
       login_password: '',
       register_username: '',
       register_password: '',
-      register_passwordVerify: '',
       register_email: '',
       store: store.state,
       mode: 'login',
@@ -19,7 +18,10 @@ export default {
   },
   methods: {
     async login () {
-      const returnError = await backend.login(this.login_user, this.login_password)
+      const returnError = await backend.login({
+        login: this.login_user,
+        password: this.login_password
+      })
       this.login_user = ''
       this.login_password = ''
       if (returnError) {
@@ -27,7 +29,17 @@ export default {
       }
     },
     async register () {
-
+      const returnError = await backend.register({
+        password: this.register_password,
+        email: this.register_email,
+        username: this.register_username
+      })
+      this.register_email = ''
+      this.register_password = ''
+      this.register_username = ''
+      if (returnError) {
+        this.error = returnError
+      }
     },
     switchTo (newMode) {
       this.mode = newMode
@@ -46,29 +58,29 @@ export default {
         :is-full-page="true"
         :can-cancel="false"
       />
-      <div
+      <b-notification
         v-if="error"
-        class="error"
+        type="is-danger"
       >
-        {{ error }}
-      </div>
+        {{ $t(error) }}
+      </b-notification>
       <div
         v-if="mode === 'login'"
         @keyup.enter="login"
       >
-        <b-field label="Username or email">
+        <b-field :label="$t('login.label.user')">
           <b-input
             v-model="login_user"
             type="text"
-            placeholder="Username or email"
+            :placeholder="$t('login.placeholder.user')"
             required
           />
         </b-field>
-        <b-field label="Password">
+        <b-field :label="$t('login.label.password')">
           <b-input
             v-model="login_password"
             type="password"
-            placeholder="Password"
+            :placeholder="$t('login.placeholder.password')"
             password-reveal
             required
           />
@@ -78,56 +90,48 @@ export default {
           type="is-primary"
           @click="login"
         >
-          Login
+          {{ $t('login.label.login') }}
         </b-button>
         <a
           href="#"
           @click="switchTo('register')"
         >
-          Create a new account
+          {{ $t('login.link.register') }}
         </a>
       </div>
       <div
         v-if="mode === 'register'"
         @keyup.enter="register"
       >
-        <b-field label="Username">
+        <b-field :label="$t('register.label.username')">
           <b-input
             v-model="register_username"
             type="text"
-            placeholder="Username"
+            :placeholder="$t('register.placeholder.username')"
             required
           />
         </b-field>
-        <b-field label="Password">
+        <b-field :label="$t('register.label.password')">
           <b-input
             v-model="register_password"
             type="password"
-            placeholder="Password"
+            :placeholder="$t('register.placeholder.password')"
             password-reveal
-            required
-          />
-        </b-field>
-        <b-field label="Verify password">
-          <b-input
-            v-model="register_passwordVerify"
-            type="password"
-            placeholder="Password"
             required
           />
         </b-field>
         <b-button
           expanded
           type="is-primary"
-          @click="login"
+          @click="register"
         >
-          Register
+          {{ $t('register.label.register') }}
         </b-button>
         <a
           href="#"
           @click="switchTo('login')"
         >
-          Login instead
+          {{ $t('register.link.login') }}
         </a>
       </div>
     </div>

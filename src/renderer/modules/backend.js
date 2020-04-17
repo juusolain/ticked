@@ -69,10 +69,11 @@ class Backend {
       store.setList(newList)
     }
 
-    login = async (username, password) => {
+    login = async (user) => {
       try {
+        const { login, password, email } = user
         store.addLoading(1)
-        const token = await net.login(username, password)
+        const token = await net.login(login, password)
         store.addLoading(-1)
         if (token !== null) {
           net.setToken(token)
@@ -80,7 +81,7 @@ class Backend {
           router.push('/')
           return null
         } else {
-          return 'Supply both username and a password'
+          return 'error.login.notfilled'
         }
       } catch (err) {
         store.addLoading(-1)
@@ -88,8 +89,9 @@ class Backend {
       }
     }
 
-    register = async (username, password) => {
+    register = async (user) => {
       try {
+        const { username, password, email } = user
         store.addLoading(1)
         const token = await net.register(username, password)
         store.addLoading(-1)
@@ -99,7 +101,7 @@ class Backend {
           router.push('/')
           return null
         } else {
-          return 'Supply both username and a password'
+          return 'error.register.notfilled'
         }
       } catch (err) {
         store.addLoading(-1)

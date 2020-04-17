@@ -1,0 +1,55 @@
+{
+  "menu": {
+    "label": {
+      "lists": "Lists",
+      "actions": "Actions",
+      "logout": "Logout",
+      "settings": "Settings",
+      "newlist": "New list"
+    }
+  },
+  "login": {
+    "label": {
+      "user": "@:login.placeholder.user",
+      "username": "@:login.placeholder.username",
+      "password": "@:login.placeholder.password",
+      "login": "Login"
+    },
+    "placeholder": {
+      "user": "Username or email",
+      "username": "Username",
+      "password": "Password"
+    },
+    "link":{
+      "register": "Create a new account"
+    }
+  },
+  "register":{
+    "label": {
+      "email": "@:register.placeholder.email",
+      "username": "@:register.placeholder.username",
+      "password": "@:register.placeholder.password",
+      "register": "Register"
+    },
+    "placeholder": {
+      "email": "Email",
+      "user": "Username or email",
+      "username": "Username",
+      "password": "Password"
+    },
+    "link":{
+      "login": "Login instead"
+    }
+  },
+  "error":{
+    "login":{
+      "invalidlogin": "Invalid username and password combination",
+      "notfilled": "Supply both an username and a password"
+    },
+    "register":{
+      "usernameexists": "That username already exists"
+    },
+    "servererror": "Internal server error",
+    "neterror": "Network error"
+  }
+}

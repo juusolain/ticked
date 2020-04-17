@@ -3,6 +3,7 @@ import '@mdi/font/css/materialdesignicons.css'
 import Vue from 'vue'
 import VueGlobalVar from 'vue-global-var'
 import axios from 'axios'
+import i18n from '@/../i18n'
 
 import Buefy from 'buefy'
 import './custom.scss'
@@ -45,5 +46,6 @@ new Vue({
   el: '#app',
   components: { App },
   router,
+  i18n,
   template: '<App/>'
 }).$mount('#app')

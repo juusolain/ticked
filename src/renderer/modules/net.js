@@ -2,6 +2,7 @@ import ElectronStore from 'electron-store'
 import jwtDecode from 'jwt-decode'
 import axios from 'axios'
 import { v4 as uuidv4 } from 'uuid'
+import * as errors from '@/modules/errors'
 
 import store from '@/modules/store'
 
