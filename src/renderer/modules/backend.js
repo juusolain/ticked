@@ -88,6 +88,25 @@ class Backend {
       }
     }
 
+    register = async (username, password) => {
+      try {
+        store.addLoading(1)
+        const token = await net.register(username, password)
+        store.addLoading(-1)
+        if (token !== null) {
+          net.setToken(token)
+          auth.setPassword(password)
+          router.push('/')
+          return null
+        } else {
+          return 'Supply both username and a password'
+        }
+      } catch (err) {
+        store.addLoading(-1)
+        return err.toString()
+      }
+    }
+
     logout = async () => {
       net.logout()
       store.setTasks([])
