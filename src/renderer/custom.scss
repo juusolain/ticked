@@ -25,5 +25,11 @@
   padding: 1rem !important;
 }
 
+.task.input{
+  .name{
+    font-weight: bold;
+  }
+}
+
 @import "~bulma";
 @import "~buefy/src/scss/buefy";

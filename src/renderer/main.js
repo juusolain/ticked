@@ -42,7 +42,7 @@ Vue.use(VueGlobalVar, {
 })
 
 /* eslint-disable no-new */
-new Vue({
+export default new Vue({
   el: '#app',
   components: { App },
   router,

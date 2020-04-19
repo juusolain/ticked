@@ -18,31 +18,41 @@ export default {
   },
   methods: {
     async login () {
-      const returnError = await backend.login({
-        login: this.login_user,
-        password: this.login_password
-      })
-      this.login_user = ''
-      this.login_password = ''
-      if (returnError) {
-        this.error = returnError
+      this.error = ''
+      try {
+        const returnError = await backend.login({
+          login: this.login_user,
+          password: this.login_password
+        })
+      } catch (error) {
+        this.error = error
       }
+      this.clearForms()
     },
     async register () {
-      const returnError = await backend.register({
-        password: this.register_password,
-        email: this.register_email,
-        username: this.register_username
-      })
-      this.register_email = ''
-      this.register_password = ''
-      this.register_username = ''
-      if (returnError) {
-        this.error = returnError
+      this.error = ''
+      try {
+        await backend.register({
+          password: this.register_password,
+          email: this.register_email,
+          username: this.register_username
+        })
+      } catch (error) {
+        this.error = error
       }
+      this.clearForms()
     },
     switchTo (newMode) {
       this.mode = newMode
+      this.error = null
+      this.clearForms()
+    },
+    clearForms () {
+      this.register_email = ''
+      this.register_password = ''
+      this.register_username = ''
+      this.login_user = ''
+      this.login_password = ''
     }
   }
 }

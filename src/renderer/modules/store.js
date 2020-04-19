@@ -12,6 +12,7 @@ var state = {
     if (process.env.NODE_ENV === 'development') console.log('Changing list: ', newList)
     this.state.list = newList
     this.state.tasks = this.state.allTasks.filter((elem) => {
+      if (this.state.list === null) return true
       if (elem.listid === this.state.list) {
         console.log('Adding: ', elem)
       }
@@ -35,9 +36,9 @@ var state = {
     this.state.loading = newLoading
   },
   addTask (newTask) {
-    if (newTask.listid === this.state.list) {
-      if (process.env.NODE_ENV === 'development') console.log('Adding task: ', newTask)
-      this.state.allTasks.push(newTask)
+    if (process.env.NODE_ENV === 'development') console.log('Adding task: ', newTask)
+    this.state.allTasks.push(newTask)
+    if (newTask.listid === this.state.list || this.state.list === null) {
       this.state.tasks.push(newTask)
     }
   },
@@ -46,6 +47,10 @@ var state = {
     this.state.allTasks = this.state.allTasks.filter(function (task) {
       return task.taskid !== taskToRemove.taskid
     })
+  },
+  addList (newList) {
+    if (process.env.NODE_ENV === 'development') console.log('Adding list: ', newList)
+    this.state.lists.push(newList)
   },
   setUserData (newUserData) {
     if (process.env.NODE_ENV === 'development') console.log('Setting user data: ', newUserData)

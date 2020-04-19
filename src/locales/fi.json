@@ -20,11 +20,11 @@
       "username": "Käyttäjätunnus",
       "password": "Salasana"
     },
-    "link":{
+    "link": {
       "register": "Tee uusi käyttäjätili"
     }
   },
-  "register":{
+  "register": {
     "label": {
       "email": "@:register.placeholder.email",
       "username": "@:register.placeholder.username",
@@ -36,8 +36,14 @@
       "username": "@:login.placeholder.username",
       "password": "@:login.placeholder.password"
     },
-    "link":{
+    "link": {
       "login": "Kirjaudu sisään"
+    }
+  },
+  "error": {
+    "login": {
+      "invalidlogin": "Virheellinen käyttäjänimen ja salasanan yhdistelmä",
+      "notfilled": "Anna sekä käyttäjänimi että salasana"
     }
   }
 }

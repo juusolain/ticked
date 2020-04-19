@@ -20,47 +20,49 @@ class Net {
 
   login = async (username, password) => {
     if (username && password) {
+      var res
       try {
-        const res = await this.post('/login', {
+        res = await this.post('/login', {
           data: {
             username: username,
             password: password
           }
         })
-        if (res.data.success) {
-          return res.data.token
-        } else {
-          throw res.data.err
-        }
       } catch (err) {
         console.error(err)
-        throw err
+        throw 'error.neterror'
+      }
+      if (res.data.success) {
+        return res.data.token
+      } else {
+        throw res.data.err
       }
     } else {
-      throw new Error('invalidQuery')
+      throw 'error.login.invalidquery'
     }
   };
 
   register = async (username, password) => {
     if (username && password) {
+      var res
       try {
-        const res = await this.post('/register', {
+        res = await this.post('/register', {
           data: {
             username: username,
             password: password
           }
         })
-        if (res.data.success) {
-          return res.data.token
-        } else {
-          throw res.data.err
-        }
       } catch (err) {
         console.error(err)
-        throw err
+        throw 'error.neterror'
+      }
+      if (res.data.success) {
+        return res.data.token
+      } else {
+        throw res.data.err
       }
     } else {
-      throw new Error('invalidQuery')
+      throw 'error.login.invalidquery'
     }
   };
 
@@ -119,7 +121,8 @@ class Net {
       })
       return res
     } catch (error) {
-      return Promise.reject(error)
+      console.error(error)
+      throw 'error.neterror'
     }
   };
 
@@ -141,7 +144,8 @@ class Net {
       })
       return res
     } catch (error) {
-      return Promise.reject(error)
+      console.error(error)
+      throw 'error.neterror'
     }
   };
 
@@ -150,21 +154,51 @@ class Net {
   };
 
   addTask = async (newTask) => {
-    await this.post('/newTask', {
-      data: newTask
-    })
+    var res
+    try {
+      res = await this.post('/newTask', {
+        data: newTask
+      })
+    } catch (error) {
+      console.error(error)
+      throw 'error.neterror'
+    }
+    if (res.data.success) {
+      return true
+    } else {
+      throw res.data.err
+    }
+  };
+
+  addList = async (newList) => {
+    var res
+    try {
+      res = await this.post('/newList', {
+        data: newList
+      })
+    } catch (error) {
+      console.error(error)
+      throw 'error.neterror'
+    }
+    if (res.data.success) {
+      return true
+    } else {
+      throw res.data.err
+    }
   };
 
   getUserData = async () => {
+    var res
     try {
-      const res = await this.post('/getUserData')
-      if (res.data.success) {
-        return res.data
-      } else {
-        throw res.data.error
-      }
+      res = await this.post('/getUserData')
     } catch (error) {
-      return 'Hellothere'
+      console.error(error)
+      throw 'error.neterror'
+    }
+    if (res.data.success) {
+      return res.data
+    } else {
+      throw res.data.error
     }
   }
 
@@ -173,7 +207,7 @@ class Net {
     if (res.data.success) {
       return res.data.lists
     } else {
-      throw res.data.error
+      throw res.data.err
     }
   };
 
@@ -182,7 +216,7 @@ class Net {
     if (res.data.success) {
       return res.data.tasks
     } else {
-      throw res.data.error
+      throw res.data.err
     }
   };
 }

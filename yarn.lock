@@ -6995,6 +6995,13 @@ package-json@^6.3.0:
     registry-url "^5.0.0"
     semver "^6.2.0"
 
+package-lock-only@0.0.4:
+  version "0.0.4"
+  resolved "https://registry.yarnpkg.com/package-lock-only/-/package-lock-only-0.0.4.tgz#5cf4f379d54d0f3d18d50c92e54d92e177f2f754"
+  integrity sha512-fV1YHeTMWH5LKmdVqfWskm2/SG0iF2IrxJn3ziaPVx9CnpecGJzt8xXtLV+CYINENZwPFMtbxO5qupz0asNz1A==
+  dependencies:
+    chalk "^2.4.1"
+
 pako@~1.0.5:
   version "1.0.11"
   resolved "https://registry.yarnpkg.com/pako/-/pako-1.0.11.tgz#6c9599d340d54dfd3946380252a35705a6b992bf"
@@ -9668,6 +9675,13 @@ vue-router@^3.0.1:
   version "3.1.6"
   resolved "https://registry.yarnpkg.com/vue-router/-/vue-router-3.1.6.tgz#45f5a3a3843e31702c061dd829393554e4328f89"
   integrity sha512-GYhn2ynaZlysZMkFE5oCHRUTqE8BWs/a9YbKpNLi0i7xD6KG1EzDqpHQmv1F5gXjr8kL5iIVS8EOtRaVUEXTqA==
+
+vue-stripe-checkout@^3.2.2:
+  version "3.2.2"
+  resolved "https://registry.yarnpkg.com/vue-stripe-checkout/-/vue-stripe-checkout-3.2.2.tgz#341847b172f0c5743fd9ed041dd7db4e35387d3e"
+  integrity sha512-0dQuop4/jYQk0sdjMZ8Dztyc98GIxazdefKr19q2g8rmtxM86flIORezSqEstrH3+/lCNoFzwZg/+79Ms7TohA==
+  dependencies:
+    package-lock-only "0.0.4"
 
 vue-style-loader@^4.1.0:
   version "4.1.2"

@@ -8,6 +8,16 @@ export default {
         return {}
       }
     }
+  },
+  data () {
+    return {
+      editing: false
+    }
+  },
+  methods: {
+    update () {
+      this.$emit('update')
+    }
   }
 }
 </script>
@@ -15,8 +25,20 @@ export default {
 <template>
   <article class="media">
     <div class="media-content">
-      <strong>{{ task.name }}</strong>
-      <br>
+      <div class="name">
+        <input
+          v-if="editing"
+          v-model="task.name"
+          class="task input name"
+          @blur="editing = false; $emit('update')"
+          @keyup.enter="editing=false; $emit('update')"
+        >
+        <div v-else>
+          <label @click="editing = true">
+            <strong> {{ task.name }} </strong>
+          </label>
+        </div>
+      </div>
       {{ task.description }}
     </div>
   </article>

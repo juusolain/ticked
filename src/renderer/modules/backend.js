@@ -1,7 +1,11 @@
+import vue from '@/main'
+
 import net from '@/modules/net'
 import store from '@/modules/store'
 import router from '@/router'
 import auth from '@/modules/auth'
+
+import { ToastProgrammatic as Toast } from 'buefy'
 
 import { v4 as uuidv4 } from 'uuid'
 
@@ -12,17 +16,18 @@ class Backend {
         const decryptedTasks = await auth.decryptArray(newTasks, auth.decryptObj)
         store.setTasks(decryptedTasks)
       } catch (err) {
-        console.error(err)
+        this.showError(err)
       }
     }
 
     loadLists = async () => {
       try {
         const newLists = await net.getLists()
+        console.log(newLists)
         const decryptedLists = await auth.decryptArray(newLists, auth.decryptObj)
         store.setLists(decryptedLists)
       } catch (err) {
-        console.error(err)
+        this.showError(err)
       }
     }
 
@@ -44,12 +49,18 @@ class Backend {
     }
 
     initialLoad = async () => {
-      store.addLoading(1)
-      const userData = await net.getUserData()
-      store.setUserData(userData)
-      await this.loadTasks()
-      await this.loadLists()
-      store.addLoading(-1)
+      try {
+        store.addLoading(1)
+        // const userData = await net.getUserData()
+        // store.setUserData(userData)
+        await this.loadTasks()
+        await this.loadLists()
+        store.setList(null)
+        store.addLoading(-1)
+      } catch (error) {
+        this.showError(error)
+        store.addLoading(-1)
+      }
     }
 
     newTask = async (newTask) => {
@@ -61,7 +72,19 @@ class Backend {
         const encryptedTask = await auth.encryptObj(newTask)
         await net.addTask(encryptedTask)
       } catch (err) {
-        console.error(err)
+        this.showError(err)
+      }
+    }
+
+    newList = async (newList) => {
+      try {
+        newList.listid = uuidv4()
+        newList.userid = net.getUserID()
+        store.addList(newList)
+        const encryptedTask = await auth.encryptObj(newList)
+        await net.addList(encryptedTask)
+      } catch (err) {
+        this.showError(err)
       }
     }
 
@@ -72,6 +95,9 @@ class Backend {
     login = async (user) => {
       try {
         const { login, password, email } = user
+        if (!login || !password) {
+          throw 'error.login.notfilled'
+        }
         store.addLoading(1)
         const token = await net.login(login, password)
         store.addLoading(-1)
@@ -79,19 +105,19 @@ class Backend {
           net.setToken(token)
           auth.setPassword(password)
           router.push('/')
-          return null
         } else {
-          return 'error.login.notfilled'
+          this.showError('error.login.notoken')
         }
       } catch (err) {
+        this.showError(err)
         store.addLoading(-1)
-        return err.toString()
       }
     }
 
     register = async (user) => {
       try {
         const { username, password, email } = user
+        if (!username || !password) throw 'error.register.notfilled'
         store.addLoading(1)
         const token = await net.register(username, password)
         store.addLoading(-1)
@@ -99,13 +125,12 @@ class Backend {
           net.setToken(token)
           auth.setPassword(password)
           router.push('/')
-          return null
         } else {
-          return 'error.register.notfilled'
+          this.showError('error.register.notoken')
         }
       } catch (err) {
+        this.showError(err)
         store.addLoading(-1)
-        return err.toString()
       }
     }
 
@@ -114,6 +139,15 @@ class Backend {
       store.setTasks([])
       store.setLists([])
       router.push('/')
+    }
+
+    showError = (error) => {
+      const msg = vue.$t(error)
+      Toast.open({
+        message: msg,
+        type: 'is-danger',
+        duration: 5000
+      })
     }
 }
 

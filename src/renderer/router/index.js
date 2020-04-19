@@ -21,6 +21,12 @@ const router = new Router({
       props: true
     },
     {
+      path: '/payments',
+      name: 'Payments',
+      component: require('@/components/Payments').default,
+      props: true
+    },
+    {
       path: '/',
       name: 'redirect',
       redirect: to => {

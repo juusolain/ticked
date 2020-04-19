@@ -16,14 +16,24 @@ class Auth {
 
   // Base decrypt
   decrypt = async data => {
-    const decrypted = await aes256.decrypt(await this.getPassword(), data)
-    return decrypted
+    try {
+      const decrypted = await aes256.decrypt(await this.getPassword(), data)
+      return decrypted
+    } catch (error) {
+      console.warn(error)
+      throw 'error.auth.decrypterror'
+    }
   }
 
   // Base encrypt
   encrypt = async data => {
-    const encrypted = await aes256.encrypt(await this.getPassword(), data)
-    return encrypted
+    try {
+      const encrypted = await aes256.encrypt(await this.getPassword(), data)
+      return encrypted
+    } catch (error) {
+      console.warn(error)
+      throw 'error.auth.encrypterror'
+    }
   }
 
   // Decrypt array with specified decryptor function

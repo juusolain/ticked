@@ -5,7 +5,8 @@
       "actions": "Actions",
       "logout": "Logout",
       "settings": "Settings",
-      "newlist": "New list"
+      "newlist": "New list",
+      "allLists": "All lists"
     }
   },
   "login": {
@@ -20,11 +21,11 @@
       "username": "Username",
       "password": "Password"
     },
-    "link":{
+    "link": {
       "register": "Create a new account"
     }
   },
-  "register":{
+  "register": {
     "label": {
       "email": "@:register.placeholder.email",
       "username": "@:register.placeholder.username",
@@ -37,19 +38,36 @@
       "username": "Username",
       "password": "Password"
     },
-    "link":{
+    "link": {
       "login": "Login instead"
     }
   },
-  "error":{
-    "login":{
+  "error": {
+    "login": {
       "invalidlogin": "Invalid username and password combination",
-      "notfilled": "Supply both an username and a password"
+      "notfilled": "Supply both an username and a password",
+      "invalidquery": "Invalid query, maybe missing password or username",
+      "notoken": "Something happened ... got no token"
     },
-    "register":{
-      "usernameexists": "That username already exists"
+    "register": {
+      "usernameexists": "That username already exists",
+      "notfilled": "Form not filled properly",
+      "invalidquery": "Invalid query, maybe missing password or username",
+      "notoken": "Something happened ... got no token"
     },
     "servererror": "Internal server error",
-    "neterror": "Network error"
+    "neterror": "Network error",
+    "invalidtoken": "Not authorized"
+  },
+  "newlist": {
+    "label": {
+      "name": "Name"
+    },
+    "placeholder": {
+      "name": "Name"
+    },
+    "create": "Create",
+    "close": "Close",
+    "title": "Create a new list"
   }
 }
