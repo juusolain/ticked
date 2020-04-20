@@ -109,7 +109,7 @@ class Net {
       'Content-Type': 'application/json'
     }
     if (this.isLoggedIn()) {
-      headers['Authorization'] = 'Bearer ' + this.getToken()
+      headers.Authorization = 'Bearer ' + this.getToken()
     }
     try {
       const res = await axios({
@@ -132,7 +132,7 @@ class Net {
       'Content-Type': 'application/json'
     }
     if (this.isLoggedIn()) {
-      headers['Authorization'] = 'Bearer ' + this.getToken()
+      headers.Authorization = 'Bearer ' + this.getToken()
     }
     try {
       const res = await axios({

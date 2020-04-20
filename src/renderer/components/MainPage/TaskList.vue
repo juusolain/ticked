@@ -22,6 +22,9 @@ export default {
         name: this.newTaskValue
       })
       this.newTaskValue = ''
+    },
+    updateTask (newTask) {
+      console.log('Updating task: ', newTask)
     }
   }
 }
@@ -44,6 +47,7 @@ export default {
         v-for="task in store.tasks"
         :key="task.taskid"
         :task="task"
+        @update="updateTask(task)"
       />
     </div>
     <div

@@ -26,4 +26,4 @@ class QueryError extends Error {
   }
 }
 
-export {NetworkError, ServerError, CredentialError, QueryError}
+export { NetworkError, ServerError, CredentialError, QueryError }

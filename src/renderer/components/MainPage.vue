@@ -18,7 +18,7 @@ export default {
       test: 'test'
     }
   },
-  lists: {listid: '1234', listname: 'Example'},
+  lists: { listid: '1234', listname: 'Example' },
   mounted: function () {
     console.log('Mounted')
     this.$nextTick(() => {
