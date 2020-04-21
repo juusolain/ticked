@@ -219,6 +219,20 @@ class Net {
       throw res.data.err
     }
   };
+
+  deleteAccount = async () => {
+    var res
+    try {
+      res = await this.post('/deleteAccount')
+    } catch (error) {
+      throw 'err.neterror'
+    }
+    if (res.data.success) {
+      return true
+    } else {
+      throw res.data.err
+    }
+  }
 }
 
 export default new Net()

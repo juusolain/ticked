@@ -56,10 +56,24 @@ class Backend {
         await this.loadTasks()
         await this.loadLists()
         store.setList(null)
+        store.setMenuView('allLists')
         store.addLoading(-1)
       } catch (error) {
         this.showError(error)
         store.addLoading(-1)
+      }
+    }
+
+    deleteAccount = async (password) => {
+      try {
+        if (password === await auth.getPassword()) {
+          await net.deleteAccount()
+          this.logout()
+        } else {
+          throw 'err.deleteAccount.invalidpassword'
+        }
+      } catch (error) {
+        this.showError(error)
       }
     }
 
@@ -72,6 +86,7 @@ class Backend {
         const encryptedTask = await auth.encryptObj(newTask)
         await net.addTask(encryptedTask)
       } catch (err) {
+        store.removeTask(newTask)
         this.showError(err)
       }
     }
@@ -81,10 +96,14 @@ class Backend {
         newList.listid = uuidv4()
         newList.userid = net.getUserID()
         store.addList(newList)
+        store.setList(newList.listid)
+        store.setMenuView(newList.listid)
         const encryptedTask = await auth.encryptObj(newList)
         await net.addList(encryptedTask)
       } catch (err) {
         this.showError(err)
+        store.removeList(newList)
+        store.backMenuView()
       }
     }
 
@@ -142,11 +161,13 @@ class Backend {
     }
 
     showError = (error) => {
+      error = error.toString()
       const msg = vue.$t(error)
       Toast.open({
         message: msg,
         type: 'is-danger',
-        duration: 5000
+        duration: 5000,
+        queue: false
       })
     }
 }

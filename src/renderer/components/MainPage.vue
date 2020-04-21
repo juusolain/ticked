@@ -1,6 +1,7 @@
 <script>
 import Menu from '@/components/MainPage/Menu'
 import TaskList from '@/components/MainPage/TaskList'
+import Settings from '@/components/MainPage/Settings'
 
 import store from '@/modules/store'
 import backend from '@/modules/backend'
@@ -8,7 +9,7 @@ import auth from '@/modules/auth'
 
 export default {
   name: 'MainPage',
-  components: { Menu, TaskList },
+  components: { Menu, TaskList, Settings },
   data () {
     return {
       loading: false,
@@ -45,6 +46,7 @@ export default {
     </div>
     <div class="column is-three-quarters">
       <TaskList v-if="store.view === 'tasks'" />
+      <Settings v-if="store.view === 'settings'" />
     </div>
   </div>
 </template>

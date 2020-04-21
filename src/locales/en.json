@@ -69,5 +69,16 @@
     "create": "Create",
     "close": "Close",
     "title": "Create a new list"
+  },
+  "settings": {
+    "delete": {
+      "placeholder": {
+        "password": "Password"
+      },
+      "label": {
+        "password": "Enter password to delete account",
+        "delete": "Delete account"
+      }
+    }
   }
 }

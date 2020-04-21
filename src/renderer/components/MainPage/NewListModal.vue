@@ -1,5 +1,7 @@
 <script>
 import backend from '@/modules/backend'
+import store from '@/modules/store'
+
 export default {
   name: 'NewListModal',
   data () {
@@ -10,12 +12,13 @@ export default {
   methods: {
     create () {
       console.log(this.$parent)
-      this.$parent.close()
+      this.close()
       backend.newList({
         name: this.name
       })
     },
-    cancel () {
+    close () {
+      store.viewBack()
       this.$parent.close()
     }
   }
@@ -51,7 +54,7 @@ export default {
       </b-button>
       <b-button
         type="is-light"
-        @click="cancel"
+        @click="close"
       >
         {{ $t('newlist.close') }}
       </b-button>

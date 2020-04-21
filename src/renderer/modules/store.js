@@ -6,7 +6,10 @@ var state = {
     allTasks: [],
     loading: 0,
     userData: {},
-    view: 'tasks' // tasks or shareKey
+    view: 'tasks', // tasks or shareKey
+    menuView: '',
+    lastMenuView: '',
+    lastView: ''
   },
   setList (newList) {
     if (process.env.NODE_ENV === 'development') console.log('Changing list: ', newList)
@@ -30,6 +33,7 @@ var state = {
   addLoading (newLoading) {
     if (process.env.NODE_ENV === 'development') console.log('Adding loading: ', newLoading)
     this.state.loading += newLoading
+    if (this.state.loading < 0) this.state.loading = 0
   },
   setLoading (newLoading) {
     if (process.env.NODE_ENV === 'development') console.log('Changing loading: ', newLoading)
@@ -47,6 +51,9 @@ var state = {
     this.state.allTasks = this.state.allTasks.filter(function (task) {
       return task.taskid !== taskToRemove.taskid
     })
+    this.state.tasks = this.state.tasks.filter(function (task) {
+      return task.taskid !== taskToRemove.taskid
+    })
   },
   addList (newList) {
     if (process.env.NODE_ENV === 'development') console.log('Adding list: ', newList)
@@ -57,8 +64,23 @@ var state = {
     this.state.userData = newUserData
   },
   setView (newView) {
+    this.state.lastView = newView
     if (process.env.NODE_ENV === 'development') console.log('Setting view: ', newView)
     this.state.view = newView
+  },
+  setMenuView (newMenu) {
+    this.state.lastMenuView = this.state.menuView
+    if (process.env.NODE_ENV === 'development') console.log('Setting menu view: ', newMenu)
+    this.state.menuView = newMenu
+  },
+  viewBack () {
+    const newView = this.state.lastView
+    const newMenuView = this.state.lastMenuView
+    this.state.lastView = this.state.view
+    this.state.lastMenuView = this.state.menuView
+    this.state.view = newView
+    this.state.menuView = newMenuView
+    if (process.env.NODE_ENV === 'development') console.log('Going back')
   }
 }
 

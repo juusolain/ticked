@@ -31,5 +31,9 @@
   }
 }
 
+::-webkit-scrollbar {
+  display: none;
+}
+
 @import "~bulma";
 @import "~buefy/src/scss/buefy";
