@@ -12,7 +12,7 @@
     flex: 1;
     margin: 0 !important;
     .column {
-      overflow-y: auto;
+      overflow: visible;
     }
   }
 }
@@ -20,6 +20,7 @@
 .is-sidebar-menu {
   padding: 1rem !important;
 }
+
 
 .is-login{
   padding: 1rem !important;

@@ -69,9 +69,33 @@ export default {
           v-for="list in state.lists"
           :key="list.listid"
           :active="state.menuView === list.listid"
-          :label="list.name"
           @click="setList(list.listid)"
-        />
+        >
+          <template #label>
+            {{ list.name }}
+            <b-dropdown
+              aria-role="list"
+              class="is-pulled-right"
+              append-to-body="true"
+            >
+              <template #trigger>
+                <b-icon
+                  icon="dots-vertical"
+                />
+              </template>
+
+              <b-dropdown-item aria-role="listitem">
+                Action
+              </b-dropdown-item>
+              <b-dropdown-item aria-role="listitem">
+                Another action
+              </b-dropdown-item>
+              <b-dropdown-item aria-role="listitem">
+                Something else
+              </b-dropdown-item>
+            </b-dropdown>
+          </template>
+        </b-menu-item>
         <b-menu-item
           tag="a"
           icon="plus"
