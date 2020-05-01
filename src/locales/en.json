@@ -80,5 +80,10 @@
         "delete": "Delete account"
       }
     }
+  },
+  "task": {
+    "placeholder": {
+      "description": "Click to add a description..."
+    }
   }
 }
