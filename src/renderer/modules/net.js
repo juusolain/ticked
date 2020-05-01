@@ -12,7 +12,7 @@ console.log(process.env.server)
 
 const server = process.env.server || (process.env.NODE_ENV === 'development'
   ? 'http://localhost/'
-  : 'https://server.ticked.cf/')
+  : 'https://server.ticked.jusola.xyz/')
 
 class Net {
   constructor () {
