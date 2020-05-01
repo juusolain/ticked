@@ -91,6 +91,16 @@ class Backend {
       }
     }
 
+    updateTask = async (newTask) => {
+      try {
+        const encryptedTask = await auth.encryptObj(newTask)
+        await net.updateTask(encryptedTask)
+      } catch (err) {
+        store.removeTask(newTask)
+        this.showError(err)
+      }
+    }
+
     newList = async (newList) => {
       try {
         newList.listid = uuidv4()

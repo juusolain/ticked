@@ -25,6 +25,7 @@ export default {
     },
     updateTask (newTask) {
       console.log('Updating task: ', newTask)
+      backend.updateTask(newTask)
     }
   }
 }

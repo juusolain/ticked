@@ -27,8 +27,26 @@
 }
 
 .task.input{
-  .name{
-    font-weight: bold;
+  box-sizing: content-box !important;
+  background-color: transparent !important;
+  outline: none !important;
+  outline-style: none !important;
+  border-top: none !important;
+  border-left: none !important;
+  border-right: none !important;
+  /*
+  Someone decided that borders change box size even with box-sizing: content-box;
+  Outline could be a better workaround, but they cannot be applied only to one side.
+  Therefore the following "bad" workaround:
+  */
+  height: 23px !important;
+  border-bottom: solid 1px !important;
+  padding: 0px !important;
+  border-radius: 0px !important;
+  box-shadow: none !important;
+  margin: 0px !important;
+  &.name{
+    font-weight: bold !important;
   }
 }
 

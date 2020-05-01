@@ -152,7 +152,20 @@ class Net {
   };
 
   updateTask = async newTask => {
-    console.log(newTask)
+    var res
+    try {
+      res = await this.post('/updateTask', {
+        data: newTask
+      })
+    } catch (error) {
+      console.error(error)
+      throw 'error.neterror'
+    }
+    if (res.data.success) {
+      return true
+    } else {
+      throw res.data.err
+    }
   };
 
   addTask = async (newTask) => {
