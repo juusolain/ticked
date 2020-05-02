@@ -7,20 +7,28 @@
 .has-direction-column {
   flex-direction: column;
 }
-.columns {
-  &.is-fullheight {
-    flex: 1;
-    margin: 0 !important;
-    .column {
-      overflow: visible;
-    }
+
+.main {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-height: 100%;
+  .main-layout {
+      display: flex;
+      flex-direction: row;
+      min-height: 100%;
   }
 }
+
+.main-content{
+  flex: 1;
+  padding: 1rem !important;
+}
+
 
 .is-sidebar-menu {
   padding: 1rem !important;
 }
-
 
 .is-login{
   padding: 1rem !important;

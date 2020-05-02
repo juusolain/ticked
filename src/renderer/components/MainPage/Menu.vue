@@ -54,10 +54,13 @@ export default {
 </script>
 
 <template>
-  <div>
-    <b-menu
-      class="is-sidebar-menu"
-    >
+  <b-sidebar
+    position="static"
+    fullheight
+    mobile="show"
+    open
+  >
+    <b-menu class="is-sidebar-menu">
       <b-menu-list :label="$t('menu.label.lists')">
         <b-menu-item
           :active="state.menuView === 'allLists'"
@@ -76,7 +79,7 @@ export default {
             <b-dropdown
               aria-role="list"
               class="is-pulled-right"
-              append-to-body="true"
+              append-to-body
             >
               <template #trigger>
                 <b-icon
@@ -119,7 +122,7 @@ export default {
         />
       </b-menu-list>
     </b-menu>
-  </div>
+  </b-sidebar>
 </template>
 
 <style></style>

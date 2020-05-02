@@ -35,19 +35,19 @@ export default {
 </script>
 
 <template>
-  <div class="columns is-fullheight">
+  <div class="main">
     <b-loading
       :active="store.loading !== 0"
       :is-full-page="true"
       :can-cancel="false"
     />
-    <div class="column is-one-quarter has-background-black-ter has-text-light">
+    <section class="main-layout">
       <Menu />
-    </div>
-    <div class="column is-three-quarters">
-      <TaskList v-if="store.view === 'tasks'" />
-      <Settings v-if="store.view === 'settings'" />
-    </div>
+      <div class="main-content">
+        <TaskList v-if="store.view === 'tasks'" />
+        <Settings v-if="store.view === 'settings'" />
+      </div>
+    </section>
   </div>
 </template>
 
