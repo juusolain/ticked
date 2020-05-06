@@ -57,6 +57,7 @@ class Backend {
         await this.loadLists()
         store.setList(null)
         store.setMenuView('allLists')
+        store.setView('tasks')
         store.addLoading(-1)
       } catch (error) {
         this.showError(error)

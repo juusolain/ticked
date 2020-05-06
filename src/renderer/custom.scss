@@ -8,6 +8,10 @@
   flex-direction: column;
 }
 
+.is-fullheight {
+  flex: 1;
+}
+
 .main {
   display: flex;
   flex-direction: column;
@@ -61,6 +65,7 @@
 ::-webkit-scrollbar {
   display: none;
 }
+
 
 @import "~bulma";
 @import "~buefy/src/scss/buefy";

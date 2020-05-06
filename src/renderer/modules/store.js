@@ -6,7 +6,7 @@ var state = {
     allTasks: [],
     loading: 0,
     userData: {},
-    view: 'tasks', // tasks or shareKey
+    view: 'tasks', // tasks or settings
     menuView: '',
     lastMenuView: '',
     lastView: ''
