@@ -38,6 +38,7 @@ class Auth {
   createVerifier = async (username, password) => {
     const salt = srp.generateSalt()
     const privateKey = await this.getPrivateKey(username, password, salt)
+    console.log(privateKey)
     const verifier = srp.deriveVerifier(privateKey)
     return {verifier, salt}
   }
@@ -55,8 +56,10 @@ class Auth {
   }
 
   createSession = async (username, password, salt, serverEphemeralPublic) => {
-    const privateKey = this.getPrivateKey(username, password, salt)
-    this.clientSession = srp.deriveSession(this.clientEphemeral.secret, serverEphemeralPublic, salt, username, privateKey)
+    console.log({username, password, salt, serverEphemeralPublic})
+    const privateKey = await this.getPrivateKey(username, password, salt)
+    console.log(privateKey)
+    this.clientSession = await srp.deriveSession(this.clientEphemeral.secret, serverEphemeralPublic, salt, username, privateKey)
     return this.clientSession.proof
   }
 

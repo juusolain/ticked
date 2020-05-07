@@ -21,7 +21,7 @@ export default {
       this.error = ''
       try {
         const returnError = await backend.login({
-          login: this.login_user,
+          username: this.login_user,
           password: this.login_password
         })
       } catch (error) {
