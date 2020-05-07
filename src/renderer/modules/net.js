@@ -44,14 +44,15 @@ class Net {
     }
   };
 
-  register = async (username, password) => {
-    if (username && password) {
+  register = async (username, salt, verifier) => {
+    if (username && salt && verifier) {
       var res
       try {
         res = await this.post('/register', {
           data: {
-            username: username,
-            password: password
+            username,
+            salt,
+            verifier
           }
         })
       } catch (err) {

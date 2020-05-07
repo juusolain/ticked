@@ -4,6 +4,11 @@ import store from '@/modules/store'
 import ElectronStore from 'electron-store'
 import aes256 from 'aes256'
 import keytar from 'keytar'
+import srp from 'secure-remote-password/client'
+import crypto from 'crypto'
+import util from 'util'
+
+const pbkdf2 = util.promisify(crypto.pbkdf2)
 
 class Auth {
   setPassword = async newPassword => {
@@ -23,6 +28,15 @@ class Auth {
       console.warn(error)
       throw 'error.auth.decrypterror'
     }
+  }
+
+  createVerifier = async (username, password) => {
+    const salt = srp.generateSalt()
+    const secret = `${username}:${password}`
+    const keyBuf = await pbkdf2(secret, salt, 10000, 512, 'sha512')
+    const privateKey = keyBuf.toString('hex')
+    const verifier = srp.deriveVerifier(privateKey)
+    return {verifier, salt}
   }
 
   // Base encrypt

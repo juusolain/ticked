@@ -149,7 +149,8 @@ class Backend {
         const { username, password, email } = user
         if (!username || !password) throw 'error.register.notfilled'
         store.addLoading(1)
-        const token = await net.register(username, password)
+        const {salt, verifier} = await auth.createVerifier(username, password)
+        const token = await net.register(username, salt, verifier)
         store.addLoading(-1)
         if (token !== null) {
           net.setToken(token)
