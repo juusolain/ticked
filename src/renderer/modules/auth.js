@@ -11,6 +11,11 @@ import util from 'util'
 const pbkdf2 = util.promisify(crypto.pbkdf2)
 
 class Auth {
+  constructor () {
+    this.clientEphemeral = null
+    this.clientSession = null
+  }
+
   setPassword = async newPassword => {
     return keytar.setPassword('ticked', net.getUserID(), newPassword)
   }
@@ -32,11 +37,27 @@ class Auth {
 
   createVerifier = async (username, password) => {
     const salt = srp.generateSalt()
+    const privateKey = await this.getPrivateKey(username, password, salt)
+    const verifier = srp.deriveVerifier(privateKey)
+    return {verifier, salt}
+  }
+
+  getPrivateKey = async (username, password, salt) => {
     const secret = `${username}:${password}`
     const keyBuf = await pbkdf2(secret, salt, 10000, 512, 'sha512')
     const privateKey = keyBuf.toString('hex')
-    const verifier = srp.deriveVerifier(privateKey)
-    return {verifier, salt}
+    return privateKey
+  }
+
+  createEphemeral = async () => {
+    this.clientEphemeral = srp.generateEphemeral()
+    return this.clientEphemeral.public
+  }
+
+  createSession = async (username, password, salt, serverEphemeralPublic) => {
+    const privateKey = this.getPrivateKey(username, password, salt)
+    this.clientSession = srp.deriveSession(this.clientEphemeral.secret, serverEphemeralPublic, salt, username, privateKey)
+    return this.clientSession.proof
   }
 
   // Base encrypt

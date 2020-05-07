@@ -124,12 +124,15 @@ class Backend {
 
     login = async (user) => {
       try {
-        const { login, password, email } = user
-        if (!login || !password) {
+        const { username, password } = user
+        if (!username || !password) {
           throw 'error.login.notfilled'
         }
         store.addLoading(1)
-        const token = await net.login(login, password)
+        const clientEphemeralPublic = await auth.createEphemeral()
+        const {salt, serverEphemeralPublic} = await net.loginSalt(username, clientEphemeralPublic)
+        const clientSessionProof = await auth.createSession(username, password, salt, serverEphemeralPublic)
+        const {token, serverSessionProof} = await net.loginToken(username, clientSessionProof)
         store.addLoading(-1)
         if (token !== null) {
           net.setToken(token)

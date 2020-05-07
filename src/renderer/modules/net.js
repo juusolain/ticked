@@ -20,14 +20,14 @@ class Net {
     console.log(`New auth created with server ${this.server}`)
   }
 
-  login = async (username, password) => {
-    if (username && password) {
+  loginSalt = async (username, clientEphemeralPublic) => {
+    if (username && clientEphemeralPublic) {
       var res
       try {
-        res = await this.post('/login', {
+        res = await this.post('/login/salt', {
           data: {
             username: username,
-            password: password
+            clientEphemeralPublic: clientEphemeralPublic
           }
         })
       } catch (err) {
@@ -35,7 +35,31 @@ class Net {
         throw 'error.neterror'
       }
       if (res.data.success) {
-        return res.data.token
+        return res.data
+      } else {
+        throw res.data.err
+      }
+    } else {
+      throw 'error.login.invalidquery'
+    }
+  };
+
+  loginToken = async (username, clientSessionProof) => {
+    if (username && clientSessionProof) {
+      var res
+      try {
+        res = await this.post('/login/token', {
+          data: {
+            username: username,
+            clientSessionProof: clientSessionProof
+          }
+        })
+      } catch (err) {
+        console.error(err)
+        throw 'error.neterror'
+      }
+      if (res.data.success) {
+        return res.data
       } else {
         throw res.data.err
       }
