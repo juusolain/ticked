@@ -3,7 +3,6 @@ import jwtDecode from 'jwt-decode'
 import axios from 'axios'
 import { v4 as uuidv4 } from 'uuid'
 import * as errors from '@/modules/errors'
-
 import store from '@/modules/store'
 
 const electronstore = new ElectronStore()
@@ -269,6 +268,20 @@ class Net {
     }
     if (res.data.success) {
       return true
+    } else {
+      throw res.data.err
+    }
+  }
+
+  getNewSubscription = async () => {
+    var res
+    try {
+      res = await this.get('/newSubscription')
+    } catch (error) {
+      throw 'err.neterror'
+    }
+    if (res.data.success) {
+      return res.data.token
     } else {
       throw res.data.err
     }

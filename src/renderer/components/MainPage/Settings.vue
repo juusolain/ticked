@@ -14,6 +14,12 @@ export default {
   methods: {
     deleteAccount (event) {
       backend.deleteAccount(this.password)
+    },
+    openManage () {
+      backend.manageSubscription()
+    },
+    openSubscribe () {
+      backend.newSubscription()
     }
   }
 }
@@ -47,7 +53,7 @@ export default {
       </b-button>
       <b-button
         class="is-primary"
-        @click="openSubscribe"
+        @click="openManage"
       >
         {{ $t('settings.payments.manage') }}
       </b-button>
