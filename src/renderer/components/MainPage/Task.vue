@@ -32,7 +32,13 @@ export default {
 
 <template>
   <article class="media">
-    <div class="media-content">
+    <div class="task">
+      <div class="check">
+        <b-checkbox
+          size="is-large"
+          type="is-success"
+        />
+      </div>
       <div class="name">
         <input
           v-if="editing_name"

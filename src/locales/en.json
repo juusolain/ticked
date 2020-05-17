@@ -85,5 +85,8 @@
     "placeholder": {
       "description": "Click to add a description..."
     }
+  },
+  "tasklist": {
+    "notasks": "No tasks here yet"
   }
 }

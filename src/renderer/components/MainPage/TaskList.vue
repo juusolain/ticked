@@ -32,9 +32,9 @@ export default {
 </script>
 
 <template>
-  <div class="tasklist">
+  <div class="tasks">
     <div class="newtask">
-      <b-field>
+      <b-field class="name">
         <b-input
           v-model="newTaskValue"
           placeholder="New task"
@@ -42,20 +42,37 @@ export default {
           @keyup.native.enter="newTask"
         />
       </b-field>
-    </div>
-    <div v-if="store.tasks">
-      <Task
-        v-for="task in store.tasks"
-        :key="task.taskid"
-        :task="task"
-        @update="updateTask(task)"
+      <b-button
+        type="is-primary"
+        size="is-medium"
+        icon-right="plus"
+        @click="newTask"
       />
     </div>
-    <div
-      v-if="error"
-      class="error"
-    >
-      {{ error }}
+    <div class="tasklist">
+      <div v-if="store.tasks && store.tasks.length !== 0">
+        <Task
+          v-for="task in store.tasks"
+          :key="task.taskid"
+          :task="task"
+          @update="updateTask(task)"
+        />
+      </div>
+      <div
+        v-else
+        class="is-flex"
+        style="align-items: center; justify-content: center;"
+      >
+        <p style="text-align: center">
+          {{ $t('tasklist.notasks') }}
+        </p>
+      </div>
+      <div
+        v-if="error"
+        class="error"
+      >
+        {{ error }}
+      </div>
     </div>
   </div>
 </template>
