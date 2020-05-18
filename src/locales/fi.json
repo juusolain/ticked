@@ -1,0 +1,84 @@
+{
+  "menu": {
+    "label": {
+      "lists": "Listat",
+      "actions": "Timinnot",
+      "logout": "Kirjaudu ulos",
+      "settings": "Asetukset",
+      "newlist": "Uusi lista",
+      "allLists": "Kaikki luettelot"
+    }
+  },
+  "login": {
+    "label": {
+      "user": "@:login.placeholder.user",
+      "username": "@:login.placeholder.username",
+      "password": "@:login.placeholder.password",
+      "login": "Kirjaudu sisään"
+    },
+    "placeholder": {
+      "user": "Käyttäjätunnus tai sähköposti",
+      "username": "Käyttäjätunnus",
+      "password": "Salasana"
+    },
+    "link": {
+      "register": "Tee uusi käyttäjätili"
+    }
+  },
+  "register": {
+    "label": {
+      "email": "@:register.placeholder.email",
+      "username": "@:register.placeholder.username",
+      "password": "@:register.placeholder.password",
+      "register": "Rekisteröidy"
+    },
+    "placeholder": {
+      "email": "Sähköposti",
+      "username": "@:login.placeholder.username",
+      "password": "@:login.placeholder.password",
+      "user": "Käyttäjätunnus tai sähköpostiosoite"
+    },
+    "link": {
+      "login": "Kirjaudu sisään"
+    }
+  },
+  "error": {
+    "login": {
+      "invalidlogin": "Virheellinen käyttäjänimen ja salasanan yhdistelmä",
+      "notfilled": "Anna sekä käyttäjänimi että salasana",
+      "invalidquery": "Virheellinen kysely, puuttuuko salasana tai käyttäjänimi",
+      "notoken": "Jotain tapahtui ... ei saatu avainta"
+    },
+    "invalidtoken": "Ei sallittu",
+    "neterror": "Verkkovirhe",
+    "register": {
+      "invalidquery": "Virheellinen kysely, puuttuuko salasana tai käyttäjänimi",
+      "notfilled": "Lomaketta ei ole täytetty oikein",
+      "notoken": "Jotain tapahtui ... ei saatu avainta",
+      "usernameexists": "Tuo käyttäjänimi on jo olemassa"
+    },
+    "servererror": "Sisäinen palvelinvirhe"
+  },
+  "newlist": {
+    "close": "Sulje",
+    "create": "Luo",
+    "label": {
+      "name": "Nimi"
+    },
+    "placeholder": {
+      "name": "Nimi"
+    },
+    "title": "Luo uusi luettelo"
+  },
+  "settings": {
+    "delete": {
+      "label": {
+        "delete": "Poista tili",
+        "password": "Kirjoita salasana poistaaksesi tilin"
+      },
+      "placeholder": {
+        "password": "Salasana"
+      }
+    }
+  }
+}

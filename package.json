@@ -1,66 +1,131 @@
 {
   "name": "ticked",
-  "productName": "ticked",
-  "version": "1.0.2",
-  "description": "My Electron application description",
-  "repository": "https://github.com/jusola/ticked",
-  "main": "src/index.js",
+  "version": "0.0.1",
+  "description": "Ticked - a Vue and Electron based time mgmt app",
+  "author": "jusola <juulain@gmail.com>",
   "scripts": {
-    "start": "electron-forge start",
-    "package": "electron-forge package",
-    "make": "electron-forge make",
-    "publish": "electron-forge publish",
-    "lint": "echo \"No linting configured\""
+    "build": "node .electron-vue/build.js && electron-builder",
+    "lint": "eslint --ext .js,.vue -f ./node_modules/eslint-friendly-formatter src",
+    "build:clean": "cross-env BUILD_TARGET=clean node .electron-vue/build.js",
+    "build:dir": "node .electron-vue/build.js && electron-builder --dir",
+    "build:web": "cross-env BUILD_TARGET=web node .electron-vue/build.js",
+    "dev": "node .electron-vue/dev-runner.js",
+    "dev:web": "export server=https://server.ticked.jusola.xyz || set server=https://server.ticked.jusola.xyz&& npm run dev",
+    "i18n:report": "vue-cli-service i18n:report --src './src/**/*.?(js|vue)' --locales './src/locales/**/*.json'",
+    "lint:fix": "eslint --ext .js,.vue -f ./node_modules/eslint-friendly-formatter --fix src",
+    "pack": "npm run pack:main && npm run pack:renderer",
+    "pack:main": "cross-env NODE_ENV=production webpack --progress --colors --config .electron-vue/webpack.main.config.js",
+    "pack:renderer": "cross-env NODE_ENV=production webpack --progress --colors --config .electron-vue/webpack.renderer.config.js",
+    "postinstall": "npm run lint:fix && npm run rebuild",
+    "rebuild": "./node_modules/.bin/electron-rebuild.cmd"
   },
-  "keywords": [],
-  "author": {
-    "name": "jusola",
-    "email": "juulain@gmail.com"
-  },
-  "license": "MIT",
-  "config": {
-    "forge": {
-      "packagerConfig": {},
-      "makers": [
-        {
-          "name": "@electron-forge/maker-squirrel",
-          "config": {
-            "name": "ticked"
-          }
-        }
-      ],
-      "publishers": [
-        {
-          "name": "@electron-forge/publisher-github",
-          "config": {
-            "repository": {
-              "owner": "jusola",
-              "name": "ticked"
-            },
-            "prerelease": false
-          }
-        }
-      ]
-    }
-  },
+  "main": "./dist/electron/main.js",
   "dependencies": {
+    "@mdi/font": "^5.1.45",
+    "@stripe/stripe-js": "^1.5.0",
+    "aes256": "^1.0.4",
     "axios": "^0.19.2",
-    "electron-is-dev": "^1.1.0",
-    "electron-reload": "^1.5.0",
-    "electron-squirrel-startup": "^1.0.0",
+    "buefy": "^0.8.15",
     "electron-store": "^5.1.1",
-    "flatpickr": "^4.6.3",
-    "jquery": "^3.4.1",
     "jwt-decode": "^2.2.0",
-    "update-electron-app": "^1.5.0"
+    "keytar": "^5.5.0",
+    "secure-remote-password": "^0.3.1",
+    "uuid": "^7.0.3",
+    "vue": "^2.6.11",
+    "vue-electron": "^1.0.6",
+    "vue-global-var": "^1.0.0",
+    "vue-i18n": "^8.17.3",
+    "vue-router": "^3.1.6",
+    "vue-stripe-checkout": "^3.2.2",
+    "vue-stripe-elements-plus": "^0.3.2",
+    "vuex": "^3.2.0",
+    "vuex-electron": "^1.0.3"
   },
   "devDependencies": {
-    "@electron-forge/cli": "^6.0.0-beta.50",
-    "@electron-forge/maker-deb": "6.0.0-beta.50",
-    "@electron-forge/maker-rpm": "6.0.0-beta.50",
-    "@electron-forge/maker-squirrel": "6.0.0-beta.50",
-    "@electron-forge/maker-zip": "6.0.0-beta.50",
-    "@electron-forge/publisher-github": "^6.0.0-beta.50",
-    "electron": "8.0.2"
-  }
+    "ajv": "^6.12.2",
+    "babel-core": "^6.26.3",
+    "babel-eslint": "^10.1.0",
+    "babel-loader": "^7.1.5",
+    "babel-minify-webpack-plugin": "^0.3.1",
+    "babel-plugin-transform-runtime": "^6.23.0",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-stage-0": "^6.24.1",
+    "babel-register": "^6.26.0",
+    "cfonts": "^2.8.1",
+    "chalk": "^4.0.0",
+    "copy-webpack-plugin": "^5.1.1",
+    "cross-env": "^7.0.2",
+    "css-loader": "^3.5.2",
+    "del": "^5.1.0",
+    "devtron": "^1.4.0",
+    "electron": "^8.2.3",
+    "electron-builder": "^22.5.1",
+    "electron-debug": "^3.0.1",
+    "electron-devtools-installer": "^2.2.4",
+    "electron-rebuild": "^1.10.1",
+    "eslint": "^6.8.0",
+    "eslint-config-standard": "^11.0.0",
+    "eslint-friendly-formatter": "^4.0.1",
+    "eslint-loader": "^2.0.0",
+    "eslint-plugin-html": "^4.0.3",
+    "eslint-plugin-import": "^2.12.0",
+    "eslint-plugin-node": "^6.0.1",
+    "eslint-plugin-promise": "^3.8.0",
+    "eslint-plugin-standard": "^3.1.0",
+    "eslint-plugin-vue": "^7.0.0-alpha.0",
+    "file-loader": "^1.1.11",
+    "html-webpack-plugin": "^3.2.0",
+    "mini-css-extract-plugin": "0.4.0",
+    "multispinner": "^0.2.1",
+    "node-loader": "^0.6.0",
+    "node-sass": "^4.9.2",
+    "sass-loader": "^7.0.3",
+    "style-loader": "^0.21.0",
+    "url-loader": "^1.0.1",
+    "vue-cli-plugin-i18n": "~0.6.1",
+    "vue-html-loader": "^1.2.4",
+    "vue-loader": "^15.2.4",
+    "vue-style-loader": "^4.1.0",
+    "vue-template-compiler": "^2.5.16",
+    "webpack": "^4.15.1",
+    "webpack-cli": "^3.0.8",
+    "webpack-dev-server": "^3.1.4",
+    "webpack-hot-middleware": "^2.22.2",
+    "webpack-merge": "^4.1.3"
+  },
+  "build": {
+    "productName": "ticked",
+    "appId": "",
+    "directories": {
+      "output": "build"
+    },
+    "files": [
+      "dist/electron/**/*"
+    ],
+    "dmg": {
+      "contents": [
+        {
+          "x": 410,
+          "y": 150,
+          "type": "link",
+          "path": "/Applications"
+        },
+        {
+          "x": 130,
+          "y": 150,
+          "type": "file"
+        }
+      ]
+    },
+    "mac": {
+      "icon": "build/icons/icon.icns"
+    },
+    "win": {
+      "icon": "build/icons/icon.ico"
+    },
+    "linux": {
+      "icon": "build/icons"
+    }
+  },
+  "license": "null"
 }

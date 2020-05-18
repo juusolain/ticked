@@ -1,0 +1,92 @@
+{
+  "menu": {
+    "label": {
+      "lists": "Lists",
+      "actions": "Actions",
+      "logout": "Logout",
+      "settings": "Settings",
+      "newlist": "New list",
+      "allLists": "All lists"
+    }
+  },
+  "login": {
+    "label": {
+      "user": "@:login.placeholder.user",
+      "username": "@:login.placeholder.username",
+      "password": "@:login.placeholder.password",
+      "login": "Login"
+    },
+    "placeholder": {
+      "user": "Username or email",
+      "username": "Username",
+      "password": "Password"
+    },
+    "link": {
+      "register": "Create a new account"
+    }
+  },
+  "register": {
+    "label": {
+      "email": "@:register.placeholder.email",
+      "username": "@:register.placeholder.username",
+      "password": "@:register.placeholder.password",
+      "register": "Register"
+    },
+    "placeholder": {
+      "email": "Email",
+      "user": "Username or email",
+      "username": "Username",
+      "password": "Password"
+    },
+    "link": {
+      "login": "Login instead"
+    }
+  },
+  "error": {
+    "login": {
+      "invalidlogin": "Invalid username and password combination",
+      "notfilled": "Supply both an username and a password",
+      "invalidquery": "Invalid query, maybe missing password or username",
+      "notoken": "Something happened ... got no token"
+    },
+    "register": {
+      "usernameexists": "That username already exists",
+      "notfilled": "Form not filled properly",
+      "invalidquery": "Invalid query, maybe missing password or username",
+      "notoken": "Something happened ... got no token"
+    },
+    "servererror": "Internal server error",
+    "neterror": "Network error",
+    "invalidtoken": "Not authorized"
+  },
+  "newlist": {
+    "label": {
+      "name": "Name"
+    },
+    "placeholder": {
+      "name": "Name"
+    },
+    "create": "Create",
+    "close": "Close",
+    "title": "Create a new list"
+  },
+  "settings": {
+    "delete": {
+      "placeholder": {
+        "password": "Password"
+      },
+      "label": {
+        "password": "Enter password to delete account",
+        "delete": "Delete account"
+      }
+    }
+  },
+  "task": {
+    "placeholder": {
+      "description": "Click to add a description..."
+    }
+  },
+  "tasklist": {
+    "notasks": "No tasks here yet"
+  }
+}
