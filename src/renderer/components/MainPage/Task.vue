@@ -35,8 +35,10 @@ export default {
     <div class="task">
       <div class="check">
         <b-checkbox
+          v-model="task.done"
           size="is-large"
           type="is-success"
+          @input="update()"
         />
       </div>
       <div class="name">

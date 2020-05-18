@@ -50,7 +50,10 @@ export default {
       />
     </div>
     <div class="tasklist">
-      <div v-if="store.tasks && store.tasks.length !== 0">
+      <div
+        v-if="store.tasks && store.tasks.length !== 0"
+        class="tasklist-content"
+      >
         <Task
           v-for="task in store.tasks"
           :key="task.taskid"

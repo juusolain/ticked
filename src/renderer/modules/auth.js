@@ -24,17 +24,6 @@ class Auth {
     return keytar.getPassword('ticked', net.getUserID())
   }
 
-  // Base decrypt
-  decrypt = async data => {
-    try {
-      const decrypted = await aes256.decrypt(await this.getPassword(), data)
-      return decrypted
-    } catch (error) {
-      console.warn(error)
-      throw 'error.auth.decrypterror'
-    }
-  }
-
   createVerifier = async (username, password) => {
     const salt = srp.generateSalt()
     const privateKey = await this.getPrivateKey(username, password, salt)
@@ -65,6 +54,7 @@ class Auth {
 
   // Base encrypt
   encrypt = async data => {
+    data = JSON.stringify(data)
     try {
       const encrypted = await aes256.encrypt(await this.getPassword(), data)
       return encrypted
@@ -73,6 +63,17 @@ class Auth {
       throw 'error.auth.encrypterror'
     }
   }
+
+    // Base decrypt
+    decrypt = async data => {
+      try {
+        const decrypted = await aes256.decrypt(await this.getPassword(), data)
+        return JSON.parse(decrypted)
+      } catch (error) {
+        console.warn(error)
+        throw 'error.auth.decrypterror'
+      }
+    }
 
   // Decrypt array with specified decryptor function
   decryptArray = async (dataArray, decryptor = this.decrypt) => {
