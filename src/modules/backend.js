@@ -6,7 +6,7 @@ import router from '@/router'
 import auth from '@/modules/auth'
 import database from '@/modules/database'
 
-import {loadStripe} from '@stripe/stripe-js'
+// import {loadStripe} from '@stripe/stripe-js'
 
 import { ToastProgrammatic as Toast } from 'buefy'
 
@@ -18,7 +18,7 @@ class Backend {
   }
 
   init = async () => {
-    this.stripe = await loadStripe('pk_test_9PEe48tGkcyxICp3juCtFr3M00fFSbjMnc')
+    // this.stripe = await loadStripe('pk_test_9PEe48tGkcyxICp3juCtFr3M00fFSbjMnc')
   }
 
   loadTasks = async () => {
@@ -159,7 +159,7 @@ class Backend {
       const clientEphemeralPublic = await auth.createEphemeral()
       const {salt, serverEphemeralPublic} = await net.loginSalt(username, clientEphemeralPublic)
       const clientSessionProof = await auth.createSession(username, password, salt, serverEphemeralPublic)
-      const {token, serverSessionProof, key} = await net.loginToken(username, clientSessionProof)
+      const {token, key} = await net.loginToken(username, clientSessionProof) // serverSessionProof
       store.addLoading(-1)
       if (token !== null) {
         net.setToken(token)
@@ -176,7 +176,7 @@ class Backend {
 
   register = async (user) => {
     try {
-      const { username, password, email } = user
+      const { username, password } = user
       if (!username || !password) throw 'error.register.notfilled'
       store.addLoading(1)
       const {salt, verifier} = await auth.createVerifier(username, password)

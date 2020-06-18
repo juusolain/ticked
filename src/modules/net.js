@@ -1,11 +1,6 @@
-import ElectronStore from 'electron-store'
 import jwtDecode from 'jwt-decode'
 import axios from 'axios'
-import { v4 as uuidv4 } from 'uuid'
-import * as errors from '@/modules/errors'
-import store from '@/modules/store'
-
-const electronstore = new ElectronStore()
+// import store from '@/modules/store'
 
 console.log(process.env.server)
 
@@ -93,11 +88,13 @@ class Net {
   }
 
   getToken = () => {
-    return electronstore.get('token')
+    return 123
+    // return electronstore.get('token')
   }
 
   setToken = newToken => {
-    return electronstore.set('token', newToken)
+    return true
+    // return electronstore.set('token', newToken)
   }
 
   isLoggedIn = () => {

@@ -1,13 +1,9 @@
 import net from '@/modules/net'
-import store from '@/modules/store'
 
-import ElectronStore from 'electron-store'
 import aes256 from 'aes256'
-import keytar from 'keytar'
 import srp from 'secure-remote-password/client'
 import crypto from 'crypto'
 import util from 'util'
-import { get } from 'http'
 
 const pbkdf2 = util.promisify(crypto.pbkdf2)
 
@@ -21,7 +17,9 @@ class Auth {
     try {
       const buf = await getRandomBytes(128) // Get random bytes for key... 128 bytes might be a bit overkill, but better safe than sorry
       const key = buf.toString('base64')
-      return keytar.setPassword('ticked', net.getUserID(), key)
+      console.log(key)
+      console.log(net.getUserID())
+      // return keytar.setPassword('ticked', net.getUserID(), key)
     } catch (error) {
       console.error(error)
       throw 'error.auth.datakey.create'
@@ -29,7 +27,8 @@ class Auth {
   }
 
   getEncryptionKey = async () => {
-    return keytar.getPassword('ticked', net.getUserID())
+    return 123
+    // return keytar.getPassword('ticked', net.getUserID())
   }
 
   getEncryptionKeyWithPass = async pass => {
@@ -46,7 +45,8 @@ class Auth {
   setEncryptionKeyWithPass = async (pass, encrypted) => {
     try {
       const key = await aes256.decrypt(pass, encrypted)
-      await keytar.setPassword('ticked', net.getUserID(), key)
+      console.log(key)
+      // await keytar.setPassword('ticked', net.getUserID(), key)
     } catch (error) {
       console.error(error)
       throw 'error.auth.datakey'

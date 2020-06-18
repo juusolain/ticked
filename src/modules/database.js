@@ -1,11 +1,4 @@
-import {remote} from 'electron'
-import Datastore from 'nedb-promises'
-import path from 'path'
 import net from '@/modules/net'
-
-const {app} = remote
-
-const userData = app.getPath('userData')
 
 const updateFrequency = 5 // update frequency in minutes
 
@@ -19,12 +12,14 @@ class Database {
   }
 
   init = async () => {
+    /*
     this.tasks = await Datastore.create(path.join(userData, 'data', 'tasks.db'))
     this.lists = await Datastore.create(path.join(userData, 'data', 'lists.db'))
     await this.tasks.load()
     await this.lists.load()
     this.ready = true
     setInterval(this.checkUpdate, 500)
+    */
   }
 
   checkUpdate = async () => {
@@ -32,7 +27,7 @@ class Database {
     if (this.needsUpdate) {
       this.updating++
       await this.sync()
-    } else if (this.getTime() - this.lastUpdateTime > 1000 * 60 * 5) {
+    } else if (this.getTime() - this.lastUpdateTime > 1000 * 60 * updateFrequency) {
       await this.sync()
     }
   }
@@ -62,7 +57,7 @@ class Database {
     console.log(ourArray, remoteArray)
     if (ourArray) {
       ourArray.forEach(ourTask => {
-        let theirTask = remoteArray.find(elem => {
+        const theirTask = remoteArray.find(elem => {
           return elem['userid'] === ourTask['userid'] && elem['taskid'] === ourTask['taskid']
         })
         if (theirTask) {
