@@ -157,9 +157,9 @@ class Backend {
       }
       store.addLoading(1)
       const clientEphemeralPublic = await auth.createEphemeral()
-      const {salt, serverEphemeralPublic} = await net.loginSalt(username, clientEphemeralPublic)
+      const { salt, serverEphemeralPublic } = await net.loginSalt(username, clientEphemeralPublic)
       const clientSessionProof = await auth.createSession(username, password, salt, serverEphemeralPublic)
-      const {token, key} = await net.loginToken(username, clientSessionProof) // serverSessionProof
+      const { token, key } = await net.loginToken(username, clientSessionProof) // serverSessionProof
       store.addLoading(-1)
       if (token !== null) {
         net.setToken(token)
@@ -179,7 +179,7 @@ class Backend {
       const { username, password } = user
       if (!username || !password) throw 'error.register.notfilled'
       store.addLoading(1)
-      const {salt, verifier} = await auth.createVerifier(username, password)
+      const { salt, verifier } = await auth.createVerifier(username, password)
       const token = await net.register(username, salt, verifier)
       store.addLoading(-1)
       if (token !== null) {

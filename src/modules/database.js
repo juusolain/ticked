@@ -58,7 +58,7 @@ class Database {
     if (ourArray) {
       ourArray.forEach(ourTask => {
         const theirTask = remoteArray.find(elem => {
-          return elem['userid'] === ourTask['userid'] && elem['taskid'] === ourTask['taskid']
+          return elem.userid === ourTask.userid && elem.taskid === ourTask.taskid
         })
         if (theirTask) {
           if (theirTask.modified < ourTask.modified) {
@@ -77,8 +77,8 @@ class Database {
     if (remoteArray) {
       remoteArray.forEach(theirTask => {
         if (ourArray) {
-          let ourTask = ourArray.find(elem => {
-            return elem['userid'] === theirTask['userid'] && elem['taskid'] === theirTask['taskid']
+          const ourTask = ourArray.find(elem => {
+            return elem.userid === theirTask.userid && elem.taskid === theirTask.taskid
           })
           if (!ourTask) {
             this.addTask(theirTask)
@@ -95,8 +95,8 @@ class Database {
     console.log(ourArray, remoteArray)
     if (ourArray) {
       ourArray.forEach(ourList => {
-        let theirList = remoteArray.find(elem => {
-          return elem['userid'] === ourList['userid'] && elem['listid'] === ourList['listid']
+        const theirList = remoteArray.find(elem => {
+          return elem.userid === ourList.userid && elem.listid === ourList.listid
         })
         if (theirList) {
           if (theirList.modified < ourList.modified) {
@@ -115,8 +115,8 @@ class Database {
     if (remoteArray) {
       remoteArray.forEach(theirList => {
         if (ourArray) {
-          let ourList = ourArray.find(elem => {
-            return elem['userid'] === theirList['userid'] && elem['listid'] === theirList['listid']
+          const ourList = ourArray.find(elem => {
+            return elem.userid === theirList.userid && elem.listid === theirList.listid
           })
           if (!ourList) {
             this.addList(theirList)
@@ -138,19 +138,19 @@ class Database {
 
   getTasks = async () => {
     if (!this.ready) throw 'error.database.notready'
-    return this.tasks.find({userid: await net.getUserID()}, {_id: 0})
+    return this.tasks.find({ userid: await net.getUserID() }, { _id: 0 })
   }
 
   getLists = async () => {
     if (!this.ready) throw 'error.database.notready'
-    return this.lists.find({userid: await net.getUserID()}, {_id: 0})
+    return this.lists.find({ userid: await net.getUserID() }, { _id: 0 })
   }
 
   deleteTask = async (taskToDelete, netUpdate = false) => {
     this.updating++
     if (!this.ready) throw 'error.database.notready'
     try {
-      const newTask = {taskid: taskToDelete.taskid, userid: taskToDelete.userid, deleted: true, modified: this.getTime()}
+      const newTask = { taskid: taskToDelete.taskid, userid: taskToDelete.userid, deleted: true, modified: this.getTime() }
       this.updateTask(newTask)
       if (netUpdate) {
         try {
@@ -193,7 +193,7 @@ class Database {
     if (!this.ready) throw 'error.database.notready'
     try {
       newTask.modified = this.getTime()
-      await this.tasks.update({userid: newTask.userid, taskid: newTask.taskid}, newTask)
+      await this.tasks.update({ userid: newTask.userid, taskid: newTask.taskid }, newTask)
       if (netUpdate) {
         try {
           await net.updateTask(newTask)
