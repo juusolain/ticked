@@ -1,4 +1,5 @@
 import net from '@/modules/net'
+import db from '@/modules/db-schema'
 
 const updateFrequency = 5 // update frequency in minutes
 
@@ -8,18 +9,8 @@ class Database {
     this.updating = 1 // while loading db, contacting server or syncing
     this.updateHandler = null
     this.lastUpdateTime = 0
-    this.ready = false
-  }
-
-  init = async () => {
-    /*
-    this.tasks = await Datastore.create(path.join(userData, 'data', 'tasks.db'))
-    this.lists = await Datastore.create(path.join(userData, 'data', 'lists.db'))
-    await this.tasks.load()
-    await this.lists.load()
     this.ready = true
-    setInterval(this.checkUpdate, 500)
-    */
+    setInterval(this.checkUpdate, 5000)
   }
 
   checkUpdate = async () => {
@@ -138,12 +129,12 @@ class Database {
 
   getTasks = async () => {
     if (!this.ready) throw 'error.database.notready'
-    return this.tasks.find({ userid: await net.getUserID() }, { _id: 0 })
+    return db.tasks.where('userid').equals(await net.getUserID()).toArray()
   }
 
   getLists = async () => {
     if (!this.ready) throw 'error.database.notready'
-    return this.lists.find({ userid: await net.getUserID() }, { _id: 0 })
+    return db.lists.where('userid').equals(await net.getUserID()).toArray()
   }
 
   deleteTask = async (taskToDelete, netUpdate = false) => {
@@ -172,7 +163,7 @@ class Database {
     if (!this.ready) throw 'error.database.notready'
     try {
       newTask.modified = this.getTime()
-      await this.tasks.insert(newTask)
+      await this.tasks.add(newTask)
       if (netUpdate) {
         try {
           await net.addTask(newTask)
@@ -193,7 +184,7 @@ class Database {
     if (!this.ready) throw 'error.database.notready'
     try {
       newTask.modified = this.getTime()
-      await this.tasks.update({ userid: newTask.userid, taskid: newTask.taskid }, newTask)
+      await db.tasks.put(newTask)
       if (netUpdate) {
         try {
           await net.updateTask(newTask)
@@ -214,7 +205,7 @@ class Database {
     if (!this.ready) throw 'error.database.notready'
     try {
       newList.modified = this.getTime()
-      await this.lists.insert(newList)
+      await this.lists.add(newList)
       if (netUpdate) {
         try {
           await net.addList(newList)

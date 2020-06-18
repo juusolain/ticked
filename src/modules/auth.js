@@ -1,5 +1,3 @@
-import net from '@/modules/net'
-
 import aes256 from 'aes256'
 import srp from 'secure-remote-password/client'
 import crypto from 'crypto'
@@ -17,9 +15,7 @@ class Auth {
     try {
       const buf = await getRandomBytes(128) // Get random bytes for key... 128 bytes might be a bit overkill, but better safe than sorry
       const key = buf.toString('base64')
-      console.log(key)
-      console.log(net.getUserID())
-      // return keytar.setPassword('ticked', net.getUserID(), key)
+      localStorage.setItem('key', key)
     } catch (error) {
       console.error(error)
       throw 'error.auth.datakey.create'
@@ -27,8 +23,7 @@ class Auth {
   }
 
   getEncryptionKey = async () => {
-    return 123
-    // return keytar.getPassword('ticked', net.getUserID())
+    return localStorage.getItem('key')
   }
 
   getEncryptionKeyWithPass = async pass => {
@@ -45,8 +40,7 @@ class Auth {
   setEncryptionKeyWithPass = async (pass, encrypted) => {
     try {
       const key = await aes256.decrypt(pass, encrypted)
-      console.log(key)
-      // await keytar.setPassword('ticked', net.getUserID(), key)
+      localStorage.setItem('key', key)
     } catch (error) {
       console.error(error)
       throw 'error.auth.datakey'

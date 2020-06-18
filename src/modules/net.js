@@ -1,12 +1,9 @@
 import jwtDecode from 'jwt-decode'
 import axios from 'axios'
-// import store from '@/modules/store'
 
 console.log(process.env.server)
 
-const server = process.env.server || (process.env.NODE_ENV === 'development'
-  ? 'http://localhost/'
-  : 'https://server.ticked.jusola.xyz/')
+const server = 'https://server.ticked.jusola.xyz/'
 
 class Net {
   constructor () {
@@ -88,13 +85,15 @@ class Net {
   }
 
   getToken = () => {
-    return 123
-    // return electronstore.get('token')
+    return localStorage.getItem('token')
   }
 
   setToken = newToken => {
-    return true
-    // return electronstore.set('token', newToken)
+    if (newToken) {
+      return localStorage.setItem('token', newToken)
+    } else {
+      return localStorage.removeItem('token')
+    }
   }
 
   isLoggedIn = () => {
