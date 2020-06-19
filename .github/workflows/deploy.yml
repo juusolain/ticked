@@ -42,3 +42,4 @@ jobs:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         branch: 'dist'
         force: true
+        directory: './dist'
