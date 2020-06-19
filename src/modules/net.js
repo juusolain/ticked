@@ -3,7 +3,7 @@ import axios from 'axios'
 
 console.log(process.env.server)
 
-const server = 'https://server.ticked.jusola.xyz/'
+const server = 'https://api.ticked.jusola.xyz/'
 
 class Net {
   constructor () {
