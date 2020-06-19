@@ -31,6 +31,8 @@ jobs:
     - name: Commit changes and add CNAME
       run: |
         cd dist
+        git config --global user.email "ticked.deployment@jusola.xyz"
+        git config --global user.name "Ticked deployment"
         git init
         echo ticked.jusola.xyz > CNAME
         git add -A
