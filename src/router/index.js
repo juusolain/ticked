@@ -28,7 +28,7 @@ const routes = [
     path: '/',
     name: 'redirect',
     redirect: to => {
-      /* if (net.isLoggedIn()) {
+      if (net.isLoggedIn()) {
         return {
           name: 'Main'
         }
@@ -36,9 +36,6 @@ const routes = [
         return {
           name: 'Login'
         }
-      } */
-      return {
-        name: 'Login'
       }
     }
   }

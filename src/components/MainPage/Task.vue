@@ -48,7 +48,7 @@ export default {
           v-focus
           class="task input name"
           @blur="editing_name = false; update()"
-          @keyup.enter="editing_name=false"
+          @keyup.enter="editing_name=false; update()"
         >
         <div v-else>
           <label @click="editing_name = true">
@@ -63,7 +63,7 @@ export default {
           v-focus
           class="task input description"
           @blur="editing_desc = false; update()"
-          @keyup.enter="editing_desc=false"
+          @keyup.enter="editing_desc=false; update()"
         >
         <div v-else>
           <label
