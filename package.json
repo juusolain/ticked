@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@mdi/font": "^5.3.45",
+    "@stripe/stripe-js": "^1.7.0",
     "aes256": "^1.0.4",
     "axios": "^0.19.2",
     "buefy": "^0.8.20",

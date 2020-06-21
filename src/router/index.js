@@ -9,19 +9,19 @@ const routes = [
   {
     path: '/login',
     name: 'Login',
-    component: require('@/components/Login').default,
+    component: require('@/views/Login').default,
     props: true
   },
   {
     path: '/main',
     name: 'Main',
-    component: require('@/components/MainPage').default,
+    component: require('@/views/MainPage').default,
     props: true
   },
   {
     path: '/payments',
     name: 'Payments',
-    component: require('@/components/Payments').default,
+    component: require('@/views/Payments').default,
     props: true
   },
   {

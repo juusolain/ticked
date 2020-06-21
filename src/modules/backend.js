@@ -5,8 +5,7 @@ import store from '@/modules/store'
 import router from '@/router'
 import auth from '@/modules/auth'
 import database from '@/modules/database'
-
-// import {loadStripe} from '@stripe/stripe-js'
+import payments from '@/modules/payments'
 
 import { ToastProgrammatic as Toast } from 'buefy'
 
@@ -14,11 +13,7 @@ import { v4 as uuidv4 } from 'uuid'
 
 class Backend {
   constructor () {
-    this.init()
-  }
-
-  init = async () => {
-    // this.stripe = await loadStripe('pk_test_9PEe48tGkcyxICp3juCtFr3M00fFSbjMnc')
+    payments.init()
   }
 
   loadTasks = async () => {
@@ -215,6 +210,26 @@ class Backend {
       duration: 5000,
       queue: false
     })
+  }
+
+  paymentPortal = async () => {
+    try {
+      const url = await net.getPaymentPortal()
+      payments.goToPortal(url)
+    } catch (error) {
+      console.warn(error)
+      this.showError(error)
+    }
+  }
+
+  checkout = async () => {
+    try {
+      const session = await net.getCheckout()
+      payments.goToCheckout(session)
+    } catch (error) {
+      console.warn(error)
+      this.showError(error)
+    }
   }
 }
 
