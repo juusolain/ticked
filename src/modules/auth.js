@@ -13,9 +13,8 @@ class Auth {
 
   createEncryptionKey = async () => {
     try {
-      const buf = await getRandomBytes(128) // Get random bytes for key... 128 bytes might be a bit overkill, but better safe than sorry
+      const buf = await getRandomBytes(64)
       const key = buf.toString('base64')
-      console.log(key)
       localStorage.setItem('key', key)
     } catch (error) {
       console.error(error)
@@ -29,11 +28,8 @@ class Auth {
 
   getEncryptionKeyWithPass = async pass => {
     try {
-      console.log(pass)
       const decrypted = await this.getEncryptionKey()
-      console.log(decrypted)
       const encrypted = await aes256.encrypt(pass, decrypted)
-      console.log(encrypted)
       return encrypted
     } catch (error) {
       console.error(error)
@@ -43,10 +39,8 @@ class Auth {
 
   setEncryptionKeyWithPass = async (pass, encrypted) => {
     try {
-      console.log(pass, encrypted)
       const key = await aes256.decrypt(pass, encrypted)
       localStorage.setItem('key', key)
-      console.log(key)
     } catch (error) {
       console.error(error)
       throw 'error.auth.datakey'
@@ -159,7 +153,6 @@ class Auth {
         newObj[prop] = value
       }
     }
-    console.log('Decrypted: ', newObj)
     return newObj
   }
 
@@ -179,7 +172,6 @@ class Auth {
         newObj[prop] = value
       }
     }
-    console.log('Encrypted: ', newObj)
     return newObj
   }
 }
@@ -199,7 +191,7 @@ function pbkdf2 (secret, salt, iterations, keylen, algorithm) { // returns promi
   return new Promise((resolve, reject) => {
     pbkdf2Lib.pbkdf2(secret, salt, iterations, keylen, algorithm, function (err, derKey) {
       if (err) {
-        console.log(err)
+        console.error(err)
         reject(err)
       }
       resolve(derKey)
