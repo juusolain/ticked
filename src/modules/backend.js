@@ -163,8 +163,6 @@ class Backend {
 
       store.addLoading(-1)
       if (token !== null) {
-        console.log('Logged in')
-        console.log(password, key)
         net.setToken(token)
 
         await auth.setEncryptionKeyWithPass(password, key)
@@ -184,14 +182,12 @@ class Backend {
       if (!username || !password) throw 'error.register.notfilled'
       store.addLoading(1)
       const { salt, verifier } = await auth.createVerifier(username, password)
-      console.log(salt, username, verifier)
       const token = await net.register(username, salt, verifier)
       store.addLoading(-1)
       if (token !== null) {
         net.setToken(token)
         await auth.createEncryptionKey()
         const key = await auth.getEncryptionKeyWithPass(password)
-        console.log(key)
         await net.sendKey(key)
         router.push('/')
       } else {
