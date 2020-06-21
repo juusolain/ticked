@@ -6,5 +6,8 @@ module.exports = {
       localeDir: 'locales',
       enableInSFC: true
     }
+  },
+  devServer: {
+    proxy: 'https://api.ticked.jusola.xyz'
   }
 }

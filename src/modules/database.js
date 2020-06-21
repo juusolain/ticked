@@ -163,7 +163,7 @@ class Database {
     if (!this.ready) throw 'error.database.notready'
     try {
       newTask.modified = this.getTime()
-      await this.tasks.add(newTask)
+      await db.tasks.add(newTask)
       if (netUpdate) {
         try {
           await net.addTask(newTask)
@@ -205,7 +205,7 @@ class Database {
     if (!this.ready) throw 'error.database.notready'
     try {
       newList.modified = this.getTime()
-      await this.lists.add(newList)
+      await db.lists.add(newList)
       if (netUpdate) {
         try {
           await net.addList(newList)

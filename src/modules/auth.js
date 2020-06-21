@@ -1,9 +1,9 @@
 import aes256 from 'aes256'
 import srp from 'secure-remote-password/client'
-import crypto from 'crypto'
-import util from 'util'
+import pbkdf2Lib from 'pbkdf2'
+import randomBytes from 'randombytes'
 
-const pbkdf2 = util.promisify(crypto.pbkdf2)
+import CryptoJS from 'crypto-js'
 
 class Auth {
   constructor () {
@@ -29,7 +29,9 @@ class Auth {
   getEncryptionKeyWithPass = async pass => {
     try {
       const decrypted = await this.getEncryptionKey()
-      const encrypted = await aes256.encrypt(pass, decrypted)
+      console.log(decrypted)
+      const encrypted = await CryptoJS.AES.encrypt(decrypted, pass).toString()
+      console.log(encrypted)
       return encrypted
     } catch (error) {
       console.error(error)
@@ -39,7 +41,7 @@ class Auth {
 
   setEncryptionKeyWithPass = async (pass, encrypted) => {
     try {
-      const key = await aes256.decrypt(pass, encrypted)
+      const key = await CryptoJS.AES.decrypt(encrypted, pass)
       localStorage.setItem('key', key)
     } catch (error) {
       console.error(error)
@@ -62,7 +64,7 @@ class Auth {
   getPrivateKey = async (username, password, salt) => {
     try {
       const secret = `${username}:${password}`
-      const keyBuf = await pbkdf2(secret, salt, 10000, 512, 'sha512')
+      const keyBuf = await pbkdf2(secret, salt, 20000, 64, 'sha512')
       const privateKey = keyBuf.toString('hex')
       return privateKey
     } catch (error) {
@@ -182,11 +184,24 @@ class Auth {
 
 function getRandomBytes (bytes = 128) { // returns promise
   return new Promise((resolve, reject) => {
-    crypto.randomBytes(bytes, function (err, buffer) {
+    randomBytes(bytes, function (err, buffer) {
       if (err) {
         reject(err)
       }
       resolve(buffer)
+    })
+  })
+}
+
+function pbkdf2 (secret, salt, iterations, keylen, algorithm) { // returns promise
+  return new Promise((resolve, reject) => {
+    console.log(secret, salt, iterations, keylen, algorithm)
+    pbkdf2Lib.pbkdf2(secret, salt, iterations, keylen, algorithm, function (err, derKey) {
+      if (err) {
+        console.log(err)
+        reject(err)
+      }
+      resolve(derKey)
     })
   })
 }

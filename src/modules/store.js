@@ -55,6 +55,9 @@ var state = {
       return task.taskid !== taskToRemove.taskid
     })
   },
+  removeList (listToRemove) {
+    console.log('TODO - removelist')
+  },
   addList (newList) {
     if (process.env.NODE_ENV === 'development') console.log('Adding list: ', newList)
     this.state.lists.push(newList)

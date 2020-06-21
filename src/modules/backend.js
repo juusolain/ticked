@@ -74,9 +74,9 @@ class Backend {
 
   initialLoad = async () => {
     try {
-      await database.init()
-      await database.sync()
       store.addLoading(1)
+      await database.sync()
+
       // const userData = await net.getUserData()
       // store.setUserData(userData)
       await this.loadTasks()
@@ -141,7 +141,7 @@ class Backend {
     } catch (err) {
       this.showError(err)
       store.removeList(newList)
-      store.backMenuView()
+      store.viewBack()
     }
   }
 
@@ -160,6 +160,7 @@ class Backend {
       const { salt, serverEphemeralPublic } = await net.loginSalt(username, clientEphemeralPublic)
       const clientSessionProof = await auth.createSession(username, password, salt, serverEphemeralPublic)
       const { token, key } = await net.loginToken(username, clientSessionProof) // serverSessionProof
+
       store.addLoading(-1)
       if (token !== null) {
         net.setToken(token)
@@ -180,12 +181,14 @@ class Backend {
       if (!username || !password) throw 'error.register.notfilled'
       store.addLoading(1)
       const { salt, verifier } = await auth.createVerifier(username, password)
+      console.log(salt, username, verifier)
       const token = await net.register(username, salt, verifier)
       store.addLoading(-1)
       if (token !== null) {
         net.setToken(token)
         await auth.createEncryptionKey()
         const key = await auth.getEncryptionKeyWithPass(password)
+        console.log(key)
         await net.sendKey(key)
         router.push('/')
       } else {

@@ -1,3 +1,75 @@
 {
-  "message": "hello i18n !!"
+  "message": "hello i18n !!",
+  "task": {
+    "placeholder": {
+      "description": "Click here to add a description"
+    }
+  },
+  "login": {
+    "label": {
+      "password": "Password",
+      "login": "Login",
+      "user": "User"
+    },
+    "link": {
+      "register": "Create a new account instead"
+    },
+    "placeholder": {
+      "password": "Password",
+      "user": "Username"
+    }
+  },
+  "register": {
+    "label": {
+      "password": "Password",
+      "register": "Create a new account",
+      "username": "Username"
+    },
+    "link": {
+      "login": "Login instead"
+    },
+    "placeholder": {
+      "password": "Password",
+      "username": "Username"
+    }
+  },
+  "newlist": {
+    "close": "Cancel",
+    "create": "Create",
+    "label": {
+      "name": "Name"
+    },
+    "placeholder": {
+      "name": "Name"
+    },
+    "title": "Create a new list"
+  },
+  "menu": {
+    "label": {
+      "actions": "Actions",
+      "allLists": "All lists",
+      "lists": "Lists",
+      "logout": "Logout",
+      "newlist": "New list",
+      "settings": "Settings"
+    }
+  },
+  "settings": {
+    "delete": {
+      "label": {
+        "delete": "Delete my account",
+        "password": "Type password to delete account"
+      },
+      "placeholder": {
+        "password": "Password"
+      }
+    },
+    "payments": {
+      "manage": "Manage payments",
+      "upgrade": "Subscribe"
+    }
+  },
+  "tasklist": {
+    "notasks": "No tasks here yet..."
+  }
 }
