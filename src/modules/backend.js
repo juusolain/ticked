@@ -163,7 +163,10 @@ class Backend {
 
       store.addLoading(-1)
       if (token !== null) {
+        console.log('Logged in')
+        console.log(password, key)
         net.setToken(token)
+
         await auth.setEncryptionKeyWithPass(password, key)
         router.push('/')
       } else {

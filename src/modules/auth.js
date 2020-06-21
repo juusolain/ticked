@@ -3,7 +3,7 @@ import srp from 'secure-remote-password/client'
 import pbkdf2Lib from 'pbkdf2'
 import randomBytes from 'randombytes'
 
-import CryptoJS from 'crypto-js'
+import CryptoJS, { enc } from 'crypto-js'
 
 class Auth {
   constructor () {
@@ -15,6 +15,7 @@ class Auth {
     try {
       const buf = await getRandomBytes(128) // Get random bytes for key... 128 bytes might be a bit overkill, but better safe than sorry
       const key = buf.toString('base64')
+      console.log(key)
       localStorage.setItem('key', key)
     } catch (error) {
       console.error(error)
@@ -28,9 +29,10 @@ class Auth {
 
   getEncryptionKeyWithPass = async pass => {
     try {
+      console.log(pass)
       const decrypted = await this.getEncryptionKey()
       console.log(decrypted)
-      const encrypted = await CryptoJS.AES.encrypt(decrypted, pass).toString()
+      const encrypted = await aes256.encrypt(pass, decrypted)
       console.log(encrypted)
       return encrypted
     } catch (error) {
@@ -41,8 +43,10 @@ class Auth {
 
   setEncryptionKeyWithPass = async (pass, encrypted) => {
     try {
-      const key = await CryptoJS.AES.decrypt(encrypted, pass)
+      console.log(pass, encrypted)
+      const key = await aes256.decrypt(pass, encrypted)
       localStorage.setItem('key', key)
+      console.log(key)
     } catch (error) {
       console.error(error)
       throw 'error.auth.datakey'
@@ -79,9 +83,7 @@ class Auth {
   }
 
   createSession = async (username, password, salt, serverEphemeralPublic) => {
-    console.log({ username, password, salt, serverEphemeralPublic })
     const privateKey = await this.getPrivateKey(username, password, salt)
-    console.log(privateKey)
     this.clientSession = await srp.deriveSession(this.clientEphemeral.secret, serverEphemeralPublic, salt, username, privateKey)
     return this.clientSession.proof
   }
@@ -195,7 +197,6 @@ function getRandomBytes (bytes = 128) { // returns promise
 
 function pbkdf2 (secret, salt, iterations, keylen, algorithm) { // returns promise
   return new Promise((resolve, reject) => {
-    console.log(secret, salt, iterations, keylen, algorithm)
     pbkdf2Lib.pbkdf2(secret, salt, iterations, keylen, algorithm, function (err, derKey) {
       if (err) {
         console.log(err)
