@@ -64,10 +64,7 @@
         "password": "Password"
       }
     },
-    "payments": {
-      "manage": "Manage payments",
-      "upgrade": "Subscribe"
-    }
+    "payments": "Open payments"
   },
   "tasklist": {
     "notasks": "No tasks here yet..."

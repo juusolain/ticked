@@ -15,11 +15,8 @@ export default {
     deleteAccount (event) {
       backend.deleteAccount(this.password)
     },
-    openManage () {
-      backend.manageSubscription()
-    },
-    openSubscribe () {
-      backend.newSubscription()
+    openPayments () {
+      this.$router.push('/payments')
     }
   }
 }
@@ -47,15 +44,9 @@ export default {
     <section>
       <b-button
         class="is-primary"
-        @click="openSubscribe"
+        @click="openPayments"
       >
-        {{ $t('settings.payments.upgrade') }}
-      </b-button>
-      <b-button
-        class="is-primary"
-        @click="openManage"
-      >
-        {{ $t('settings.payments.manage') }}
+        {{ $t('settings.payments') }}
       </b-button>
     </section>
   </div>
