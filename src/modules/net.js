@@ -1,14 +1,12 @@
 import jwtDecode from 'jwt-decode'
 import axios from 'axios'
 
-console.log(process.env.server)
-
-const server = 'https://api.ticked.jusola.xyz/'
+const server = process.env.API_SERVER | 'https://api.ticked.jusola.xyz/'
 
 class Net {
   constructor () {
     this.server = server
-    console.log(`New auth created with server ${this.server}`)
+    console.log(`Created networking with server ${this.server}`)
   }
 
   loginSalt = async (username, clientEphemeralPublic) => {
@@ -265,7 +263,7 @@ class Net {
     }
   }
 
-  getNewSubscription = async () => {
+  getCheckout = async () => {
     var res
     try {
       res = await this.get('/newSubscription')
@@ -274,6 +272,20 @@ class Net {
     }
     if (res.data.success) {
       return res.data.token
+    } else {
+      throw res.data.err
+    }
+  }
+
+  getPaymentPortal = async () => {
+    var res
+    try {
+      res = await this.get('/manageSubscription')
+    } catch (error) {
+      throw 'err.neterror'
+    }
+    if (res.data.success) {
+      return res.data.url
     } else {
       throw res.data.err
     }

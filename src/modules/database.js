@@ -137,6 +137,26 @@ class Database {
     return db.lists.where('userid').equals(await net.getUserID()).toArray()
   }
 
+  deleteList = async (listToDelete, netUpdate = false) => {
+    this.updating++
+    try {
+      const newTask = { listid: listToDelete.taskid, userid: listToDelete.userid, deleted: true, modified: this.getTime() }
+      this.updateList(newTask)
+      if (netUpdate) {
+        try {
+          await net.updateList(newTask)
+          this.updating--
+        } catch (error) {
+          this.needsUpdate = true
+          this.checkUpdate()
+        }
+      }
+    } catch (error) {
+      console.warn(error)
+      throw 'error.database.deletetask'
+    }
+  }
+
   deleteTask = async (taskToDelete, netUpdate = false) => {
     this.updating++
     if (!this.ready) throw 'error.database.notready'

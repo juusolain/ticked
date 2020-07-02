@@ -8,6 +8,6 @@ module.exports = {
     }
   },
   devServer: {
-    proxy: 'https://api.ticked.jusola.xyz'
+    proxy: 'http://localhost:80'
   }
 }
