@@ -1,7 +1,7 @@
 import jwtDecode from 'jwt-decode'
 import axios from 'axios'
 
-const server = process.env.API_SERVER | 'https://api.ticked.jusola.xyz/'
+const server = process.env.API_SERVER && process.env.API_SERVER !== 0 ? process.env.API_SERVER : 'https://api.ticked.jusola.xyz/'
 
 class Net {
   constructor () {
