@@ -101,12 +101,6 @@ export default {
               <b-dropdown-item aria-role="listitem" @click="deleteList(list)">
                 Delete list
               </b-dropdown-item>
-              <b-dropdown-item aria-role="listitem">
-                Another action
-              </b-dropdown-item>
-              <b-dropdown-item aria-role="listitem">
-                Something else
-              </b-dropdown-item>
             </b-dropdown>
           </template>
         </b-menu-item>
