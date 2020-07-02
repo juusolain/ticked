@@ -56,6 +56,9 @@ export default {
       this.setView('lists')
       this.setMenuView('allLists')
       store.setAllLists()
+    },
+    deleteList (list) {
+      backend.deleteList(list)
     }
   }
 }
@@ -95,8 +98,8 @@ export default {
                 />
               </template>
 
-              <b-dropdown-item aria-role="listitem">
-                Action
+              <b-dropdown-item aria-role="listitem" @click="deleteList(list)">
+                Delete list
               </b-dropdown-item>
               <b-dropdown-item aria-role="listitem">
                 Another action

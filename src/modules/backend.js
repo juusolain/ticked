@@ -123,6 +123,28 @@ class Backend {
     }
   }
 
+  deleteTask = async (taskToDelete) => {
+    try {
+      store.removeTask(taskToDelete)
+      const encryptedTask = await auth.encryptObj(taskToDelete)
+      await database.deleteTask(taskToDelete, true)
+    } catch (err) {
+      store.addTask(taskToDelete)
+      this.showError(err)
+    }
+  }
+
+  deleteList = async (listToDelete) => {
+    try {
+      store.removeList(listToDelete)
+      const encryptedList = await auth.encryptObj(listToDelete)
+      await database.deleteList(listToDelete, true)
+    } catch (err) {
+      store.addList(listToDelete)
+      this.showError(err)
+    }
+  }
+
   newList = async (newList) => {
     try {
       newList.listid = uuidv4()
