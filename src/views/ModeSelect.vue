@@ -1,5 +1,5 @@
 <script>
-import backend from '@/modules/backend'
+import store from '@/modules/store'
 
 export default {
   data () {
@@ -9,7 +9,7 @@ export default {
   },
   methods: {
     async select (mode) {
-      backend.setMode(mode)
+      store.setMode(mode)
       this.$router.push('/')
     }
   }
