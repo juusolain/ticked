@@ -64,9 +64,32 @@
         "password": "Password"
       }
     },
-    "payments": "Open payments"
+    "payments": "Open payments",
+    "migrate": {
+      "button": "Migrate",
+      "info": {
+        "local": "Migrate online data to local",
+        "online": "Migrate local data to online"
+      },
+      "title": {
+        "local": "Migrate",
+        "online": "Migrate"
+      }
+    }
   },
   "tasklist": {
     "notasks": "No tasks here yet..."
+  },
+  "modeselect": {
+    "button": {
+      "local": "Use Ticked locally",
+      "online": "Use our servers"
+    },
+    "title": "Select mode"
+  },
+  "payments": {
+    "portal": "Manage payments",
+    "checkout": "New subscription",
+    "back": "Go back"
   }
 }

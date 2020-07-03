@@ -3,7 +3,7 @@ import srp from 'secure-remote-password/client'
 import pbkdf2Lib from 'pbkdf2'
 import randomBytes from 'randombytes'
 
-import CryptoJS, { enc } from 'crypto-js'
+import net from '@/modules/net'
 
 class Auth {
   constructor () {
@@ -11,19 +11,28 @@ class Auth {
     this.clientSession = null
   }
 
-  createEncryptionKey = async () => {
+  transferEncryptionKey = async (fromUser) => {
+    const key = this.getEncryptionKey(fromUser)
+    this.setEncryptionKey(key)
+  }
+
+  createEncryptionKey = async (userid = net.getUserID()) => {
     try {
       const buf = await getRandomBytes(64)
       const key = buf.toString('base64')
-      localStorage.setItem('key', key)
+      this.setEncryptionKey(key, userid)
     } catch (error) {
       console.error(error)
       throw 'error.auth.datakey.create'
     }
   }
 
-  getEncryptionKey = () => {
-    return localStorage.getItem('key')
+  getEncryptionKey = (userid = net.getUserID()) => {
+    return localStorage.getItem(`key_${userid}`)
+  }
+
+  setEncryptionKey = (key, userid = net.getUserID()) => {
+    return localStorage.setItem(`key_${userid}`, key)
   }
 
   getEncryptionKeyWithPass = async pass => {
@@ -40,7 +49,7 @@ class Auth {
   setEncryptionKeyWithPass = async (pass, encrypted) => {
     try {
       const key = await aes256.decrypt(pass, encrypted)
-      localStorage.setItem('key', key)
+      this.setEncryptionKey(key)
     } catch (error) {
       console.error(error)
       throw 'error.auth.datakey'

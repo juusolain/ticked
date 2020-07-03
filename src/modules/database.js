@@ -258,6 +258,16 @@ class Database {
       throw 'error.database.newlist'
     }
   }
+
+  migrate = async (oldUserID, newUserID) => {
+    try {
+      await db.tasks.where('userid').equals(oldUserID).modify({ userid: newUserID })
+      await db.lists.where('userid').equals(oldUserID).modify({ userid: newUserID })
+    } catch (error) {
+      console.warn(error)
+      throw 'error.database.migrate'
+    }
+  }
 }
 
 export default new Database()

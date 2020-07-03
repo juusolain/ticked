@@ -21,8 +21,8 @@ export default {
     openPayments () {
       this.$router.push('/payments')
     },
-    transfer () {
-      backend.transfer()
+    migrate (from) {
+      backend.migrate(from)
     }
   }
 }
@@ -55,12 +55,28 @@ export default {
         {{ $t('settings.payments') }}
       </b-button>
     </section>
-    <section v-if="mode === 'local'">
+    <section v-if="mode === 'online'">
+      <p class="is-size-3">
+        {{ $t('settings.migrate.title.online') }}
+      </p>
+      <p>{{ $t('settings.migrate.info.online') }}</p>
       <b-button
-        class="is-primary"
-        @click="transfer"
+        class="is-danger"
+        @click="migrate('local')"
       >
-        {{ $t('settings.transfer') }}
+        {{ $t('settings.migrate.button') }}
+      </b-button>
+    </section>
+    <section v-if="mode === 'local_NO'">
+      <p class="is-size-3">
+        {{ $t('settings.migrate.title.local') }}
+      </p>
+      <p>{{ $t('settings.migrate.info.local') }}</p>
+      <b-button
+        class="is-danger"
+        @click="migrate('online')"
+      >
+        {{ $t('settings.migrate.button') }}
       </b-button>
     </section>
   </div>
