@@ -2,7 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 
 import net from '@/modules/net'
-import backend from '../modules/backend'
+import store from '@/modules/store'
 
 Vue.use(VueRouter)
 
@@ -35,7 +35,7 @@ const routes = [
     path: '/',
     name: 'redirect',
     redirect: to => {
-      const mode = backend.getMode()
+      const mode = store.getMode()
       console.log(mode)
       if (mode === 'online') {
         if (net.isLoggedIn()) {
