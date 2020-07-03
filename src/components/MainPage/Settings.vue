@@ -11,12 +11,18 @@ export default {
       password: ''
     }
   },
+  computed: {
+    mode: store.getMode
+  },
   methods: {
     deleteAccount (event) {
       backend.deleteAccount(this.password)
     },
     openPayments () {
       this.$router.push('/payments')
+    },
+    transfer () {
+      backend.transfer()
     }
   }
 }
@@ -47,6 +53,14 @@ export default {
         @click="openPayments"
       >
         {{ $t('settings.payments') }}
+      </b-button>
+    </section>
+    <section v-if="mode === 'local'">
+      <b-button
+        class="is-primary"
+        @click="transfer"
+      >
+        {{ $t('settings.transfer') }}
       </b-button>
     </section>
   </div>
