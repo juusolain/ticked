@@ -1,7 +1,8 @@
 import jwtDecode from 'jwt-decode'
 import axios from 'axios'
+import store from '@/modules/store'
 
-const server = process.env.API_SERVER && process.env.API_SERVER !== 0 ? process.env.API_SERVER : 'https://api.ticked.jusola.xyz/'
+const server = process.env.VUE_APP_API_SERVER
 
 class Net {
   constructor () {
@@ -104,9 +105,13 @@ class Net {
   }
 
   getUserID = () => {
-    const token = this.getToken()
-    const decodedJWT = jwtDecode(token)
-    return decodedJWT.userid
+    if (store.getMode() === 'online') {
+      const token = this.getToken()
+      const decodedJWT = jwtDecode(token)
+      return decodedJWT.userid
+    } else {
+      return 'local'
+    }
   }
 
   logout = () => {

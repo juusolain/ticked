@@ -15,15 +15,14 @@ export default {
       loading: false,
       store: store.state,
       error: null,
-      isActive: true,
-      test: 'test'
+      isActive: true
     }
   },
-  lists: { listid: '1234', listname: 'Example' },
+  lists: {},
   mounted: function () {
     console.log('Mounted')
     this.$nextTick(() => {
-      backend.initialLoad()
+      backend.initialLoad(this)
     })
   },
   methods: {
