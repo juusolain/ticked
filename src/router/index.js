@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 
 import net from '@/modules/net'
+import backend from '../modules/backend'
 
 Vue.use(VueRouter)
 
@@ -25,16 +26,34 @@ const routes = [
     props: true
   },
   {
+    path: '/modeSelect',
+    name: 'ModeSelect',
+    component: require('@/views/ModeSelect').default,
+    props: true
+  },
+  {
     path: '/',
     name: 'redirect',
     redirect: to => {
-      if (net.isLoggedIn()) {
+      const mode = backend.getMode()
+      console.log(mode)
+      if (mode === 'online') {
+        if (net.isLoggedIn()) {
+          return {
+            name: 'Main'
+          }
+        } else {
+          return {
+            name: 'Login'
+          }
+        }
+      } else if (mode === 'local') {
         return {
           name: 'Main'
         }
       } else {
         return {
-          name: 'Login'
+          name: 'ModeSelect'
         }
       }
     }

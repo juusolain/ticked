@@ -22,7 +22,7 @@ class Auth {
     }
   }
 
-  getEncryptionKey = async () => {
+  getEncryptionKey = () => {
     return localStorage.getItem('key')
   }
 

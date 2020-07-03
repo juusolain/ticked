@@ -87,6 +87,16 @@ var state = {
     this.state.view = newView
     this.state.menuView = newMenuView
     if (process.env.NODE_ENV === 'development') console.log('Going back')
+  },
+  getMode () {
+    return localStorage.getItem('mode')
+  },
+  setMode (newMode) {
+    if (newMode) {
+      return localStorage.setItem('mode', newMode)
+    } else {
+      return localStorage.removeItem('mode')
+    }
   }
 }
 

@@ -7,7 +7,9 @@ import auth from '@/modules/auth'
 import database from '@/modules/database'
 import payments from '@/modules/payments'
 
-import { ToastProgrammatic as Toast } from 'buefy'
+import PasswordModal from '@/components/Login/PasswordModal'
+
+import { ToastProgrammatic as Toast, ModalProgrammatic as Modal } from 'buefy'
 
 import { v4 as uuidv4 } from 'uuid'
 
@@ -67,9 +69,36 @@ class Backend {
     await this.loadTasks()
   }
 
-  initialLoad = async () => {
+  initialLoad = async (mainRef) => {
     try {
-      store.addLoading(1)
+      if (store.getMode() === 'local') {
+        /*
+        let password = null
+        const createModal = new Promise((resolve, reject) => {
+          const modal = Modal.open({
+            parent: mainRef,
+            component: PasswordModal,
+            hasModalCard: true,
+            trapFocus: true,
+            canCancel: false,
+            events: {
+              password: newPassword => {
+                password = newPassword
+              }
+            }
+          })
+          console.log(modal)
+          modal.$on('close', resolve)
+        })
+        await createModal */
+        store.addLoading(1)
+        if (auth.getEncryptionKey() === null) {
+          await auth.createEncryptionKey()
+        }
+      } else {
+        store.addLoading(1)
+      }
+
       await database.sync()
 
       // const userData = await net.getUserData()

@@ -1,5 +1,6 @@
 import net from '@/modules/net'
 import db from '@/modules/db-schema'
+import store from '@/modules/store'
 
 const updateFrequency = 5 // update frequency in minutes
 
@@ -10,7 +11,9 @@ class Database {
     this.updateHandler = null
     this.lastUpdateTime = 0
     this.ready = true
-    setInterval(this.checkUpdate, 5000)
+    if (store.getMode() === 'online') {
+      setInterval(this.checkUpdate, 5000)
+    }
   }
 
   checkUpdate = async () => {
@@ -25,21 +28,26 @@ class Database {
 
   sync = async () => {
     if (!this.ready) throw 'error.database.notready'
-    try {
-      const tasks = await net.getTasks()
-      const lists = await net.getLists()
-      const ourTasks = await this.getTasks()
-      const ourLists = await this.getLists()
-      await this.syncTasks(ourTasks, tasks)
-      await this.syncLists(ourLists, lists)
-      if (this.updateHandler) {
-        this.updateHandler()
+    if (store.getMode() === 'online') {
+      try {
+        const tasks = await net.getTasks()
+        const lists = await net.getLists()
+        const ourTasks = await this.getTasks()
+        const ourLists = await this.getLists()
+        await this.syncTasks(ourTasks, tasks)
+        await this.syncLists(ourLists, lists)
+        if (this.updateHandler) {
+          this.updateHandler()
+        }
+        this.needsUpdate = false
+        this.updating = 0
+        this.lastUpdateTime = this.getTime()
+      } catch (error) {
+        console.error(error)
       }
-      this.needsUpdate = false
+    } else {
       this.updating = 0
-      this.lastUpdateTime = this.getTime()
-    } catch (error) {
-      console.error(error)
+      this.needsUpdate = false
     }
   }
 
@@ -142,7 +150,7 @@ class Database {
     try {
       const newTask = { listid: listToDelete.taskid, userid: listToDelete.userid, deleted: true, modified: this.getTime() }
       this.updateList(newTask)
-      if (netUpdate) {
+      if (netUpdate && store.getMode() === 'online') {
         try {
           await net.updateList(newTask)
           this.updating--
@@ -150,6 +158,8 @@ class Database {
           this.needsUpdate = true
           this.checkUpdate()
         }
+      } else if (store.getMode() === 'local') {
+        this.updating--
       }
     } catch (error) {
       console.warn(error)
@@ -163,7 +173,7 @@ class Database {
     try {
       const newTask = { taskid: taskToDelete.taskid, userid: taskToDelete.userid, deleted: true, modified: this.getTime() }
       this.updateTask(newTask)
-      if (netUpdate) {
+      if (netUpdate && store.getMode() === 'online') {
         try {
           await net.updateTask(newTask)
           this.updating--
@@ -171,6 +181,8 @@ class Database {
           this.needsUpdate = true
           this.checkUpdate()
         }
+      } else if (store.getMode() === 'local') {
+        this.updating--
       }
     } catch (error) {
       console.warn(error)
@@ -184,7 +196,7 @@ class Database {
     try {
       newTask.modified = this.getTime()
       await db.tasks.add(newTask)
-      if (netUpdate) {
+      if (netUpdate && store.getMode() === 'online') {
         try {
           await net.addTask(newTask)
           this.updating--
@@ -192,6 +204,8 @@ class Database {
           this.needsUpdate = true
           this.checkUpdate()
         }
+      } else if (store.getMode() === 'local') {
+        this.updating--
       }
     } catch (error) {
       console.warn(error)
@@ -205,7 +219,7 @@ class Database {
     try {
       newTask.modified = this.getTime()
       await db.tasks.put(newTask)
-      if (netUpdate) {
+      if (netUpdate && store.getMode() === 'online') {
         try {
           await net.updateTask(newTask)
           this.updating--
@@ -213,6 +227,8 @@ class Database {
           this.needsUpdate = true
           this.checkUpdate()
         }
+      } else if (store.getMode() === 'local') {
+        this.updating--
       }
     } catch (error) {
       console.warn(error)
@@ -226,7 +242,7 @@ class Database {
     try {
       newList.modified = this.getTime()
       await db.lists.add(newList)
-      if (netUpdate) {
+      if (netUpdate && store.getMode() === 'online') {
         try {
           await net.addList(newList)
           this.updating--
@@ -234,6 +250,8 @@ class Database {
           this.needsUpdate = true
           this.checkUpdate()
         }
+      } else if (store.getMode() === 'local') {
+        this.updating--
       }
     } catch (error) {
       console.warn(error)
