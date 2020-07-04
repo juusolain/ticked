@@ -275,17 +275,32 @@ class Backend {
       // get old tasks
       const oldTasks = await database.getTasks('local')
       // reencrypt tasks with current key
-      const newTasks = await auth.reencrypt('local', net.getUserID(), oldTasks, auth.encryptArray, auth.decryptArray)
+      var newTasks = await auth.reencrypt('local', net.getUserID(), oldTasks, auth.encryptArray, auth.decryptArray)
+
+      // replace userid with new
+      newTasks = this.replaceArrayUserID(newTasks, net.getUserID())
 
       // same with lists
       const oldLists = await database.getLists('local')
-      const newLists = await auth.reencrypt('local', net.getUserID(), oldLists, auth.encryptArray, auth.decryptArray)
+      var newLists = await auth.reencrypt('local', net.getUserID(), oldLists, auth.encryptArray, auth.decryptArray)
+
+      newLists = this.replaceArrayUserID(newLists, net.getUserID())
 
       await database.putArray(newTasks, 'tasks')
       await database.putArray(newLists, 'lists')
+
       await database.sync()
       await this.initialLoad()
     }
+  }
+
+  replaceArrayUserID = (array, newUserID) => {
+    const newArray = []
+    array.forEach(element => {
+      element.userid = newUserID
+      newArray.push(element)
+    })
+    return newArray
   }
 }
 

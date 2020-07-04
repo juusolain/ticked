@@ -18,8 +18,8 @@ class Auth {
       const newKey = this.getEncryptionKey(newuser)
 
       // re-encrypt with new key
-      const decrypted = await decryptor(input, oldKey)
-      const encrypted = await encryptor(decrypted, newKey)
+      const decrypted = await decryptor(input, oldKey, this.decryptObj)
+      const encrypted = await encryptor(decrypted, newKey, this.encryptObj)
       return encrypted
     } catch (err) {
       console.error(err)
@@ -103,8 +103,9 @@ class Auth {
   }
 
   // Base encrypt
-  encrypt = async (data, key = this.getEncryptionKey()) => {
+  encrypt = async (data, key) => {
     try {
+      if (!key) key = this.getEncryptionKey()
       data = JSON.stringify(data)
       const encrypted = await aes256.encrypt(key, data)
       return encrypted
@@ -114,16 +115,19 @@ class Auth {
     }
   }
 
-    // Base decrypt
-    decrypt = async (data, key = this.getEncryptionKey()) => {
-      try {
-        const decrypted = await aes256.decrypt(key, data)
-        return JSON.parse(decrypted)
-      } catch (error) {
-        console.warn(error)
-        throw 'error.auth.decrypterror'
-      }
+  // Base decrypt
+  decrypt = async (data, key) => {
+    try {
+      if (!key) key = this.getEncryptionKey()
+      console.log(key)
+      const decrypted = await aes256.decrypt(key, data)
+      console.log(decrypted)
+      return JSON.parse(decrypted)
+    } catch (error) {
+      console.warn(error)
+      throw 'error.auth.decrypterror'
     }
+  }
 
   // Decrypt array with specified decryptor function
   decryptArray = async (dataArray, key, decryptor = this.decrypt) => {
@@ -149,7 +153,7 @@ class Auth {
     return encryptedArray
   }
 
-  decryptObj = async obj => {
+  decryptObj = async (obj, key) => {
     var newObj = {}
     if (!obj) {
       throw 'error.auth.decrypterror'
@@ -157,7 +161,7 @@ class Auth {
     for (const [prop, value] of Object.entries(obj)) {
       if (!['taskid', 'listid', 'userid', 'deleted', 'modified'].includes(prop)) {
         if (value) {
-          newObj[prop] = await this.decrypt(value)
+          newObj[prop] = await this.decrypt(value, key)
         } else {
           newObj[prop] = null
         }
@@ -168,7 +172,7 @@ class Auth {
     return newObj
   }
 
-  encryptObj = async obj => {
+  encryptObj = async (obj, key) => {
     var newObj = {}
     if (!obj) {
       throw 'error.auth.encrypterror'
@@ -176,7 +180,7 @@ class Auth {
     for (const [prop, value] of Object.entries(obj)) {
       if (!['taskid', 'listid', 'userid', 'deleted', 'modified'].includes(prop)) {
         if (value) {
-          newObj[prop] = await this.encrypt(value)
+          newObj[prop] = await this.encrypt(value, key)
         } else {
           newObj[prop] = null
         }
