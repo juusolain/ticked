@@ -14,12 +14,20 @@ import { v4 as uuidv4 } from 'uuid'
 class Backend {
   constructor () {
     payments.init()
+    this.warnConsolePasting()
+  }
+
+  warnConsolePasting = () => {
+    console.warn('%cSTOP!', 'color:#000;background-color:#faa;font-size:20em')
+    console.warn('%cThe developer tools are intended for developers. If you have been told by someone to paste or type anything here, there is a 200% chance that they\'re trying to scam you.', 'color: #000; font-size:x-large;')
+    console.warn('%cTo stay safe, close this side-bar. ', 'color:#000;font-size:xx-large;')
+    console.warn('%cIf you want to learn more, visit https://en.wikipedia.org/wiki/Self-XSS', 'color: #6; font-size:large;')
   }
 
   loadTasks = async () => {
     try {
       const newTasks = await database.getTasks()
-      const decryptedTasks = await auth.decryptArray(newTasks, auth.decryptObj)
+      const decryptedTasks = await auth.decryptArray(newTasks, null, auth.decryptObj)
       store.setTasks(decryptedTasks)
     } catch (err) {
       console.warn(err)
@@ -30,7 +38,7 @@ class Backend {
   loadLists = async () => {
     try {
       const newLists = await database.getLists()
-      const decryptedLists = await auth.decryptArray(newLists, auth.decryptObj)
+      const decryptedLists = await auth.decryptArray(newLists, null, auth.decryptObj)
       store.setLists(decryptedLists)
     } catch (err) {
       console.warn(err)
@@ -264,8 +272,17 @@ class Backend {
 
   migrate = async (from) => {
     if (from === 'local') {
-      await auth.transferEncryptionKey('local')
-      await database.migrate('local', net.getUserID())
+      // get old tasks
+      const oldTasks = await database.getTasks('local')
+      // reencrypt tasks with current key
+      const newTasks = await auth.reencrypt('local', net.getUserID(), oldTasks, auth.encryptArray, auth.decryptArray)
+
+      // same with lists
+      const oldLists = await database.getLists('local')
+      const newLists = await auth.reencrypt('local', net.getUserID(), oldLists, auth.encryptArray, auth.decryptArray)
+
+      await database.putArray(newTasks, 'tasks')
+      await database.putArray(newLists, 'lists')
       await database.sync()
       await this.initialLoad()
     }

@@ -11,9 +11,20 @@ class Auth {
     this.clientSession = null
   }
 
-  transferEncryptionKey = async (fromUser) => {
-    const key = this.getEncryptionKey(fromUser)
-    this.setEncryptionKey(key)
+  reencrypt = async (olduser, newuser, input, encryptor = this.encrypt, decryptor = this.decrypt) => {
+    try {
+    // get encryption keys
+      const oldKey = this.getEncryptionKey(olduser)
+      const newKey = this.getEncryptionKey(newuser)
+
+      // re-encrypt with new key
+      const decrypted = await decryptor(input, oldKey)
+      const encrypted = await encryptor(decrypted, newKey)
+      return encrypted
+    } catch (err) {
+      console.error(err)
+      throw new Error('auth.reencrypt')
+    }
   }
 
   createEncryptionKey = async (userid = net.getUserID()) => {
@@ -92,10 +103,10 @@ class Auth {
   }
 
   // Base encrypt
-  encrypt = async data => {
-    data = JSON.stringify(data)
+  encrypt = async (data, key = this.getEncryptionKey()) => {
     try {
-      const encrypted = await aes256.encrypt(await this.getEncryptionKey(), data)
+      data = JSON.stringify(data)
+      const encrypted = await aes256.encrypt(key, data)
       return encrypted
     } catch (error) {
       console.warn(error)
@@ -104,18 +115,10 @@ class Auth {
   }
 
     // Base decrypt
-    decrypt = async data => {
+    decrypt = async (data, key = this.getEncryptionKey()) => {
       try {
-        const decrypted = await aes256.decrypt(await this.getEncryptionKey(), data)
-        try {
-          return JSON.parse(decrypted)
-        } catch (error) {
-          try {
-            return JSON.parse(data)
-          } catch (error) {
-            return data
-          }
-        }
+        const decrypted = await aes256.decrypt(key, data)
+        return JSON.parse(decrypted)
       } catch (error) {
         console.warn(error)
         throw 'error.auth.decrypterror'
@@ -123,11 +126,11 @@ class Auth {
     }
 
   // Decrypt array with specified decryptor function
-  decryptArray = async (dataArray, decryptor = this.decrypt) => {
+  decryptArray = async (dataArray, key, decryptor = this.decrypt) => {
     var decryptedArray = []
     if (dataArray) {
       for await (const element of dataArray) {
-        const decrypted = await decryptor(element)
+        const decrypted = await decryptor(element, key)
         decryptedArray.push(decrypted)
       }
     }
@@ -135,11 +138,11 @@ class Auth {
   }
 
   // Encrypt array with specified encryptor function
-  encryptArray = async (dataArray, encryptor = this.decrypt) => {
+  encryptArray = async (dataArray, key, encryptor = this.decrypt) => {
     var encryptedArray = []
     if (dataArray) {
       for await (const element of dataArray) {
-        const decrypted = await encryptor(element)
+        const decrypted = await encryptor(element, key)
         encryptedArray.push(decrypted)
       }
     }

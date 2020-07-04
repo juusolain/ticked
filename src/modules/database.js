@@ -53,7 +53,6 @@ class Database {
 
   syncTasks = async (ourArray, remoteArray) => {
     if (!this.ready) throw 'error.database.notready'
-    console.log(ourArray, remoteArray)
     if (ourArray) {
       ourArray.forEach(ourTask => {
         const theirTask = remoteArray.find(elem => {
@@ -91,7 +90,6 @@ class Database {
 
   syncLists = async (ourArray, remoteArray) => {
     if (!this.ready) throw 'error.database.notready'
-    console.log(ourArray, remoteArray)
     if (ourArray) {
       ourArray.forEach(ourList => {
         const theirList = remoteArray.find(elem => {
@@ -135,14 +133,14 @@ class Database {
     return Date.now()
   }
 
-  getTasks = async () => {
+  getTasks = async (userid = net.getUserID()) => {
     if (!this.ready) throw 'error.database.notready'
-    return db.tasks.where('userid').equals(await net.getUserID()).toArray()
+    return db.tasks.where('userid').equals(userid).toArray()
   }
 
-  getLists = async () => {
+  getLists = async (userid = net.getUserID()) => {
     if (!this.ready) throw 'error.database.notready'
-    return db.lists.where('userid').equals(await net.getUserID()).toArray()
+    return db.lists.where('userid').equals(userid).toArray()
   }
 
   deleteList = async (listToDelete, netUpdate = false) => {
@@ -259,13 +257,13 @@ class Database {
     }
   }
 
-  migrate = async (oldUserID, newUserID) => {
-    try {
-      await db.tasks.where('userid').equals(oldUserID).modify({ userid: newUserID })
-      await db.lists.where('userid').equals(oldUserID).modify({ userid: newUserID })
-    } catch (error) {
-      console.warn(error)
-      throw 'error.database.migrate'
+  putArray = async (newArray, target) => {
+    if (target === 'tasks') {
+      await db.tasks.bulkPut(newArray)
+    } else if (target === 'lists') {
+      await db.lists.bulkPut(newArray)
+    } else {
+      throw new Error('Invalid query to putarray - invalid target')
     }
   }
 }

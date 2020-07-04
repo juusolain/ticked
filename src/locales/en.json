@@ -1,5 +1,4 @@
 {
-  "message": "hello i18n !!",
   "task": {
     "placeholder": {
       "description": "Click here to add a description"
@@ -12,7 +11,8 @@
       "user": "User"
     },
     "link": {
-      "register": "Create a new account instead"
+      "register": "Create a new account instead",
+      "modeselect": "Change mode"
     },
     "placeholder": {
       "password": "Password",

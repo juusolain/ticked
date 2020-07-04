@@ -108,6 +108,13 @@ html{
   grid-row: 2;
 }
 
+.login.link.modeselect{
+  position: absolute;
+  bottom: 0px;
+  left: 0px;
+  margin: 0.5em;
+}
+
 .tasks{
   flex: 1;
   display: flex;
