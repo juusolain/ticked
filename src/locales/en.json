@@ -66,14 +66,20 @@
     },
     "payments": "Open payments",
     "migrate": {
-      "button": "Migrate",
+      "button": {
+        "import": "Import",
+        "export": "Export"
+      },
       "info": {
         "local": "Migrate online data to local",
-        "online": "Migrate local data to online"
+        "online": "Migrate local data to online",
+        "import": "Import data from local mode",
+        "export": "Export data to local mode"
       },
       "title": {
         "local": "Migrate",
-        "online": "Migrate"
+        "online": "Migrate",
+        "import": "Migrate data"
       }
     }
   },

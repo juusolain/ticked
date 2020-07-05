@@ -270,19 +270,20 @@ class Backend {
     }
   }
 
-  migrate = async (from) => {
-    if (from === 'local') {
+  migrate = async (migMode) => {
+    var newTasks, newLists
+    if (migMode === 'import') {
       // get old tasks
       const oldTasks = await database.getTasks('local')
       // reencrypt tasks with current key
-      var newTasks = await auth.reencrypt('local', net.getUserID(), oldTasks, auth.encryptArray, auth.decryptArray)
+      newTasks = await auth.reencrypt('local', net.getUserID(), oldTasks, auth.encryptArray, auth.decryptArray)
 
       // replace userid with new
       newTasks = this.replaceArrayUserID(newTasks, net.getUserID())
 
       // same with lists
       const oldLists = await database.getLists('local')
-      var newLists = await auth.reencrypt('local', net.getUserID(), oldLists, auth.encryptArray, auth.decryptArray)
+      newLists = await auth.reencrypt('local', net.getUserID(), oldLists, auth.encryptArray, auth.decryptArray)
 
       newLists = this.replaceArrayUserID(newLists, net.getUserID())
 
@@ -291,6 +292,22 @@ class Backend {
 
       await database.sync()
       await this.initialLoad()
+    } else if (migMode === 'export') {
+      const oldTasks = await database.getTasks()
+      // reencrypt tasks with current key
+      newTasks = await auth.reencrypt(net.getUserID(), 'local', oldTasks, auth.encryptArray, auth.decryptArray)
+
+      // replace userid with new
+      newTasks = this.replaceArrayUserID(newTasks, 'local')
+
+      // same with lists
+      const oldLists = await database.getLists()
+      newLists = await auth.reencrypt(net.getUserID(), 'local', oldLists, auth.encryptArray, auth.decryptArray)
+
+      newLists = this.replaceArrayUserID(newLists, net.getUserID())
+
+      await database.putArray(newTasks, 'tasks')
+      await database.putArray(newLists, 'lists')
     }
   }
 

@@ -21,15 +21,15 @@ export default {
     openPayments () {
       this.$router.push('/payments')
     },
-    migrate (from) {
-      backend.migrate(from)
+    migrate (migMode) {
+      backend.migrate(migMode)
     }
   }
 }
 </script>
 
 <template>
-  <div class="settings">
+  <div class="settings is-fullwidth">
     <section>
       <b-field :label="$t('settings.delete.label.password')">
         <b-input
@@ -57,27 +57,28 @@ export default {
     </section>
     <section v-if="mode === 'online'">
       <p class="is-size-3">
-        {{ $t('settings.migrate.title.online') }}
+        {{ $t('settings.migrate.title.import') }}
       </p>
-      <p>{{ $t('settings.migrate.info.online') }}</p>
-      <b-button
-        class="is-danger"
-        @click="migrate('local')"
-      >
-        {{ $t('settings.migrate.button') }}
-      </b-button>
-    </section>
-    <section v-if="mode === 'local_NO'">
-      <p class="is-size-3">
-        {{ $t('settings.migrate.title.local') }}
-      </p>
-      <p>{{ $t('settings.migrate.info.local') }}</p>
-      <b-button
-        class="is-danger"
-        @click="migrate('online')"
-      >
-        {{ $t('settings.migrate.button') }}
-      </b-button>
+      <div class="columns">
+        <div class="column">
+          <p>{{ $t('settings.migrate.info.import') }}</p>
+          <b-button
+            class="is-danger"
+            @click="migrate('import')"
+          >
+            {{ $t('settings.migrate.button.import') }}
+          </b-button>
+        </div>
+        <div class="column">
+          <p>{{ $t('settings.migrate.info.export') }}</p>
+          <b-button
+            class="is-danger"
+            @click="migrate('export')"
+          >
+            {{ $t('settings.migrate.button.export') }}
+          </b-button>
+        </div>
+      </div>
     </section>
   </div>
 </template>
