@@ -293,6 +293,8 @@ class Backend {
       await database.sync()
       await this.initialLoad()
     } else if (migMode === 'export') {
+      // add check and create encryptionkey for local if it doesn't exist
+
       const oldTasks = await database.getTasks()
       // reencrypt tasks with current key
       newTasks = await auth.reencrypt(net.getUserID(), 'local', oldTasks, auth.encryptArray, auth.decryptArray)
