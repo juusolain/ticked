@@ -53,6 +53,9 @@ export default {
       this.register_username = ''
       this.login_user = ''
       this.login_password = ''
+    },
+    modeSelect () {
+      this.$router.push('/modeSelect')
     }
   }
 }
@@ -60,6 +63,12 @@ export default {
 
 <template>
   <div class="columns is-fullheight is-centered is-vcentered">
+    <a
+      class="login link modeselect"
+      @click="modeSelect"
+    >
+      {{ $t('login.link.modeselect') }}
+    </a>
     <div
       class="is-login column is-half is-vcentered"
     >
@@ -103,7 +112,6 @@ export default {
           {{ $t('login.label.login') }}
         </b-button>
         <a
-          href="#"
           @click="switchTo('register')"
         >
           {{ $t('login.link.register') }}
@@ -138,7 +146,6 @@ export default {
           {{ $t('register.label.register') }}
         </b-button>
         <a
-          href="#"
           @click="switchTo('login')"
         >
           {{ $t('register.link.login') }}

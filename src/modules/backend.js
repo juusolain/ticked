@@ -7,8 +7,6 @@ import auth from '@/modules/auth'
 import database from '@/modules/database'
 import payments from '@/modules/payments'
 
-import PasswordModal from '@/components/Login/PasswordModal'
-
 import { ToastProgrammatic as Toast, ModalProgrammatic as Modal } from 'buefy'
 
 import { v4 as uuidv4 } from 'uuid'
@@ -16,12 +14,20 @@ import { v4 as uuidv4 } from 'uuid'
 class Backend {
   constructor () {
     payments.init()
+    this.warnConsolePasting()
+  }
+
+  warnConsolePasting = () => {
+    console.warn('%cSTOP!', 'color:#000;background-color:#faa;font-size:20em')
+    console.warn('%cThe developer tools are intended for developers. If you have been told by someone to paste or type anything here, there is a 200% chance that they\'re trying to scam you.', 'color: #000; font-size:x-large;')
+    console.warn('%cTo stay safe, close this side-bar. ', 'color:#000;font-size:xx-large;')
+    console.warn('%cIf you want to learn more, visit https://en.wikipedia.org/wiki/Self-XSS', 'color: #6; font-size:large;')
   }
 
   loadTasks = async () => {
     try {
       const newTasks = await database.getTasks()
-      const decryptedTasks = await auth.decryptArray(newTasks, auth.decryptObj)
+      const decryptedTasks = await auth.decryptArray(newTasks, null, auth.decryptObj)
       store.setTasks(decryptedTasks)
     } catch (err) {
       console.warn(err)
@@ -32,7 +38,7 @@ class Backend {
   loadLists = async () => {
     try {
       const newLists = await database.getLists()
-      const decryptedLists = await auth.decryptArray(newLists, auth.decryptObj)
+      const decryptedLists = await auth.decryptArray(newLists, null, auth.decryptObj)
       store.setLists(decryptedLists)
     } catch (err) {
       console.warn(err)
@@ -72,25 +78,6 @@ class Backend {
   initialLoad = async (mainRef) => {
     try {
       if (store.getMode() === 'local') {
-        /*
-        let password = null
-        const createModal = new Promise((resolve, reject) => {
-          const modal = Modal.open({
-            parent: mainRef,
-            component: PasswordModal,
-            hasModalCard: true,
-            trapFocus: true,
-            canCancel: false,
-            events: {
-              password: newPassword => {
-                password = newPassword
-              }
-            }
-          })
-          console.log(modal)
-          modal.$on('close', resolve)
-        })
-        await createModal */
         store.addLoading(1)
         if (auth.getEncryptionKey() === null) {
           await auth.createEncryptionKey()
@@ -281,6 +268,58 @@ class Backend {
       console.warn(error)
       this.showError(error)
     }
+  }
+
+  migrate = async (migMode) => {
+    var newTasks, newLists
+    if (migMode === 'import') {
+      // get old tasks
+      const oldTasks = await database.getTasks('local')
+      // reencrypt tasks with current key
+      newTasks = await auth.reencrypt('local', net.getUserID(), oldTasks, auth.encryptArray, auth.decryptArray)
+
+      // replace userid with new
+      newTasks = this.replaceArrayUserID(newTasks, net.getUserID())
+
+      // same with lists
+      const oldLists = await database.getLists('local')
+      newLists = await auth.reencrypt('local', net.getUserID(), oldLists, auth.encryptArray, auth.decryptArray)
+
+      newLists = this.replaceArrayUserID(newLists, net.getUserID())
+
+      await database.putArray(newTasks, 'tasks')
+      await database.putArray(newLists, 'lists')
+
+      await database.sync()
+      await this.initialLoad()
+    } else if (migMode === 'export') {
+      // add check and create encryptionkey for local if it doesn't exist
+
+      const oldTasks = await database.getTasks()
+      // reencrypt tasks with current key
+      newTasks = await auth.reencrypt(net.getUserID(), 'local', oldTasks, auth.encryptArray, auth.decryptArray)
+
+      // replace userid with new
+      newTasks = this.replaceArrayUserID(newTasks, 'local')
+
+      // same with lists
+      const oldLists = await database.getLists()
+      newLists = await auth.reencrypt(net.getUserID(), 'local', oldLists, auth.encryptArray, auth.decryptArray)
+
+      newLists = this.replaceArrayUserID(newLists, net.getUserID())
+
+      await database.putArray(newTasks, 'tasks')
+      await database.putArray(newLists, 'lists')
+    }
+  }
+
+  replaceArrayUserID = (array, newUserID) => {
+    const newArray = []
+    array.forEach(element => {
+      element.userid = newUserID
+      newArray.push(element)
+    })
+    return newArray
   }
 }
 

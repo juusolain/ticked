@@ -97,7 +97,10 @@ export default {
                   icon="dots-vertical"
                 />
               </template>
-              <b-dropdown-item aria-role="listitem" @click="deleteList(list)">
+              <b-dropdown-item
+                aria-role="listitem"
+                @click="deleteList(list)"
+              >
                 Delete list
               </b-dropdown-item>
             </b-dropdown>

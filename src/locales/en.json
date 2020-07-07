@@ -1,5 +1,4 @@
 {
-  "message": "hello i18n !!",
   "task": {
     "placeholder": {
       "description": "Click here to add a description"
@@ -12,7 +11,8 @@
       "user": "User"
     },
     "link": {
-      "register": "Create a new account instead"
+      "register": "Create a new account instead",
+      "modeselect": "Change mode"
     },
     "placeholder": {
       "password": "Password",
@@ -64,9 +64,38 @@
         "password": "Password"
       }
     },
-    "payments": "Open payments"
+    "payments": "Open payments",
+    "migrate": {
+      "button": {
+        "import": "Import",
+        "export": "Export"
+      },
+      "info": {
+        "local": "Migrate online data to local",
+        "online": "Migrate local data to online",
+        "import": "Import data from local mode",
+        "export": "Export data to local mode"
+      },
+      "title": {
+        "local": "Migrate",
+        "online": "Migrate",
+        "import": "Migrate data"
+      }
+    }
   },
   "tasklist": {
     "notasks": "No tasks here yet..."
+  },
+  "modeselect": {
+    "button": {
+      "local": "Use Ticked locally",
+      "online": "Use our servers"
+    },
+    "title": "Select mode"
+  },
+  "payments": {
+    "portal": "Manage payments",
+    "checkout": "New subscription",
+    "back": "Go back"
   }
 }

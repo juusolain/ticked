@@ -16,9 +16,6 @@ var state = {
     this.state.list = newList
     this.state.tasks = this.state.allTasks.filter((elem) => {
       if (this.state.list === null) return true
-      if (elem.listid === this.state.list) {
-        console.log('Adding: ', elem)
-      }
       return elem.listid === this.state.list
     })
   },
